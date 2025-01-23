@@ -1,12 +1,58 @@
 <script lang="ts">
 	import '../app.css';
 	import Header from './Header.svelte';
-	import one from '$lib/images/1.png';
-	import two from '$lib/images/2.png';
-	import three from '$lib/images/3.png';
-	import onetroll from '$lib/images/troll_1.jpg';
-	import twotroll from '$lib/images/troll_2.jpg';
-	import threetroll from '$lib/images/troll_3.jpg';
+  import nba from '$lib/images/nba.gif';
+  import novaCanvas from '$lib/images/nova-canvas.gif';
+  import pixelPrompt from '$lib/images/pixel-prompt.gif';
+  import pizza from '$lib/images/italian.gif';
+  import plotPalette from '$lib/images/plotpalette.gif';
+  import ppMedium from '$lib/images/pp-medium.gif';
+  import savorSwipe from '$lib/images/savorswipe.gif';
+  import stockLog from '$lib/images/stock-log.gif';
+  import stocks from '$lib/images/stock.gif';
+  import stockSent from '$lib/images/stock-sent.gif';
+  import studioBrowser from '$lib/images/as-medium.gif';
+  import trachtenberg from '$lib/images/trachtenberg.gif';
+  import twa from '$lib/images/twa.gif';
+  import vocab from '$lib/images/vocabulary.gif';
+  import whoami from '$lib/images/name-check.gif';
+  import credentials from '$lib/images/credentials.avif';
+  import canvasMedium from '$lib/images/canvas-medium.gif';
+  import cbExpoMedium from '$lib/images/cb-expo-medium.gif';
+  import cbRnFastMedium from '$lib/images/cb-rn-fast-medium.gif';
+  import connector from '$lib/images/connector.gif';
+  import connectorMedium from '$lib/images/connector-medium.gif';
+  import float from '$lib/images/float.gif';
+  import hugMedium from '$lib/images/hug-medium.gif';
+  import instant from '$lib/images/instant.gif';
+  import looper from '$lib/images/looper.gif';
+  import movies from '$lib/images/movies.gif';
+  import floata from '$lib/images/float.avif';
+  import novaCanvasa from '$lib/images/nova-canvas.avif';
+  import savorSwipea from '$lib/images/savorswipe.avif';
+  import floatj from '$lib/images/float.jpg';
+  import novaCanvasj from '$lib/images/nova-canvas.jpg';
+  import savorSwipej from '$lib/images/savorswipe.jpg';
+
+  /**
+  import { onMount } from 'svelte';
+
+  let x = 0;
+  let y = 0;
+
+  function moveBg(event) {
+    const rect = event.target.getBoundingClientRect();
+    x = (event.clientX - rect.x) / rect.width * 100;
+    y = (event.clientY - rect.y) / rect.height * 100;
+    
+  }
+
+  onMount(() => {
+    const button = document.querySelector("button");
+    if (button) {
+      button.addEventListener('pointermove', moveBg);
+    }
+  });*/
 </script>
 
 <svelte:head>
@@ -17,112 +63,225 @@
 <section>
 <div class="scroll-container">
 	<div class="stuck-grid">
-  <div class="grid-item">oklch()</div>
-  <div class="grid-item">scroll()</div>
-  <div class="grid-item">text-box-trim</div>
-  <div class="grid-item">pow()</div>
-  <div class="grid-item">@property</div>
-  <div class="grid-item">top-layer</div>
-  <div class="grid-item">@view-transition</div>
-  <div class="grid-item">var()</div>
-  <div class="grid-item">clamp()</div>
-  <div class="grid-item">view()</div>
-  <div class="grid-item special"><b>CSS</b></div>
-  <div class="grid-item">@layer</div>
-  <div class="grid-item">@swash</div>
-  <div class="grid-item">subgrid</div>
-  <div class="grid-item">in oklab</div>
-  <div class="grid-item">:popover-open</div>
-  <div class="grid-item">abs()</div>
-  <div class="grid-item">sin()</div>
-  <div class="grid-item">:has()</div>
-  <div class="grid-item">::marker</div>
-  <div class="grid-item">1cap</div>
-  <div class="grid-item">scrollbar-color</div>
-  <div class="grid-item">scroll-timeline</div>
-  <div class="grid-item">view-timeline</div>
-  <div class="grid-item">overlay</div>
-  <div class="grid-item">scale</div>
-  <div class="grid-item">ascent-override</div>
-  <div class="grid-item">initial-letter</div>
-  <div class="grid-item">inset</div>
-  <div class="grid-item">@container</div>
-  <div class="grid-item">accent-color</div>
-  <div class="grid-item">color-mix()</div>
-  <div class="grid-item">@scope</div>
-  <div class="grid-item">@starting-style</div>
-  <div class="grid-item">override-colors</div>
-  <div class="grid-item">anchor()</div>
-  <div class="grid-item">scroll-snap</div>
-  <div class="grid-item">::backdrop</div>
-  <div class="grid-item">::cue</div>
-  <div class="grid-item">:focus-visible</div>
-  <div class="grid-item">:user-valid</div>
-  <div class="grid-item">:fullscreen</div>
-  <div class="grid-item">:dir()</div>
-  <div class="grid-item">caret-color</div>
-  <div class="grid-item">aspect-ratio</div>
-  <div class="grid-item">cross-fade()</div>
-  <div class="grid-item">image-set()</div>
-  <div class="grid-item">env()</div>
-  <div class="grid-item">place-content</div>
-  <div class="grid-item">gap</div>
-</div>
-</div>
+  <div class="grid-item"><img src={nba} alt="nba" /></div>
+  <div class="grid-item"><img src={novaCanvas} alt="nova-canvas" /></div>
+  <div class="grid-item"><img src={pixelPrompt} alt="pixel-prompt" /></div>
+  <div class="grid-item"><img src={pizza} alt="pizza" /></div>
+  <div class="grid-item"><img src={plotPalette} alt="plotpalette" /></div>
+  <div class="grid-item"><img src={ppMedium} alt="pp-medium" /></div>
+  <div class="grid-item"><img src={savorSwipe} alt="savorswipe" /></div>
+  <div class="grid-item"><img src={stockLog} alt="stock-log" /></div>
+  <div class="grid-item"><img src={stocks} alt="stocks" /></div>
+  <div class="grid-item"><img src={stockSent} alt="stock-sent" /></div>
+  <div class="grid-item special"><p ><b>Hi I'm Chris.  Here's Some Stuff.</b></p></div>
+  <div class="grid-item"><img src={studioBrowser} alt="studio-browser" /></div>
+  
+  <div class="grid-item"><img src={trachtenberg} alt="trachtenberg" /></div>
+  <div class="grid-item"><img src={credentials} alt="credentials" /></div>
+  
+  <div class="grid-item"><img src={twa} alt="twa" /></div>
+  <div class="grid-item"><img src={vocab} alt="vocab" /></div>
+  <div class="grid-item"><img src={whoami} alt="whoami" /></div>
+  <div class="grid-item"><img src={canvasMedium} alt="canvas-medium" /></div>
+  <div class="grid-item"><img src={cbExpoMedium} alt="cb-expo-medium" /></div>
+  <div class="grid-item"><img src={cbRnFastMedium} alt="cb-rn-fast" /></div>
+  <div class="grid-item"><img src={connector} alt="connector" /></div>
+  <div class="grid-item"><img src={connectorMedium} alt="connector-medium" /></div>
+  <div class="grid-item"><img src={float} alt="float" /></div>
+  <div class="grid-item"><img src={hugMedium} alt="hug-medium" /></div>
+  <div class="grid-item"><img src={instant} alt="instant" /></div>
+  <div class="grid-item"><img src={looper} alt="looper" /></div>
+  <div class="grid-item"><img src={credentials} alt="credentials" /></div>
+  <div class="grid-item"><img src={movies} alt="movies" /></div>
+  <div class="grid-item"><img src={nba} alt="nba" /></div>
+  <div class="grid-item"></div>
+  <div class="grid-item"><img src={pixelPrompt} alt="pixel-prompt" /></div>
+  <div class="grid-item"><img src={pizza} alt="pizza" /></div>
+  <div class="grid-item"><img src={plotPalette} alt="plotpalette" /></div>
+  <div class="grid-item"><img src={ppMedium} alt="pp-medium" /></div>
+  <div class="grid-item"><img src={savorSwipe} alt="savorswipe" /></div>
+  <div class="grid-item"><img src={stockLog} alt="stock-log" /></div>
+  <div class="grid-item"><img src={stocks} alt="stocks" /></div>
+  <div class="grid-item"><img src={stockSent} alt="stock-sent" /></div>
+  <div class="grid-item"><img src={studioBrowser} alt="studio-browser" /></div>
+  <div class="grid-item"><img src={trachtenberg} alt="trachtenberg" /></div>
+  <div class="grid-item"><img src={twa} alt="twa" /></div>
+  <div class="grid-item"><img src={whoami} alt="whoami" /></div>
+  <div class="grid-item"><img src={cbRnFastMedium} alt="cb-rn-fast" /></div>
+  <div class="grid-item"><img src={connector} alt="connector" /></div>
+  <div class="grid-item"><img src={connectorMedium} alt="connector-medium" /></div>
+  <div class="grid-item"><img src={float} alt="float" /></div>
+  <div class="grid-item"><img src={hugMedium} alt="hug-medium" /></div>
+  <div class="grid-item"><img src={instant} alt="instant" /></div>
+  <div class="grid-item"><img src={novaCanvas} alt="nova-canvas" /></div>
 
+  
+</div>
+</div>
 </section>
 
-
-
+<section class="header-scroll">
 <Header />
-<section class="container">
+</section>
 
+<section class="container">
 	<div class="category_container">
 		<div class="content">
-			<img src={one} class="professio_image" alt="Profession" />
-			<img src={onetroll} class="profile_image" alt="Profile" />
+			<img src={floata} class="profession_image" alt="Profession" />
+			<img src={floatj} class="profile_image" alt="Profile" />
 			<div class="profile_detail">
-				<span>John Doe</span>
-				<p>UI/UX Designer + Graphic Designer</p>
+				<span>Float</span>
+				<p>Cross-Platform</p>
 			</div>
 
 			<div class="wrapper">			
 				<div class="profile_quote">
-					<p>"UI is the saddle, the stirrups, & the reins. UX is the feeling you get being able to ride the horse."</p>
-				</div>
+					<p style="font-size:.8em">Float is a cross-platform meditation app built with React Native and Expo. It uses Google Generative AI, Google TTS, and a library of sound files to create personalized meditation experiences based on user-submitted incidents that have affected them emotionally, which we refer to as “floats”. Floats are categorized by emotion and intensity, featuring a timer and a color scheme that convey the duration, summary, and reasoning for the category.</p>
+				<a href="https://float-app.fun" target="_blank" rel="noopener noreferrer">
+        <button type="button" class="gooey-button">
+            Meditate
+        </button></a>
+        </div>
+        
 			</div>
 
 		</div>
 		<div class="content">
-			<img src={two} class="profession_image" alt="Profession" />
-			<img src={twotroll} class="profile_image" alt="Profile" />
+			<img src={novaCanvasa} class="profession_image" alt="Profession" />
+			<img src={novaCanvasj} class="profile_image" alt="Profile" />
 			<div class="profile_detail">
-				<span>Prince Akashi</span>
-				<p>Photographer + Model</p>
+				<span>Nova Canvas</span>
+				<p>Web</p>
 			</div>
 			<div class="wrapper">				
 				<div class="profile_quote">
-					<p>"If you see something that moves you, and then snap it, you keep a moment."</p>
-				</div>
+					<p style="font-size:.8em">The AWS Nova Canvas foundation model presented in a gradio app. The model enables users to generate, edit, and refine images through sophisticated tools like text-to-image generation, inpainting, outpainting, and background removal. Users can explore innovative image creation methods, including color-guided content manipulation and image conditioning, providing control over visual design and artistic expression.</p>
+				<a href="https://hatman-aws-nova-canvas.hf.space/" target="_blank" rel="noopener noreferrer">
+        <button type="button" class="gooey-button">
+            Inference
+        </button></a>
+        </div>
 			</div>
 		</div>
 		<div class="content">
-			<img src={three} class="profession_image" alt="Profession" />
-			<img src={threetroll} class="profile_image" alt="Profile" />
+			<img src={savorSwipea} class="profession_image" alt="Profession" />
+			<img src={savorSwipej} class="profile_image" alt="Profile" />
 			<div class="profile_detail">
-				<span>Rafaella Mendes</span>
-				<p>Fashion Designer + Model</p>
+				<span>Savor Swipe</span>
+				<p>Cross-Platform</p>
 			</div>
 			<div class="wrapper">				
 				<div class="profile_quote">
-					<p>"My mission in life is not merely to survive, but to thrive and to do so with some passion, some compassion, some humor, and some style."</p>
-				</div>
+					<p style="font-size:.8em">SavorSwipe is a recipe discovery app that lets you swipe through dishes to decide what to make. When adding a recipe, simply take a picture of either the ingredients or the directions. The app uses OpenAI’s OCR technology to automatically extract the relevant information, then leverages Google’s Custom Search API to find matching food images. This creates a visual collection of dishes that you can easily swipe through.</p>
+				<a href="https://savorswipe.fun" target="_blank" rel="noopener noreferrer">
+        <button type="button" class="gooey-button">
+            Eat
+        </button></a>
+        </div>
 			</div>
 		</div>
 	</div>
 </section>
 
+<svg width="0" height="0" style="position: absolute;">
+  <filter id="goo" x="-50%" y="-50%" width="200%" height="200%">
+    <feComponentTransfer>
+      <feFuncA type="discrete" tableValues="0 1"></feFuncA>
+    </feComponentTransfer>
+    <feGaussianBlur stdDeviation="5"></feGaussianBlur>
+    <feComponentTransfer>
+      <feFuncA type="table" tableValues="-5 11"></feFuncA>
+    </feComponentTransfer>
+  </filter>
+</svg>
+
 <style>
+
+
+button {
+    --a: 0%;
+    --hue: 170deg;
+    --x: 50;
+    --y: 50;
+    --button: hsl(var(--hue), 66%, 66%);
+    --edge: 10px;
+    --size: 1em;
+    border: none;
+    background: transparent;
+    color: hsla(var(--hue), 80%, 30%, 0.7);
+    font-size: 1.8em;
+    position: relative;
+    padding: calc(var(--size)) calc(var(--size)*1.5);
+    animation: color 20s linear infinite both;
+    transition: 
+        --a .5s ease-in-out, 
+        scale var(--spring-duration) var(--spring-easing);
+    scale: 0.92;
+    isolation: isolate;
+    &:hover {
+        --a: 100%;
+        transition-duration: .5s, 1s;
+        box-shadow: none;
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+button:before {
+  
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    inset: 0em;
+    border: none;
+    /** here's the magic. A blur and a svg filter */
+    filter: blur(12px) url(#goo) drop-shadow(0 .25em .5em hsla(0deg, 0%, 0%, 0.8)); 
+    /** followed by a radial-gradient which causes the
+    gooey effect to follow mouse-position */
+    background-image:
+        linear-gradient(0deg,var(--button),var(--button));
+        /**
+        radial-gradient(
+            40% 70% at calc(var(--x) * 1%) calc(var(--y) * 1%),
+            hsla(var(--hue), 77%, 77%, var(--a)) 0%,
+            transparent 90%
+        );*/
+    /** and finally a background-clip so the radial-gradient
+    is larger than the linear-gradient */
+    background-clip: content-box, border-box;
+    padding: 24px;
+    z-index: -1;
+    border: inherit;
+    animation: color 20s linear infinite both;
+    
+}
+
+@property --hue {
+    syntax: "<angle>";
+    initial-value: 170deg;
+    inherits: false;
+}
+
+@keyframes color {
+    from {
+        --hue: 170deg;
+    }
+    to {
+        --hue: 530deg;
+    }
+}
+
+:root {
+    --spring-easing: linear(
+    0, 0.002, 0.01 0.9%, 0.038 1.8%, 0.156, 0.312 5.8%, 0.789 11.1%, 1.015 14.2%,
+    1.096, 1.157, 1.199, 1.224 20.3%, 1.231, 1.231, 1.226, 1.214 24.6%,
+    1.176 26.9%, 1.057 32.6%, 1.007 35.5%, 0.984, 0.968, 0.956, 0.949 42%,
+    0.946 44.1%, 0.95 46.5%, 0.998 57.2%, 1.007, 1.011 63.3%, 1.012 68.3%,
+    0.998 84%, 1
+  );
+    --spring-duration: 1.66s;
+}
+
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 
 * {
@@ -136,182 +295,165 @@ body {
 }
 
 :root {
-	--light: #ffe6e6;
-	--dark: #0c0c0c;
+  --dark: #121212;
+  --light: #ffffff;
+  --gap: 0.5rem;
 }
 
 .container {
-	--bg-color: radial-gradient(
-		circle at 50% 0%,
-		rgba(50, 50, 50, 1) 0%,
-		rgba(12, 12, 12, 1) 100%
-	);
-
-	overflow: clip;
-	position: relative;
-
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
-	padding: 2rem 5rem;
-
-	width: 100%;
-	height: 100dvh;
-	background-image: var(--bg-color);
+  overflow: hidden; 
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  width: 100%;
+  height: 90vh;
+  background-image: var(--bg-color);
 }
 
 .category_container {
-	--gap: 0.5rem;
-
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	flex-wrap: nowrap;
-	gap: calc(var(--gap) * 2);
-
-	width: 100%;
-	height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch; 
+  flex-wrap: nowrap;
+  gap: calc(var(--gap) * 2);
+  width: 100%;
+  height: 80%; 
 }
 
 .content {
-	--active: 0;
-
-	cursor: pointer;
-	overflow: clip;
-
-	position: relative;
-	z-index: 10;
-
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-end;
-	gap: 1.5rem;
-
-	padding: 2.5rem;
-
-	width: calc((100% / 3) - var(--gap));
-	height: 100%;
-
-	border-radius: 1rem;
-
-	transition: width 0.5s ease-in-out;
+  --active: 0;
+  cursor: pointer;
+  overflow: hidden; 
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  padding: 2.5rem;
+  width: calc((100% / 3) - var(--gap));
+  height: 100%;
+  border-radius: 1rem;
+  transition: all 0.5s ease-in-out;
 }
+
 .content:hover {
-	--active: 1;
-
-	width: calc(70% - var(--gap));
+  --active: 1;
+  width: calc(90% - var(--gap));
 }
+
 .content::before {
-	content: "";
+  content: "";
+  position: absolute;
+  z-index: -10;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--dark);
+  opacity: 0.6;
+  transition: opacity 0.3s ease-in-out;
+}
 
-	position: absolute;
-	z-index: -10;
-	top: 0;
-	left: 0;
-
-	width: 100%;
-	height: 100%;
-	background-color: var(--dark);
-
-	opacity: 0.6;
+.content:hover::before {
+  opacity: 0.8;
 }
 
 .content img {
-	position: absolute;
-	z-index: -20;
-	top: 0;
-	left: 0;
+  position: absolute;
+  z-index: -20;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s ease-in-out;
+}
 
-	width: 100%;
-	height: 100%;
-
-	object-fit: cover;
-	object-position: center;
+.content .profession_image {
+  opacity: var(--active);
+  transform: scale(1.1);
+  transition: 
+    opacity 0.3s ease-in-out,
+    transform 0.5s ease-in-out;
 }
 
 .content .profile_image {
-	opacity: calc(1 - var(--active));
+  opacity: calc(1 - var(--active));
+  transition: 
+    opacity 0.3s ease-in-out,
+    transform 0.5s ease-in-out;
+}
 
-	transition: opacity 0.3s ease-in-out;
+.content:hover .profession_image {
+  transform: scale(1);
 }
 
 .profile_detail {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-
-	width: 12rem;
-	transition: transform 0.5s cubic-bezier(0.23, 0.93, 0.77, 1) 0.01s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 12rem;
+  transition: transform 0.5s cubic-bezier(0.23, 0.93, 0.77, 1) 0.01s;
+  z-index: 1;
 }
 
 .profile_detail span {
-	font-size: 1.5rem;
-	font-weight: 600;
-	color: var(--light);
-	text-wrap: nowrap;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--light);
+  text-wrap: nowrap;
 }
 
 .profile_detail p {
-	font-size: 0.75rem;
-	font-weight: 500;
-	color: var(--light);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--light);
+}
+
+.wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  transition: grid-template-rows 0.5s cubic-bezier(0.23, 0.93, 0.77, 1) 0.01s;
 }
 
 .profile_quote {
-	width: 22rem;
-	transform: translate(0, calc((1 - var(--active)) * (100% + 2.5rem)));
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-height: 0;
+  width: 100%;
+  transform: translateY(50%);
+  opacity: 0;
+  transition: 
+    opacity 0.8s ease-in-out,
+    transform 0.8s cubic-bezier(0.23, 0.93, 0.77, 1) 0.01s;
+  z-index: 1;
 }
 
 .profile_quote p {
-	font-size: 1.5rem;
-	font-weight: 600;
-	color: var(--light);
-
-	transform: translate(0, calc((1 - var(--active)) * (100% + 2.5rem)));
-
-	transition: transform 0.5s cubic-bezier(0.23, 0.93, 0.77, 1) 0.1s;
+  flex: 1;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--light);
 }
 
-
-
-
-.wrapper {
-	display: grid;
-  	grid-template-rows: 0fr;
-  	overflow: hidden;
-	transition: grid-template-rows 0.5s cubic-bezier(0.23, 0.93, 0.77, 1) 0.01s;
-}
-
-
-.profile_quote { 
-	min-height: 0; 
-	transform: translateY(50%);
-	opacity: 0;
-	transition: 
-		opacity 0.8s ease-in-out,
-		transform 0.8s cubic-bezier(0.23, 0.93, 0.77, 1) 0.01s
-	;	
-}
-
-
+.profile_quote button {
+    flex-shrink: 0;
+  }
 
 .content:hover .wrapper {
-  	grid-template-rows: 1fr;
+  grid-template-rows: 1fr;
 }
-
 
 .content:hover .profile_quote {
-	transform: none;
-	opacity: 1;	
+  transform: none;
+  opacity: 1;
 }
-
-
-
-
-
-
-
 
 dialog { position: absolute; z-index: 1; background: none; color: white; border: 0; font-size: .8rem; padding:.5em;}
 dialog a { color: whitesmoke; }

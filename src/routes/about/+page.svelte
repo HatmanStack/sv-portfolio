@@ -3,24 +3,73 @@
 	<meta name="description" content="About this app" />
 </svelte:head>
 
-<div class="text-column">
-	<h1>About this app</h1>
 
-	<p>
-		This is a <a href="https://svelte.dev/docs/kit">SvelteKit</a> app. You can make your own by typing
-		the following into your command line and following the prompts:
-	</p>
+<script>
+ 
+  
+  import linkedIn from '$lib/images/linkedIn.svg';
+  import huggingface from '$lib/images/hf.svg';
+  import x from '$lib/images/x.svg';
+  import PointerParticle from '../PointerParticles.svelte';
+ 
+</script>
 
-	<pre>npx sv create</pre>
 
-	<p>
-		The page you're looking at is purely static HTML, with no client-side interactivity needed.
-		Because of that, we don't need to load any JavaScript. Try viewing the page's source, or opening
-		the devtools network panel and reloading.
-	</p>
 
-	<p>
-		The <a href="/sverdle">Sverdle</a> page illustrates SvelteKit's data loading and form handling. Try
-		using it with JavaScript disabled!
-	</p>
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    text-align: center;
+	 opacity: 0;
+	
+    transform: translateY(20px);
+	animation: fadeIn 1s forwards ease-out;
+  }
+
+
+    @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  h1, h2 {
+    margin-bottom: 10px;
+  }
+
+  .social-links {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+  }
+
+  .social-links li {
+    margin: 0 10px;
+	
+  }
+
+.social-links img {
+  width: 40px; 
+  height: 40px;
+}
+  
+</style>
+
+<div class="container">
+  <section class="about">
+    <h1>Hope you liked the stuff</h1>
+  </section>
+  <section class="socials">
+    <ul class="social-links">
+	<li><a href="https://www.linkedin.com/in/christopher-galliart-gemenie-labs/" target="_blank"><img src={linkedIn} alt="LinkedIn" /></a></li>
+	<li><a href="https://huggingface.co/Hatman" target="_blank"><img src={huggingface} alt="Hugging Face" /></a></li>
+	<li><a href="https://twitter.com/HatmanStack" target="_blank"><img src={x} alt="X" /></a></li>
+	</ul>
+  </section>
 </div>

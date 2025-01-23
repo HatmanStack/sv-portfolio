@@ -2,9 +2,29 @@
 import { onMount } from 'svelte';
 	import '../app.css';
 	import { page } from '$app/state';
+	 import { goto } from '$app/navigation';
 	import logo from '$lib/images/logo.svg';
 	import github from '$lib/images/github.svg';	
 
+
+function navigateToContainer(event) {
+  event.preventDefault();
+  const currentPath = window.location.pathname;
+  if (currentPath !== '/') {
+    goto('/').then(() => {
+      scrollToHeaderContainer();
+    });
+  } else {
+    scrollToHeaderContainer();
+  }
+}
+
+function scrollToHeaderContainer() {
+  const container = document.querySelector('.header-scroll');
+  if (container) {
+    container.scrollIntoView({ behavior: 'auto' });
+  }
+}
 
 class TabBar {
         el: HTMLElement | null;
@@ -35,8 +55,7 @@ class TabBar {
 	<nav class="tab-bar">
 	<ul class="tab-bar__tabs">
 		<li class="tab-bar__tab">
-			<a class="tab-bar__tab-link" href="/" aria-current={page.url.pathname === '/' ? 'page' : undefined}>
-				<svg class="tab-bar__tab-icon tab-bar__tab-icon--home" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
+			<a class="tab-bar__tab-link" href="/" on:click={navigateToContainer} aria-current={page.url.pathname === '/#container' ? 'page' : undefined}>	<svg class="tab-bar__tab-icon tab-bar__tab-icon--home" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
 					<g class="tab-bar__tab-icon-1" fill="var(--focus-t)" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
 						<polygon points="12 1,23 10,23 23,16 23,16 14,8 14,8 23,1 23,1 10" />
 					</g>
@@ -73,18 +92,7 @@ class TabBar {
 				<span class="tab-bar__tab-name">Android</span>
 			</a>
 		</li>
-		<li class="tab-bar__tab">
-			<a class="tab-bar__tab-link" href="/blog" aria-current={page.url.pathname === '/blog' ? 'page' : undefined}>
-				<svg class="tab-bar__tab-icon tab-bar__tab-icon--books" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
-					<g class="tab-bar__tab-icon-1" fill="var(--focus-t)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<rect class="tab-bar__tab-icon-2" x="1" y="1" rx="2" ry="2" width="11" height="19" />
-						<rect class="tab-bar__tab-icon-3" x="12" y="1" rx="2" ry="2" width="11" height="19" />
-						<line x1="12" y1="21" x2="12" y2="23" />
-					</g>
-				</svg>
-				<span class="tab-bar__tab-name">Blog</span>
-			</a>
-		</li>
+		
 		<li class="tab-bar__tab">
 			<a class="tab-bar__tab-link" href="/about" aria-current={page.url.pathname === '/about' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--profile" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
@@ -107,6 +115,7 @@ class TabBar {
 </header>
 
 <style lang="scss">
+
 	header {
 		display: flex;
 		justify-content: space-between;
@@ -134,7 +143,7 @@ class TabBar {
 	nav {
 		display: flex;
 		justify-content: center;
-		--background: rgba(255, 255, 255, 0.7);
+		--background: #171C1B;
 	}
 
 	svg {
@@ -163,6 +172,7 @@ class TabBar {
 	li {
 		position: relative;
 		height: 100%;
+		margin-bottom: 1rem;
 	}
 
 	li[aria-current='page']::before {
@@ -214,12 +224,12 @@ $ease-in-out: cubic-bezier(0.65,0,0.35,1);
 	padding: 0;
 }
 :root {
-	--hue: 223;
-	--bg: hsl(var(--hue),10%,90%);
-	--fg: hsl(var(--hue),10%,10%);
-	--focus: hsl(var(--hue),90%,50%);
-	--focus-t: hsla(var(--hue),90%,50%,0);
-	--tab-bar-bg: hsl(0,0%,100%);
+	--hue: 100;
+	--bg: #343347;
+		--fg: #c8bdbe;
+		--focus: #816769;
+	
+	--tab-bar-bg: #171C1B;
 	--trans-dur: 0.3s;
 	--trans-timing: cubic-bezier(0.65,0,0.35,1);
 	font-size: calc(14px + (30 - 14) * (100vw - 280px) / (3840 - 280));
@@ -402,35 +412,7 @@ body {
 		}
 	}
 }
-/* Dark theme */
-@media (prefers-color-scheme: dark) {
-	:root {
-		--bg: hsl(var(--hue),10%,30%);
-		--fg: hsl(var(--hue),10%,90%);
-		--focus: hsl(var(--hue),90%,60%);
-		--focus-t: hsla(var(--hue),90%,60%,0);
-		--tab-bar-bg: hsl(var(--hue),10%,10%);
-	}
-	.tab-bar {
-		box-shadow: 0 0 0.75em hsla(var(--hue),10%,10%,0.3);
-	}
-}
-/* Animations */
-@media (prefers-reduced-motion) {
-	.tab-bar {
-		&__tab {
-			&-icon {
-				&-1,
-				&-2,
-				&-3 {
-					animation: {
-						duration: 0s;
-					}
-				}
-			}
-		}
-	}
-}
+
 @keyframes home-bounce {
 	from,
 	to {
@@ -604,4 +586,5 @@ body {
 		transform: translateX(-1px);
 	}
 }
+
 </style>
