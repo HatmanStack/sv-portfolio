@@ -63,7 +63,7 @@
 
 <div class="container">
   <section class="about">
-    <h1>Hope you liked the stuff</h1>
+    <h1>the Good stuff</h1>
   </section>
   <section class="socials">
     <ul class="social-links">

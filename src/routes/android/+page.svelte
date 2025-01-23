@@ -11,10 +11,10 @@
   import looper from '$lib/images/looper.avif';
   import italian from '$lib/images/italian.avif';
   import trachtenbergs from '$lib/images/trachtenberg.svg';
-  import stocks from '$lib/images/stock.svg';
-  import moviess from '$lib/images/movies.svg';
+  import stocks from '$lib/images/stock.jpg';
+  import moviess from '$lib/images/movies.jpg';
   import vocabs from '$lib/images/vocabulary.svg';
-  import loopers from '$lib/images/looper.svg';
+  import loopers from '$lib/images/looper.jpg';
   import italians from '$lib/images/italian.svg';
 
   let selectedImage = 'Android Stuff'; 
@@ -57,7 +57,7 @@
     {/if}
     {#if contentMap[selectedImage].link}
     <a href={contentMap[selectedImage].link}>
-      <button class="button">Some Stuff</button>
+      <button class="button">Other Stuff</button>
     </a>
     {/if}
   {/if}

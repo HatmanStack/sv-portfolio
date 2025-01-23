@@ -158,7 +158,7 @@
 					<p style="font-size:.8em">The AWS Nova Canvas foundation model presented in a gradio app. The model enables users to generate, edit, and refine images through sophisticated tools like text-to-image generation, inpainting, outpainting, and background removal. Users can explore innovative image creation methods, including color-guided content manipulation and image conditioning, providing control over visual design and artistic expression.</p>
 				<a href="https://hatman-aws-nova-canvas.hf.space/" target="_blank" rel="noopener noreferrer">
         <button type="button" class="gooey-button">
-            Inference
+            Infer
         </button></a>
         </div>
 			</div>
