@@ -1,6 +1,7 @@
-<div>
-<h1><p style="text-align:center;">❤️‍🔥 CodePen Favorites ❤️‍🔥</p></h1>
-<h4 align="center">
+
+<div align="center">
+<h1>❤️‍🔥 CodePen Favorites ❤️‍🔥</h1>
+<h4>
   <a href="https://www.apache.org/licenses/LICENSE-2.0.html">
     <img src="https://img.shields.io/badge/license-Apache2.0-blue" alt="float is under the Apache 2.0 liscense" />
   </a>
@@ -11,8 +12,8 @@
     <img src="https://img.shields.io/badge/CSS-voilet" alt="CSS Docs" />
   </a>
 </h4>
-<p style="text-align:center;">A collection of some CodePens from 2024 and their Designers.<br></br>🌎 <b>Live Site:</b> <a href="https://cg-portfolio.com">Portfolio</a></p>
-</div>
+<p >A collection of some CodePens from 2024 and their Designers.<br></br>🌎 <b>Live Site:</b> <a href="https://cg-portfolio.com">Portfolio</a></p></div>
+
 
 ## Featured CodePens
 
