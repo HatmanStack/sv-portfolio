@@ -3,20 +3,18 @@
 	<meta name="description" content="stuff from the web" />
 </svelte:head>
 
-
-
 <script>
   
   import pixelPrompta from '$lib/images/pixel-prompt.avif';
   import twaa from '$lib/images/twa.avif';
   import credentialsa from '$lib/images/credentials.avif';
-   import connectora from '$lib/images/connector.avif';
-   import plotPalettea from '$lib/images/plotpalette.avif';
+  import connectora from '$lib/images/connector.avif';
+  import plotPalettea from '$lib/images/plotpalette.avif';
   import whoamia from '$lib/images/name-check.avif';
   import nbaa from '$lib/images/nba.avif';
   import instanta from '$lib/images/instant.avif';
-    import canvasMediuma from '$lib/images/canvas-medium.avif';
-    import ppMediuma from '$lib/images/pp-medium.avif';
+  import canvasMediuma from '$lib/images/canvas-medium.avif';
+  import ppMediuma from '$lib/images/pp-medium.avif';
   import connectorMediuma from '$lib/images/connector-medium.avif';
   import hugMediuma from '$lib/images/hug-medium.avif';
   import studioBrowsera from '$lib/images/as-medium.avif';
@@ -45,8 +43,8 @@ const contentMap = {
     'Credentials': { title: 'Credentials Canvas', link: 'https://www.cg-portfolio.site/', description: 'A dynamic 3D portfolio experience crafted using Three.js and React Fiber, this immersive digital environment transforms into an interactive journey. Built with a Blender-generated .gltf file optimized through Draco compression, the portfolio offers a richly detailed landscape where phones, lights, arcade controls, signage, and antennas are fully interactive/clickable. Designed for modern hardware, this portfolio explores how technical work can be presented and browsed.' },
     'Connector': { title: 'Google Forms to Snowflake Connector', link: 'https://docs.google.com/forms/d/e/1FAIpQLSce94QihTjunjBvYzFdalz0mYGhVS6Ngy17uRrXkqLI_Da7nA/viewform?pli=1', description: 'This Node.js-based service provides a seamless connection between Google Forms (via App Scripts) and Snowflake, offering a lightweight and cost-effective alternative to traditional data pipelines like Rivery and Fivetran. Built with a serverless architecture, the custom connector enables form submissions to populate in Snowflake within approximately 1-2 minutes. The service leverages existing tools to simplify data integration, eliminating the complexity and expense of larger pipeline solutions. The Data will populate <a href="https://hatmanstack-streamlit-display-app-kicv24.streamlit.app/"><b>HERE</b></a>' },
     'Plot Palette': { title: 'Plot Palette', link: 'https://github.com/HatmanStack/plot-palette', description: 'Created to finetune LLM’s, Plot Pallete is a Dataset to generate Ideas for creative writing. It comes in 10K and 100K sizes and is easily deployed using the DataSet library from HuggingFace. The Dataset includes five tasks that the data was generated from: Creative Writing, Open Question, Poem, Question Answer, and BrainStorm.' },
-  'Name Check': { title: 'Name Check', link: 'https://github.com/HatmanStack/snow-flask-whoami', description: 'This application demonstrates serverless architectures across the three major cloud providers: <a href="https://snow-flask-whoami-gpc-k6cy6vf2la-uc.a.run.app/"><b>Google Cloud Run</b></a>, <a  href="https://l1roun0jr9.execute-api.us-west-1.amazonaws.com/dev"><b>AWS Lambda</b></a>, and <a  href="https://snow-flask-whoami-az.azurewebsites.net/Home"><b>Azure Functions</b></a>. Each backend operates on the same Snowflake database, showcasing their ability to handle a unified workload. Built with Flask for backend logic and Vega-Lite for generating interactive charts, the app highlights the effects of cold starts across providers. Users can interact with the app to initiate workloads, observe how changes propagate between providers, and compare startup performance.' },
-    'NBA': { title: 'NBA Stats', link: 'https://hatmanstack-streamlit-nba-app-dz3nxx.streamlit.app/', description: 'This interactive application, built with Streamlit.io, turns NBA analytics into an engaging prediction challenge. At its core is a custom Keras machine learning model trained on comprehensive 2018 season data, designed to predict game outcomes based on players’ seasonal performance averages. Users can craft dream teams using players from NBA history and pit them against AI-generated squads tailored to four distinct difficulty levels. For transparency and learning, both the training dataset and model script are accessible through the project’s <a href="https://github.com/HatmanStack/streamlit-nba"><b>GitHub repository</b></a>.' },
+  'Name Check': { title: 'Name Check', link: 'https://github.com/HatmanStack/snow-flask-whoami', description: 'This application demonstrates serverless architectures across the three major cloud providers: <a href="https://snow-flask-whoami-gpc-k6cy6vf2la-uc.a.run.app/" target="_blank" rel="noopener noreferrer"><b>Google Cloud Run</b></a>, <a  href="https://l1roun0jr9.execute-api.us-west-1.amazonaws.com/dev" target="_blank" rel="noopener noreferrer"><b>AWS Lambda</b></a>, and <a  href="https://snow-flask-whoami-az.azurewebsites.net/Home" target="_blank" rel="noopener noreferrer"><b>Azure Functions</b></a>. Each backend operates on the same Snowflake database, showcasing their ability to handle a unified workload. Built with Flask for backend logic and Vega-Lite for generating interactive charts, the app highlights the effects of cold starts across providers. Users can interact with the app to initiate workloads, observe how changes propagate between providers, and compare startup performance.' },
+    'NBA': { title: 'NBA Stats', link: 'https://hatmanstack-streamlit-nba-app-dz3nxx.streamlit.app/', description: 'This interactive application, built with Streamlit.io, turns NBA analytics into an engaging prediction challenge. At its core is a custom Keras machine learning model trained on comprehensive 2018 season data, designed to predict game outcomes based on players’ seasonal performance averages. Users can craft dream teams using players from NBA history and pit them against AI-generated squads tailored to four distinct difficulty levels. For transparency and learning, both the training dataset and model script are accessible through the project’s <a href="https://github.com/HatmanStack/streamlit-nba" target="_blank" rel="noopener noreferrer"><b>GitHub repository</b></a>.' },
     'Instant': { title: 'Instant Style', link: 'https://hatman-instantstyle.hf.space', description: 'Instant Style is a Gradio application designed for advanced image generation, leveraging the IPAdapter to transfer styles and layouts dynamically. Running on a Hugging Face space with ZeroGPU architecture, the app allows users to precisely control style transfer by selectively activating or deactivating different layers of the base diffusion model. Users can choose to apply style, layout, both, or neither to the generated image, providing a flexible approach to AI-powered image transformation.' },
     'Canvas Medium': { title: 'Canvas Gone Rogue Art meets chaos, with a side of jailbreak', link: 'https://medium.com/@HatmanStack/aws-nova-canvas-gone-rogue-art-meets-chaos-with-a-side-of-jailbreak-1f4cc2ba7c96', description: 'Challenges encountered when developing the AWS Nova Canvas Gradio App. ' },
     'Plot Palette Medium': { title: 'Creating Plot Palette 100K with Cloud9 for LLM Training', link: 'https://medium.com/@HatmanStack/creating-plot-palette-100k-with-cloud9-for-llm-training-7a63384ca329', description: 'A how to on managing and executing multi-threaded tasks efficiently despite API limitations, with potential to streamline the process using CloudFormation.' },
@@ -56,10 +54,12 @@ const contentMap = {
   };
 
 
-
+import Header from '../Header.svelte';
 </script>
 
-
+<section>
+<Header />
+</section>
 
 <section>
 <div class="wrapper-column">
@@ -78,19 +78,19 @@ const contentMap = {
 <div class="wrapper">
   <div class="items">
  
-    <div class="item" tabindex="0" style="--initial-img: url({one}); --active-img: url({pixelPrompta});" on:click="{(event) => selectedImage === 'Pixel Prompt' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Pixel Prompt'}"></div>
-    <div class="item" tabindex="0" style="--initial-img: url({two}); --active-img: url({twaa});" on:click="{(event) => selectedImage === 'TWA' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'TWA'}"></div>
-    <div class="item" tabindex="0" style="--initial-img: url({three}); --active-img: url({credentialsa});"  on:click="{(event) => selectedImage === 'Credentials' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Credentials'}"></div>
-    <div class="item" tabindex="0" style="--initial-img: url({four}); --active-img: url({connectora});" on:click="{(event) => selectedImage === 'Connector' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Connector'}"></div>
-    <div class="item" tabindex="0" style="--initial-img: url({five}); --active-img: url({plotPalettea});" on:click="{(event) => selectedImage === 'Plot Palette' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Plot Palette'}"></div>
-    <div class="item" tabindex="0" style="--initial-img: url({six}); --active-img: url({whoamia});" on:click="{(event) => selectedImage === 'Name Check' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Name Check'}"></div>
-    <div class="item" tabindex="0" style="--initial-img: url({seven}); --active-img: url({nbaa});"  on:click="{(event) => selectedImage === 'NBA' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'NBA'}"></div>
-    <div class="item" tabindex="0" style="--initial-img: url({eight}); --active-img: url({instanta});"  on:click="{(event) => selectedImage === 'Instant' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Instant'}"></div>
-    <div class="item" tabindex="0" style="--initial-img: url({nine}); --active-img: url({canvasMediuma});"  on:click="{(event) => selectedImage === 'Canvas Medium' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Canvas Medium'}"></div>
-    <div class="item" tabindex="0" style="--initial-img: url({ten}); --active-img: url({ppMediuma});"  on:click="{(event) => selectedImage === 'Plot Palette Medium' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Plot Palette Medium'}"></div>
-    <div class="item" tabindex="0" style="--initial-img: url({eleven}); --active-img: url({connectorMediuma});"  on:click="{(event) => selectedImage === 'Connector Medium' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Connector Medium'}"></div>
-    <div class="item" tabindex="0" style="--initial-img: url({twelve}); --active-img: url({hugMediuma});"  on:click="{(event) => selectedImage === 'Hug Medium' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Hug Medium'}"></div>
-    <div class="item" tabindex="0" style="--initial-img: url({thirteen}); --active-img: url({studioBrowsera});"  on:click="{(event) => selectedImage === 'AS Medium' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'AS Medium'}"></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({one}); --active-img: url({pixelPrompta});" on:click="{(event) => selectedImage === 'Pixel Prompt' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Pixel Prompt'}"></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({two}); --active-img: url({twaa});" on:click="{(event) => selectedImage === 'TWA' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'TWA'}"></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({three}); --active-img: url({credentialsa});"  on:click="{(event) => selectedImage === 'Credentials' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Credentials'}"></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({four}); --active-img: url({connectora});" on:click="{(event) => selectedImage === 'Connector' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Connector'}"></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({five}); --active-img: url({plotPalettea});" on:click="{(event) => selectedImage === 'Plot Palette' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Plot Palette'}"></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({six}); --active-img: url({whoamia});" on:click="{(event) => selectedImage === 'Name Check' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Name Check'}"></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({seven}); --active-img: url({nbaa});"  on:click="{(event) => selectedImage === 'NBA' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'NBA'}"></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({eight}); --active-img: url({instanta});"  on:click="{(event) => selectedImage === 'Instant' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Instant'}"></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({nine}); --active-img: url({canvasMediuma});"  on:click="{(event) => selectedImage === 'Canvas Medium' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Canvas Medium'}"></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({ten}); --active-img: url({ppMediuma});"  on:click="{(event) => selectedImage === 'Plot Palette Medium' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Plot Palette Medium'}"></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({eleven}); --active-img: url({connectorMediuma});"  on:click="{(event) => selectedImage === 'Connector Medium' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Connector Medium'}"></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({twelve}); --active-img: url({hugMediuma});"  on:click="{(event) => selectedImage === 'Hug Medium' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Hug Medium'}"></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({thirteen}); --active-img: url({studioBrowsera});"  on:click="{(event) => selectedImage === 'AS Medium' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'AS Medium'}"></div>
 
 
     </div>
@@ -166,89 +166,24 @@ const contentMap = {
 
 <style>
 :root {
-  --primary-color: #6200ea;
-  --secondary-color: #03dac6;
-  --background-color: #1e1e1e;
   --text-color: #aaaa9f;
   --accent-color: #4c4b43;
-  --modal-background: rgba(0, 0, 0, 0.8);
   --transition-speed: 0.3s;
   --border-radius: 12px;
   --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-}
-
-.button {
-  padding: 15px 30px;
-  border: none;
-  cursor: pointer;
-  color: var(--text-color);
-  font-size: 14px;
-  border-radius: var(--border-radius);
-  transition: transform var(--transition-speed), box-shadow var(--transition-speed), background var(--transition-speed);
-  position: relative;
-  overflow: hidden;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: .5rem;
-}
-
-.button {
-  background: transparent;
-  border: 2px solid var(--accent-color);
-  color: var(--accent-color);
-  position: relative;
-  overflow: hidden;
-  transition: color var(--transition-speed), background var(--transition-speed);
-}
-
-.button::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: -100%;
-  background: var(--accent-color);
-  z-index: -1;
-  transition: all var(--transition-speed);
-}
-
-.button:hover::before {
-  left: 0;
-}
-
-.button:hover {
-  color: var(--text-color);
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root{
-    --index: calc(1vw + 1vh);
+  --index: calc(1vw + 1vh);
     --transition: cubic-bezier(.1, .7, 0, 1);
 }
 
-
-body{
-    background-color: #141414;
-}
-
-.wrapper{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 10rem;
-}
 .wrapper-column {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     margin-top: 1rem;
+}
+
+.wrapper{
+    margin-top: 10rem;
 }
 
 .glow-filter {
@@ -259,7 +194,6 @@ body{
 }
 
 p {
-  margin: 0; /* Remove default margin */
   color: #86868b;
   font-weight: 600;
   background: linear-gradient(0deg, #86868b 0%, #bdc2c9 100%);
@@ -268,7 +202,6 @@ p {
   -webkit-text-fill-color: transparent;
   max-width: 60em;
   text-align: center;
-  
 }
 
 svg.filters {
@@ -312,6 +245,41 @@ svg.filters {
 @keyframes onloadopacity {
   24% { opacity: 0; }
   100% { opacity: 1; }
+}
+
+.button {
+  padding: 15px 30px;
+  color: var(--text-color);
+  font-size: 14px;
+  border-radius: var(--border-radius);
+  transition: color var(--transition-speed), background var(--transition-speed);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: .5rem;
+  background: transparent;
+  color: var(--accent-color);
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: -100%;
+  background: var(--accent-color);
+  z-index: -1;
+  transition: all var(--transition-speed);
+}
+
+.button:hover::before {
+  left: 0;
+}
+
+.button:hover {
+  color: var(--text-color);
 }
 
 .items{

@@ -16,7 +16,7 @@ export default {
   },
   preprocess: sveltePreprocess({
     scss: {
-      includePaths: ['src'], // Optional if you have SCSS files in subfolders
+      includePaths: ['src'], 
     },
   }),
   

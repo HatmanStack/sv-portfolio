@@ -4,6 +4,7 @@
 </svelte:head>
 
 <script>
+  import Header from '../Header.svelte';
   import trachtenberg from '$lib/images/trachtenberg.avif';
   import stock from '$lib/images/stock.avif';
   import movies from '$lib/images/movies.avif';
@@ -29,6 +30,10 @@
   };
 </script>
 
+<section style="margin-bottom:1rem;">
+<Header />
+</section>
+
 <section>
   <fieldset>
     <label style="--initial-img: url({loopers}); --active-img: url({looper});">
@@ -50,20 +55,19 @@
        <input type="radio" name="images" on:change="{() => selectedImage = 'Italian'}">
     </label>
     <label class="content-label">
-  {#if contentMap[selectedImage]}
-    <h1 class="header-text glow-filter" data-text={contentMap[selectedImage].title}></h1>
-    {#if contentMap[selectedImage].description}
-    <p>{contentMap[selectedImage].description}</p>
-    {/if}
-    {#if contentMap[selectedImage].link}
-    <a href={contentMap[selectedImage].link} target="_blank" rel="noopener noreferrer">
-      <button class="button">Other Stuff</button>
-    </a>
-    {/if}
-  {/if}
-  
-</label>
-  </fieldset>
+      {#if contentMap[selectedImage]}
+        <h1 class="header-text glow-filter" data-text={contentMap[selectedImage].title}></h1>
+        {#if contentMap[selectedImage].description}
+        <p>{contentMap[selectedImage].description}</p>
+        {/if}
+        {#if contentMap[selectedImage].link}
+        <a href={contentMap[selectedImage].link} target="_blank" rel="noopener noreferrer">
+          <button class="button">Other Stuff</button>
+        </a>
+        {/if}
+      {/if}
+    </label>
+</fieldset>
 <svg class="filters" width='1440px' height='300px' viewBox='0 0 1440 300' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
         <filter id="glow-4" color-interpolation-filters="sRGB" x="-50%" y="-200%" width="200%" Height="500%">
@@ -132,28 +136,14 @@
 <style>
 @import "https://unpkg.com/open-props" layer(design.system);
 
-
-@layer android {
-  :root {
-  --primary-color: #6200ea;
-  --secondary-color: #03dac6;
-  --background-color: #1e1e1e;
-  --text-color: #61676b;
-  --accent-color: #9fa5a9;
-  --modal-background: rgba(0, 0, 0, 0.8);
-  --transition-speed: 0.3s;
-  --border-radius: 12px;
-  --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-}
-
-
 .button {
+  padding: 15px 30px;
   background: transparent;
   border: 2px solid var(--accent-color);
   color: var(--accent-color);
   position: relative;
   border-radius: var(--border-radius);
-  font-size: 12px;
+  font-size: 14px;
   cursor: pointer;
   overflow: hidden;
   text-transform: uppercase;
@@ -262,17 +252,14 @@
         transition: background-image 0.3s ease;
       }
     }
-
-    &:has(label > input:checked) > label > .content {
-      display: block;
-    }
   }
+
 .content-label {
   display: flex;
   align-items:center;
-  flex-direction: column; /* Align children from top to bottom */
-  justify-content: space-around; /* Space elements apart */
-  height: 100%; /* Assume full height of the container or parent */
+  flex-direction: column; 
+  justify-content: space-around; 
+  height: 100%; 
 }
 
 .glow-filter {
@@ -283,7 +270,6 @@
 }
 
 p {
-  margin: 0; /* Remove default margin */
   color: #86868b;
   font-weight: 600;
   background: linear-gradient(0deg, #86868b 0%, #bdc2c9 100%);
@@ -293,7 +279,6 @@ p {
   max-width: 28em;
   text-align: center;
 }
-
 
 svg.filters {
   height: 0;
@@ -336,37 +321,21 @@ svg.filters {
   24% { opacity: 0; }
   100% { opacity: 1; }
 }
-}
 
-@layer android.support {
-  html {
-    background: var(--gradient-9);
-    block-size: 100%;
-  }
-  
-  body {
-    min-block-size: 100%;
-    display: grid;
-    place-content: center;
-    padding: var(--size-5);
-    gap: var(--size-5);
-  }
-  
+@layer support {
   fieldset {
     inline-size: 80vw;
-    
     display: grid;
     grid-auto-flow: column;
-    grid-template-rows: 90vh;
+    grid-template-rows: 89vh;
     gap: var(--size-3);
     border: none;
-    
     > label {
       cursor: pointer;
       border-radius: var(--radius-4);
       
       &:focus-within {
-        outline: 1px solid green;
+        outline: 3px solid  #816769;
         outline-offset: 5px;
       }
       

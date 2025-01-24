@@ -1,10 +1,23 @@
+<svelte:head>
+<title>Home</title>
+	<meta name="description" content="CG - Portfolio with Stuff" />
+  <meta property="og:title" content="CG - Portfolio with Stuff" />
+  <meta property="og:description" content="A portfolio made with some of my favorite Codepen.io's from 2024" />
+  <meta property="og:image" content={sloth} /> 
+  <meta property="og:url" content="https://www.cg-portfolio.com" />
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CG - Portfolio with Stuff">
+  <meta name="twitter:description" content="A portfolio made with some of my favorite Codepen.io's from 2024">
+  <meta name="twitter:image" content={sloth} />
+</svelte:head>
+
 <script lang="ts">
 	import '../app.css';
 	import Header from './Header.svelte';
   import nba from '$lib/images/nba.gif';
   import novaCanvas from '$lib/images/nova-canvas.gif';
   import pixelPrompt from '$lib/images/pixel-prompt.gif';
-  import pizza from '$lib/images/italian.gif';
+  import italian from '$lib/images/italian_short.avif';
   import plotPalette from '$lib/images/plotpalette.gif';
   import ppMedium from '$lib/images/pp-medium.gif';
   import savorSwipe from '$lib/images/savorswipe.gif';
@@ -13,10 +26,10 @@
   import stockSent from '$lib/images/stock-sent.gif';
   import studioBrowser from '$lib/images/as-medium.gif';
   import trachtenberg from '$lib/images/trachtenberg.gif';
-  import twa from '$lib/images/twa.gif';
+  import twa from '$lib/images/twa_short.avif';
   import vocab from '$lib/images/vocabulary.gif';
   import whoami from '$lib/images/name-check.gif';
-  import credentials from '$lib/images/credentials.avif';
+  import credentials from '$lib/images/credentials_short.avif';
   import canvasMedium from '$lib/images/canvas-medium.gif';
   import cbExpoMedium from '$lib/images/cb-expo-medium.gif';
   import cbRnFastMedium from '$lib/images/cb-rn-fast-medium.gif';
@@ -24,54 +37,17 @@
   import connectorMedium from '$lib/images/connector-medium.gif';
   import float from '$lib/images/float.gif';
   import hugMedium from '$lib/images/hug-medium.gif';
-  import instant from '$lib/images/instant.gif';
-  import looper from '$lib/images/looper.gif';
-  import movies from '$lib/images/movies.gif';
+  import instant from '$lib/images/instant.avif';
+  import looper from '$lib/images/looper_short.avif';
+  import movies from '$lib/images/movies_short.avif';
   import floata from '$lib/images/float.avif';
   import novaCanvasa from '$lib/images/nova-canvas.avif';
   import savorSwipea from '$lib/images/savorswipe.avif';
   import floatj from '$lib/images/float.jpg';
   import novaCanvasj from '$lib/images/nova-canvas.jpg';
   import savorSwipej from '$lib/images/savorswipe.jpg';
-
-  /**
-  import { onMount } from 'svelte';
-
-  let x = 0;
-  let y = 0;
-
-  function moveBg(event) {
-    const rect = event.target.getBoundingClientRect();
-    x = (event.clientX - rect.x) / rect.width * 100;
-    y = (event.clientY - rect.y) / rect.height * 100;
-    
-  }
-
-  onMount(() => {
-    const button = document.querySelector("button");
-    if (button) {
-      button.addEventListener('pointermove', moveBg);
-    }
-  });*/
   import sloth from '$lib/images/sloth_stuff.jpg'
 </script>
-
-<svelte:head>
-<title>Home</title>
-	<meta name="description" content="CG - Portfolio with Stuff" />
-  
-  <!-- Open Graph meta tags for LinkedIn and social sharing -->
-  <meta property="og:title" content="CG - Portfolio with Stuff" />
-  <meta property="og:description" content="A portfolio made with some of my favorite Codepen.io's from 2024" />
-  <meta property="og:image" content={sloth} /> 
-  <meta property="og:url" content="https://www.cg-portfolio.com" />
-  
-  <!-- Twitter Card meta tags -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="CG - Portfolio with Stuff">
-  <meta name="twitter:description" content="A portfolio made with some of my favorite Codepen.io's from 2024">
-  <meta name="twitter:image" content={sloth} />
-</svelte:head>
 
 <section>
 <div class="scroll-container">
@@ -79,19 +55,17 @@
   <div class="grid-item"><img src={nba} alt="nba" /></div>
   <div class="grid-item"><img src={novaCanvas} alt="nova-canvas" /></div>
   <div class="grid-item"><img src={pixelPrompt} alt="pixel-prompt" /></div>
-  <div class="grid-item"><img src={pizza} alt="pizza" /></div>
+  <div class="grid-item"><img src={italian} alt="italian" /></div>
   <div class="grid-item"><img src={plotPalette} alt="plotpalette" /></div>
   <div class="grid-item"><img src={ppMedium} alt="pp-medium" /></div>
   <div class="grid-item"><img src={savorSwipe} alt="savorswipe" /></div>
   <div class="grid-item"><img src={stockLog} alt="stock-log" /></div>
   <div class="grid-item"><img src={stocks} alt="stocks" /></div>
   <div class="grid-item"><img src={stockSent} alt="stock-sent" /></div>
-  <div class="grid-item special"><p ><b>Hi I'm Chris.  Here's Some Stuff.</b></p></div>
+  <div class="grid-item special"><p ><b>I'm Chris...Here's Some Stuff.</b></p></div>
   <div class="grid-item"><img src={studioBrowser} alt="studio-browser" /></div>
-  
   <div class="grid-item"><img src={trachtenberg} alt="trachtenberg" /></div>
   <div class="grid-item"><img src={credentials} alt="credentials" /></div>
-  
   <div class="grid-item"><img src={twa} alt="twa" /></div>
   <div class="grid-item"><img src={vocab} alt="vocab" /></div>
   <div class="grid-item"><img src={whoami} alt="whoami" /></div>
@@ -109,7 +83,7 @@
   <div class="grid-item"><img src={nba} alt="nba" /></div>
   <div class="grid-item"></div>
   <div class="grid-item"><img src={pixelPrompt} alt="pixel-prompt" /></div>
-  <div class="grid-item"><img src={pizza} alt="pizza" /></div>
+  <div class="grid-item"><img src={italian} alt="italian" /></div>
   <div class="grid-item"><img src={plotPalette} alt="plotpalette" /></div>
   <div class="grid-item"><img src={ppMedium} alt="pp-medium" /></div>
   <div class="grid-item"><img src={savorSwipe} alt="savorswipe" /></div>
@@ -127,12 +101,10 @@
   <div class="grid-item"><img src={hugMedium} alt="hug-medium" /></div>
   <div class="grid-item"><img src={instant} alt="instant" /></div>
   <div class="grid-item"><img src={novaCanvas} alt="nova-canvas" /></div>
+</div>
+</div>
 
-  
-</div>
-</div>
 </section>
-
 <section class="header-scroll">
 <Header />
 </section>
@@ -146,7 +118,6 @@
 				<span>Float</span>
 				<p>Cross-Platform</p>
 			</div>
-
 			<div class="wrapper">			
 				<div class="profile_quote">
 					<p style="font-size:.8em">Float is a cross-platform meditation app built with React Native and Expo. It uses Google Generative AI, Google TTS, and a library of sound files to create personalized meditation experiences based on user-submitted incidents that have affected them emotionally, which we refer to as “floats”. Floats are categorized by emotion and intensity, featuring a timer and a color scheme that convey the duration, summary, and reasoning for the category.</p>
@@ -155,9 +126,7 @@
             Meditate
         </button></a>
         </div>
-        
 			</div>
-
 		</div>
 		<div class="content">
 			<img src={novaCanvasa} class="profession_image" alt="Profession" />
@@ -209,104 +178,7 @@
 </svg>
 
 <style>
-
-
-button {
-    --a: 0%;
-    --hue: 170deg;
-    --x: 50;
-    --y: 50;
-    --button: hsl(var(--hue), 66%, 66%);
-    --edge: 10px;
-    --size: 1em;
-    border: none;
-    background: transparent;
-    color: hsla(var(--hue), 80%, 30%, 0.7);
-    font-size: 1.8em;
-    position: relative;
-    padding: calc(var(--size)) calc(var(--size)*1.5);
-    animation: color 20s linear infinite both;
-    transition: 
-        --a .5s ease-in-out, 
-        scale var(--spring-duration) var(--spring-easing);
-    scale: 0.92;
-    isolation: isolate;
-    &:hover {
-        --a: 100%;
-        transition-duration: .5s, 1s;
-        box-shadow: none;
-        opacity: 1;
-        scale: 1;
-    }
-}
-
-button:before {
-  
-    content: "";
-    position: absolute;
-    pointer-events: none;
-    inset: 0em;
-    border: none;
-    /** here's the magic. A blur and a svg filter */
-    filter: blur(12px) url(#goo) drop-shadow(0 .25em .5em hsla(0deg, 0%, 0%, 0.8)); 
-    /** followed by a radial-gradient which causes the
-    gooey effect to follow mouse-position */
-    background-image:
-        linear-gradient(0deg,var(--button),var(--button));
-        /**
-        radial-gradient(
-            40% 70% at calc(var(--x) * 1%) calc(var(--y) * 1%),
-            hsla(var(--hue), 77%, 77%, var(--a)) 0%,
-            transparent 90%
-        );*/
-    /** and finally a background-clip so the radial-gradient
-    is larger than the linear-gradient */
-    background-clip: content-box, border-box;
-    padding: 24px;
-    z-index: -1;
-    border: inherit;
-    animation: color 20s linear infinite both;
-    
-}
-
-@property --hue {
-    syntax: "<angle>";
-    initial-value: 170deg;
-    inherits: false;
-}
-
-@keyframes color {
-    from {
-        --hue: 170deg;
-    }
-    to {
-        --hue: 530deg;
-    }
-}
-
-:root {
-    --spring-easing: linear(
-    0, 0.002, 0.01 0.9%, 0.038 1.8%, 0.156, 0.312 5.8%, 0.789 11.1%, 1.015 14.2%,
-    1.096, 1.157, 1.199, 1.224 20.3%, 1.231, 1.231, 1.226, 1.214 24.6%,
-    1.176 26.9%, 1.057 32.6%, 1.007 35.5%, 0.984, 0.968, 0.956, 0.949 42%,
-    0.946 44.1%, 0.95 46.5%, 0.998 57.2%, 1.007, 1.011 63.3%, 1.012 68.3%,
-    0.998 84%, 1
-  );
-    --spring-duration: 1.66s;
-}
-
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
-
-* {
-	padding: 0;
-	margin: 0;
-	box-sizing: border-box;
-}
-
-body {
-	font-family: "Inter", sans-serif;
-}
-
 :root {
   --dark: #121212;
   --light: #ffffff;
@@ -319,9 +191,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  
   width: 100%;
-  height: 90vh;
+  height: 89vh;
   background-image: var(--bg-color);
 }
 
@@ -468,8 +339,7 @@ body {
   opacity: 1;
 }
 
-dialog { position: absolute; z-index: 1; background: none; color: white; border: 0; font-size: .8rem; padding:.5em;}
-dialog a { color: whitesmoke; }
+
 	@keyframes zoom-in {
   0% {
     transform: translateZ(-1000px);
@@ -488,8 +358,61 @@ dialog a { color: whitesmoke; }
   }
 }
 
+button {
+    --hue: 170deg;
+    --button: hsl(var(--hue), 66%, 66%);
+    --size: 1em;
+    border: none;
+    background: transparent;
+    color: hsla(var(--hue), 80%, 30%, 0.7);
+    font-size: 1.8em;
+    position: relative;
+    padding: calc(var(--size)) calc(var(--size)*1.5);
+    animation: color 20s linear infinite both;
+    scale: 0.92;
+    isolation: isolate;
+    &:hover {
+        transition-duration: .5s, 1s;
+        box-shadow: none;
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+button:before {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    inset: 0em;
+    border: none;
+    filter: blur(12px) url(#goo) drop-shadow(0 .25em .5em hsla(0deg, 0%, 0%, 0.8)); 
+    background-image:
+        linear-gradient(0deg,var(--button),var(--button));
+    background-clip: content-box, border-box;
+    padding: 20px;
+    z-index: -1;
+    border: inherit;
+    animation: color 20s linear infinite both; 
+}
+
+@property --hue {
+    syntax: "<angle>";
+    initial-value: 170deg;
+    inherits: false;
+}
+
+@keyframes color {
+    from {
+        --hue: 170deg;
+    }
+    to {
+        --hue: 530deg;
+    }
+}
+
+
 .scroll-container {
-  height: 300vh; /* Extended scroll length */
+  height: 300vh; 
   position: relative;
 }
 
@@ -527,11 +450,6 @@ dialog a { color: whitesmoke; }
       grid-row: 2 / span 2;
       grid-column: 2 / span 2;
     }
-
-    > b {
-      font-size: 15vmin;
-    }
-
     &:nth-of-type(1)  { animation-range: 40% 50% }
     &:nth-of-type(2)  { animation-range: 20% 30% }
     &:nth-of-type(3)  { animation-range: 52% 62% }
@@ -641,28 +559,4 @@ dialog a { color: whitesmoke; }
   }
 }
 
-
-
-
-
-@layer support {
-  * {
-    box-sizing: border-box;
-    margin: 0;
-  }
-
-  html {
-    block-size: 100%;
-	inline-size: 100%;
-    color-scheme: dark light;
-  }
-
-  body {
-    min-block-size: 400vh;
-	inline-size: 100vw; /* Add width control */
-    margin: 0;
-    padding: 0;
-    font-family: system-ui, sans-serif;
-  }
-}
 </style>

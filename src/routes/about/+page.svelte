@@ -3,63 +3,16 @@
 	<meta name="description" content="About this app" />
 </svelte:head>
 
-
 <script>
- 
-  
   import linkedIn from '$lib/images/linkedIn.svg';
   import huggingface from '$lib/images/hf.svg';
   import x from '$lib/images/x.svg';
-  import PointerParticle from '../PointerParticles.svelte';
- 
+  import Header from '../Header.svelte';
 </script>
 
-
-
-<style>
-  .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-    text-align: center;
-	 opacity: 0;
-	
-    transform: translateY(20px);
-	animation: fadeIn 1s forwards ease-out;
-  }
-
-
-    @keyframes fadeIn {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  h1, h2 {
-    margin-bottom: 10px;
-  }
-
-  .social-links {
-    display: flex;
-    justify-content: center;
-    list-style: none;
-    padding: 0;
-  }
-
-  .social-links li {
-    margin: 0 10px;
-	
-  }
-
-.social-links img {
-  width: 40px; 
-  height: 40px;
-}
-  
-</style>
+<section>
+<Header />
+</section>
 
 <div class="container">
   <section class="about">
@@ -73,3 +26,47 @@
 	</ul>
   </section>
 </div>
+
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    text-align: center;
+	  opacity: 0;
+    transform: translateY(20px);
+	  animation: fadeIn 1s forwards ease-out;
+  }
+
+    @keyframes fadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  h1 {
+    margin-bottom: 10px;
+  }
+
+  .social-links {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+  }
+
+  .social-links li {
+    margin: 0 10px;	
+  }
+
+  .social-links img {
+    width: 40px; 
+    height: 40px;
+  }
+  
+</style>
+
+

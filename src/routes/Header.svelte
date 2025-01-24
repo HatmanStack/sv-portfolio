@@ -1,51 +1,28 @@
 <script lang="ts">
-import { onMount } from 'svelte';
-	import '../app.css';
 	import { page } from '$app/state';
-	 import { goto } from '$app/navigation';
+	import { goto } from '$app/navigation';
 	import logo from '$lib/images/logo.svg';
 	import github from '$lib/images/github.svg';	
 
+	function navigateToContainer(event) {
+	event.preventDefault();
+	console.log('header');
+	const currentPath = window.location.pathname;
+	if (currentPath !== '/') {
+		goto('/').then(() => {
+		scrollToHeaderContainer();
+		});
+	} else {
+		scrollToHeaderContainer();
+	}
+	}
 
-function navigateToContainer(event) {
-  event.preventDefault();
-  console.log('header');
-  const currentPath = window.location.pathname;
-  if (currentPath !== '/') {
-    goto('/').then(() => {
-      scrollToHeaderContainer();
-	  
-    });
-  } else {
-    scrollToHeaderContainer();
-	
-  }
-}
-
-function scrollToHeaderContainer() {
-  const container = document.querySelector('.header-scroll');
-  if (container) {
-    container.scrollIntoView({ behavior: 'auto' });
-  }
-}
-
-     onMount(() => {
-        console.log('testHeader');
-
-        const handlePopState = (event) => {
-            // Add custom logic here for the back button
-            console.log("Back button was pressed");
-            // You can navigate or manipulate the state here as needed
-        }
-
-        window.addEventListener('popstate', handlePopState);
-
-        return () => {
-            window.removeEventListener('popstate', handlePopState);
-        };
-    });
-
-  
+	function scrollToHeaderContainer() {
+	const container = document.querySelector('.header-scroll');
+	if (container) {
+		container.scrollIntoView({ behavior: 'auto' });
+	}
+	}
 </script>
 
 <header>
@@ -118,15 +95,21 @@ function scrollToHeaderContainer() {
 </header>
 
 <style lang="scss">
+	:root {
+		--hue: 100;
+		--fg: #c8bdbe;
+		--focus: #816769;
+		--ease-out: cubic-bezier(0.33,1,0.68,1);
+		--ease-in-out: cubic-bezier(0.65,0,0.35,1);
+		--tab-bar-bg: #171C1B;
+		--trans-dur: 0.3s;
+		--trans-timing: cubic-bezier(0.65,0,0.35,1);
+		font-size: calc(14px + (30 - 14) * (100vw - 280px) / (3840 - 280));
+	}
 
 	header {
 		display: flex;
 		justify-content: space-between;
-	}
-
-	.corner {
-		width: 3em;
-		height: 3em;
 	}
 
 	.corner a {
@@ -146,17 +129,6 @@ function scrollToHeaderContainer() {
 	nav {
 		display: flex;
 		justify-content: center;
-		--background: #171C1B;
-	}
-
-	svg {
-		width: 2em;
-		height: 3em;
-		display: block;
-	}
-
-	path {
-		fill: var(--background);
 	}
 
 	ul {
@@ -178,75 +150,20 @@ function scrollToHeaderContainer() {
 		margin-bottom: 1rem;
 	}
 
-	li[aria-current='page']::before {
-		--size: 6px;
-		content: '';
-		width: 0;
-		height: 0;
-		position: absolute;
-		top: 0;
-		left: calc(50% - var(--size));
-		border: var(--size) solid transparent;
-		border-top: var(--size) solid var(--color-theme-1);
-	}
-
+	
 	nav a {
 		display: flex;
 		height: 100%;
 		align-items: center;
 		padding: 0 0.5rem;
-		color: var(--color-text);
 		font-weight: 700;
 		font-size: 0.8rem;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
 		text-decoration: none;
-		transition: color 0.2s linear;
 	}
 
-	a:hover {
-		color: var(--color-theme-1);
-	}
 
-$ease-in: cubic-bezier(0.32,0,0.67,0);
-$ease-out: cubic-bezier(0.33,1,0.68,1);
-$ease-in-out: cubic-bezier(0.65,0,0.35,1);
-
-@mixin debug-hitbox() {
-	$debug: false;
-
-	@if $debug == true {
-		$hue: floor(360 * random());
-		outline: 1px solid hsl($hue,90%,50%);
-	}
-}
-* {
-	border: 0;
-	box-sizing: border-box;
-	margin: 0;
-	padding: 0;
-}
-:root {
-	--hue: 100;
-	--bg: #343347;
-		--fg: #c8bdbe;
-		--focus: #816769;
-	
-	--tab-bar-bg: #171C1B;
-	--trans-dur: 0.3s;
-	--trans-timing: cubic-bezier(0.65,0,0.35,1);
-	font-size: calc(14px + (30 - 14) * (100vw - 280px) / (3840 - 280));
-}
-body {
-	background-color: var(--bg);
-	color: var(--fg);
-	display: flex;
-	font: 1em/1.5 "Noto Sans", sans-serif;
-	height: 100vh;
-	transition:
-		background-color var(--trans-dur),
-		color var(--trans-dur);
-}
 .tab-bar {
 	background-color: var(--tab-bar-bg);
 	border-radius: 2em;
@@ -259,15 +176,13 @@ body {
 		box-shadow var(--trans-dur);
 
 	&__tabs {
-		@include debug-hitbox();
 		display: flex;
 		justify-content: space-around;
-		gap: 2rem; /* Added gap between items */
+		gap: 2rem; 
         list-style: none;
         padding: 0 1.5rem;
 	}
 	&__tab {
-		@include debug-hitbox();
 		text-align: center;
 		width: 3em;
 		min-width: 3em;
@@ -280,7 +195,7 @@ body {
 				transform var(--trans-dur) var(--trans-timing);
 		}
 		&-icon {
-			@include debug-hitbox();
+			
 			margin: auto;
 			overflow: visible;
 			width: 1.5em;
@@ -301,7 +216,7 @@ body {
 			&-3 {
 				animation: {
 					duration: calc(var(--trans-dur) * 2.5);
-					timing-function: $ease-in-out;
+					timing-function: var(--ease-in-out);
 				}
 			}
 			&--home &-1 {
@@ -312,15 +227,12 @@ body {
 				stroke: var(--tab-bar-bg);
 			}
 			&--android &-2,
-			&--android &-3,
-			&--books &-2,
-			&--books &-3 {
+			&--android &-3{
 				transform-origin: 12px 21px;
 			}
 		}
 		&-name {
-			@include debug-hitbox();
-			 font-size: 0.75em;
+			font-size: 0.75em;
             font-weight: 500;
             line-height: 1;
             position: absolute;
@@ -334,7 +246,6 @@ body {
                 transform var(--trans-dur) var(--trans-timing);
 		}
 		&-link {
-			@include debug-hitbox();
 			color: var(--fg);
 			display: flex;
 			position: relative;
@@ -343,7 +254,6 @@ body {
 			height: 5.5em;
 			transition: color calc(var(--trans-dur) / 2);
 			-webkit-tap-highlight-color: transparent;
-
 			&:hover,
 			&:focus-visible {
 				color: var(--focus);
@@ -380,15 +290,7 @@ body {
 			opacity: 1;
 			fill: var(--tab-bar-bg);
 		}
-		&-link[aria-current="page"] &-icon--books &-icon-1 {
-			animation-name: books-move;
-		}
-		&-link[aria-current="page"] &-icon--books &-icon-2 {
-			animation-name: books-scale-left;
-		}
-		&-link[aria-current="page"] &-icon--books &-icon-3 {
-			animation-name: books-scale-right;
-		}
+		
 		&-link[aria-current="page"] &-icon--android &-icon-1 {
 			animation-name: android-move;
 		}
@@ -400,19 +302,7 @@ body {
 		}
 		&-link[aria-current="page"] &-icon--profile &-icon-1 {
 			animation-name: profile-head-bob;
-		}
-		
-	}
-	[data-pristine] &__tab {
-		&-icon {
-			&-1,
-			&-2,
-			&-3 {
-				animation: {
-					duration: 0s;
-				}
-			}
-		}
+		}	
 	}
 }
 
@@ -461,7 +351,7 @@ body {
 		transform: translate(0,0);
 	}
 	40% {
-		animation-timing-function: $ease-out;
+		animation-timing-function: var(--ease-out);
 		opacity: 1;
 		stroke: hsla(0,0%,0%,0);
 		transform: translate(-4px,0);
@@ -473,55 +363,8 @@ body {
 		transform: translate(0,0);
 	}
 }
-@keyframes books-move {
-	from,
-	60%,
-	to {
-		transform: translateY(0);
-	}
-	20% {
-		transform: translateY(-1px);
-	}
-	40% {
-		transform: translateY(0.5px);
-	}
-}
-@keyframes books-scale-left {
-	from,
-	to {
-		transform: skewY(0);
-	}
-	20% {
-		transform: skewY(-16deg);
-	}
-	40% {
-		transform: skewY(12deg);
-	}
-	60% {
-		transform: skewY(-8deg);
-	}
-	80% {
-		transform: skewY(4deg);
-	}
-}
-@keyframes books-scale-right {
-	from,
-	to {
-		transform: skewY(0);
-	}
-	20% {
-		transform: skewY(16deg);
-	}
-	40% {
-		transform: skewY(-12deg);
-	}
-	60% {
-		transform: skewY(8deg);
-	}
-	80% {
-		transform: skewY(-4deg);
-	}
-}
+
+
 @keyframes android-move {
 	from,
 	60%,
