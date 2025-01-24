@@ -1,7 +1,9 @@
 <svelte:head>
-	<title>About</title>
-	<meta name="description" content="About this app" />
+	<title>Web</title>
+	<meta name="description" content="stuff from the web" />
 </svelte:head>
+
+
 
 <script>
   
@@ -52,8 +54,12 @@ const contentMap = {
     'Hug Medium': { title: 'Cloud Bound: Hugging Face Spaces', link: 'https://medium.com/@HatmanStack/cloud-bound-hugging-face-spaces-1101c569690d', description: 'This demo faced issues with Hugging Face Spaces, which can streamline inference pipelines with its API and Docker setup, offering scalable solutions for different project needs.' },
     'AS Medium': { title: 'Android Studio in the Browser', link: 'https://medium.com/@HatmanStack/android-studio-in-the-browser-dcada6243442', description: 'Transform any computer into a powerful Android development machine with reduced backend complexity.' }
   };
- 
+
+
+
 </script>
+
+
 
 <section>
 <div class="wrapper-column">
@@ -64,15 +70,14 @@ const contentMap = {
     {@html contentMap[selectedImage].description}</p>
     {/if}    
     {#if contentMap[selectedImage].link}
-      <a href={contentMap[selectedImage].link}>
+      <a href={contentMap[selectedImage].link} target="_blank" rel="noopener noreferrer">
         <button class="button">More Stuff</button>
       </a>
     {/if}
   {/if}
 <div class="wrapper">
-    
   <div class="items">
-  
+ 
     <div class="item" tabindex="0" style="--initial-img: url({one}); --active-img: url({pixelPrompta});" on:click="{(event) => selectedImage === 'Pixel Prompt' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Pixel Prompt'}"></div>
     <div class="item" tabindex="0" style="--initial-img: url({two}); --active-img: url({twaa});" on:click="{(event) => selectedImage === 'TWA' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'TWA'}"></div>
     <div class="item" tabindex="0" style="--initial-img: url({three}); --active-img: url({credentialsa});"  on:click="{(event) => selectedImage === 'Credentials' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Credentials'}"></div>
@@ -92,7 +97,8 @@ const contentMap = {
       
     </div>
     </div>
-
+</section>
+<section>
     <svg class="filters" width='1440px' height='300px' viewBox='0 0 1440 300' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
         <filter id="glow-4" color-interpolation-filters="sRGB" x="-50%" y="-200%" width="200%" Height="500%">
@@ -263,10 +269,6 @@ p {
   max-width: 60em;
   text-align: center;
   
-}
-
-.gooey-button {
-   
 }
 
 svg.filters {

@@ -1,6 +1,6 @@
 <svelte:head>
-	<title>About</title>
-	<meta name="description" content="About this app" />
+	<title>Android</title>
+	<meta name="description" content="stuff from google play" />
 </svelte:head>
 
 <script>
@@ -21,7 +21,7 @@
   const contentMap = {
     'Android Stuff':{ title: 'Android Stuff'},
     'Looper': { title: 'Looper', link: 'https://play.google.com/store/apps/details?id=gemenielabs.looper&pli=1', description: 'An audio looping application. Create tracks by pressing the record/stop buttons or import from your own library of audio files. Every list item has independent stop/pause/delete buttons with volume/speed sliders. You can save edited files to your device.' },
-    'Vocabulary': { title: 'Vocabulary', link: 'https://play.google.com/store/apps/details?id=builder.vocabulary.vocabularybuilder', description: 'Vocabulary builder with 300+ words. Questions are given in either multiple choice or fill in the blank format. Progress is kept independently within each list and rank. After completing the rank your top score persists based on wrong answers and hints accumulated.' },
+    'Vocabulary': { title: 'Vocabulary', link: 'https://play.google.com/store/apps/details?id=gemenielabs.vocabulary', description: 'Vocabulary builder with 300+ words. Questions are given in either multiple choice or fill in the blank format. Progress is kept independently within each list and rank. After completing the rank your top score persists based on wrong answers and hints accumulated.' },
     'Trachtenberg': { title: 'Trachtenberg', link: 'https://play.google.com/store/apps/details?id=trachtenberg.math.trachtenberg', description: 'An educational app to teach the Trachtenberg method of multiplication. The practice activity can use ads to monetize the content. Hints can be turned off or on through settings.' },
     'Movies': { title: 'Movies', link: 'https://play.google.com/store/apps/details?id=gemenielabs.movies', description: 'Movies uses The Movie DataBase to showcase LiveData and Room persistence libraries in Android. It creates a database on device with web data that can be manipulated and changed in real-time.' },
     'Stocks': { title: 'Stocks', link: 'https://play.google.com/store/apps/details?id=gemenielabs.sentiment', description: 'Stocks uses a custom bag-of-words strategy and natural language processing (NLP) for sentiment analysis to analyze news articles. This is combined with other metrics, such as price and volume, to employ multivariate logistic regression to forecast market movements over varied time frames. These calculations are conducted off-device through serverless microservices. (update pending)' },
@@ -56,7 +56,7 @@
     <p>{contentMap[selectedImage].description}</p>
     {/if}
     {#if contentMap[selectedImage].link}
-    <a href={contentMap[selectedImage].link}>
+    <a href={contentMap[selectedImage].link} target="_blank" rel="noopener noreferrer">
       <button class="button">Other Stuff</button>
     </a>
     {/if}

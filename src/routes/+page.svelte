@@ -53,11 +53,24 @@
       button.addEventListener('pointermove', moveBg);
     }
   });*/
+  import sloth from '$lib/images/sloth_stuff.jpg'
 </script>
 
 <svelte:head>
-	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
+<title>Home</title>
+	<meta name="description" content="CG - Portfolio with Stuff" />
+  
+  <!-- Open Graph meta tags for LinkedIn and social sharing -->
+  <meta property="og:title" content="CG - Portfolio with Stuff" />
+  <meta property="og:description" content="A portfolio made with some of my favorite Codepen.io's from 2024" />
+  <meta property="og:image" content={sloth} /> 
+  <meta property="og:url" content="https://www.cg-portfolio.com" />
+  
+  <!-- Twitter Card meta tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CG - Portfolio with Stuff">
+  <meta name="twitter:description" content="A portfolio made with some of my favorite Codepen.io's from 2024">
+  <meta name="twitter:image" content={sloth} />
 </svelte:head>
 
 <section>
@@ -137,7 +150,7 @@
 			<div class="wrapper">			
 				<div class="profile_quote">
 					<p style="font-size:.8em">Float is a cross-platform meditation app built with React Native and Expo. It uses Google Generative AI, Google TTS, and a library of sound files to create personalized meditation experiences based on user-submitted incidents that have affected them emotionally, which we refer to as “floats”. Floats are categorized by emotion and intensity, featuring a timer and a color scheme that convey the duration, summary, and reasoning for the category.</p>
-				<a href="https://float-app.fun" target="_blank" rel="noopener noreferrer">
+				<a href="https://float-app.fun" >
         <button type="button" class="gooey-button">
             Meditate
         </button></a>
@@ -156,7 +169,7 @@
 			<div class="wrapper">				
 				<div class="profile_quote">
 					<p style="font-size:.8em">The AWS Nova Canvas foundation model presented in a gradio app. The model enables users to generate, edit, and refine images through sophisticated tools like text-to-image generation, inpainting, outpainting, and background removal. Users can explore innovative image creation methods, including color-guided content manipulation and image conditioning, providing control over visual design and artistic expression.</p>
-				<a href="https://hatman-aws-nova-canvas.hf.space/" target="_blank" rel="noopener noreferrer">
+				<a href="https://hatman-aws-nova-canvas.hf.space/" >
         <button type="button" class="gooey-button">
             Infer
         </button></a>
@@ -173,7 +186,7 @@
 			<div class="wrapper">				
 				<div class="profile_quote">
 					<p style="font-size:.8em">SavorSwipe is a recipe discovery app that lets you swipe through dishes to decide what to make. When adding a recipe, simply take a picture of either the ingredients or the directions. The app uses OpenAI’s OCR technology to automatically extract the relevant information, then leverages Google’s Custom Search API to find matching food images. This creates a visual collection of dishes that you can easily swipe through.</p>
-				<a href="https://savorswipe.fun" target="_blank" rel="noopener noreferrer">
+				<a href="https://savorswipe.fun" >
         <button type="button" class="gooey-button">
             Eat
         </button></a>

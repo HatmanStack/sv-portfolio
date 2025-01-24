@@ -9,13 +9,16 @@ import { onMount } from 'svelte';
 
 function navigateToContainer(event) {
   event.preventDefault();
+  console.log('header');
   const currentPath = window.location.pathname;
   if (currentPath !== '/') {
     goto('/').then(() => {
       scrollToHeaderContainer();
+	  
     });
   } else {
     scrollToHeaderContainer();
+	
   }
 }
 
@@ -26,23 +29,23 @@ function scrollToHeaderContainer() {
   }
 }
 
-class TabBar {
-        el: HTMLElement | null;
-        
-        constructor(el: string) {
-            this.el = document.querySelector(el);
-            this.el?.setAttribute("data-pristine","true");
-            this.el?.addEventListener("click", this.switchTab.bind(this));
+     onMount(() => {
+        console.log('testHeader');
+
+        const handlePopState = (event) => {
+            // Add custom logic here for the back button
+            console.log("Back button was pressed");
+            // You can navigate or manipulate the state here as needed
         }
 
-        switchTab(e: Event) {
-            
-        }
-    }
+        window.addEventListener('popstate', handlePopState);
 
-    onMount(() => {
-        const tabbar = new TabBar("nav");
+        return () => {
+            window.removeEventListener('popstate', handlePopState);
+        };
     });
+
+  
 </script>
 
 <header>
