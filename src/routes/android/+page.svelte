@@ -136,6 +136,17 @@
 <style>
 @import "https://unpkg.com/open-props" layer(design.system);
 
+@layer android{
+:root {
+  --text-color: #aaaa9f;
+  --accent-color: #4c4b43;
+  --transition-speed: 0.3s;
+  --border-radius: 12px;
+  --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  --index: calc(1vw + 1vh);
+    --transition: cubic-bezier(.1, .7, 0, 1);
+}
+
 .button {
   padding: 15px 30px;
   background: transparent;
@@ -321,8 +332,10 @@ svg.filters {
   24% { opacity: 0; }
   100% { opacity: 1; }
 }
+}
 
-@layer support {
+
+@layer android.support{
   fieldset {
     inline-size: 80vw;
     display: grid;
