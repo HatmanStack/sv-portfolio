@@ -4,7 +4,6 @@
 </svelte:head>
 
 <script>
-  
   import pixelPrompta from '$lib/images/pixel-prompt.avif';
   import twaa from '$lib/images/twa.avif';
   import credentialsa from '$lib/images/credentials.avif';
@@ -21,19 +20,19 @@
   import italians from '$lib/images/logo.svg';
 
   import one from '$lib/images/slices/1.jpg';
-import two from '$lib/images/slices/2.jpg';
-import three from '$lib/images/slices/3.jpg';
-import four from '$lib/images/slices/4.jpg';
-import five from '$lib/images/slices/5.jpg';
-import six from '$lib/images/slices/6.jpg';
-import seven from '$lib/images/slices/7.jpg';
-import eight from '$lib/images/slices/8.jpg';
+  import two from '$lib/images/slices/2.jpg';
+  import three from '$lib/images/slices/3.jpg';
+  import four from '$lib/images/slices/4.jpg';
+  import five from '$lib/images/slices/5.jpg';
+  import six from '$lib/images/slices/6.jpg';
+  import seven from '$lib/images/slices/7.jpg';
+  import eight from '$lib/images/slices/8.jpg';
 
-import nine from '$lib/images/slices/9.jpg';
-import ten from '$lib/images/slices/10.jpg';
-import eleven from '$lib/images/slices/11.jpg';
-import twelve from '$lib/images/slices/12.jpg';
-import thirteen from '$lib/images/slices/13.jpg';
+  import nine from '$lib/images/slices/9.jpg';
+  import ten from '$lib/images/slices/10.jpg';
+  import eleven from '$lib/images/slices/11.jpg';
+  import twelve from '$lib/images/slices/12.jpg';
+  import thirteen from '$lib/images/slices/13.jpg';
 
  let selectedImage = 'Splash'; 
 const contentMap = {
@@ -43,7 +42,7 @@ const contentMap = {
     'Credentials': { title: 'Credentials Canvas', link: 'https://production.dld9ll6ojjns2.amplifyapp.com/', description: 'A dynamic 3D portfolio experience crafted using Three.js and React Fiber, this immersive digital environment transforms into an interactive journey. Built with a Blender-generated .gltf file optimized through Draco compression, the portfolio offers a richly detailed landscape where phones, lights, arcade controls, signage, and antennas are fully interactive/clickable. Designed for modern hardware, this portfolio explores how technical work can be presented and browsed.' },
     'Connector': { title: 'Google Forms to Snowflake Connector', link: 'https://docs.google.com/forms/d/e/1FAIpQLSce94QihTjunjBvYzFdalz0mYGhVS6Ngy17uRrXkqLI_Da7nA/viewform?pli=1', description: 'This Node.js-based service provides a seamless connection between Google Forms (via App Scripts) and Snowflake, offering a lightweight and cost-effective alternative to traditional data pipelines like Rivery and Fivetran. Built with a serverless architecture, the custom connector enables form submissions to populate in Snowflake within approximately 1-2 minutes. The service leverages existing tools to simplify data integration, eliminating the complexity and expense of larger pipeline solutions. The Data will populate <a href="https://hatmanstack-streamlit-display-app-kicv24.streamlit.app/"><b>HERE</b></a>' },
     'Plot Palette': { title: 'Plot Palette', link: 'https://github.com/HatmanStack/plot-palette', description: 'Created to finetune LLM’s, Plot Pallete is a Dataset to generate Ideas for creative writing. It comes in 10K and 100K sizes and is easily deployed using the DataSet library from HuggingFace. The Dataset includes five tasks that the data was generated from: Creative Writing, Open Question, Poem, Question Answer, and BrainStorm.' },
-  'Name Check': { title: 'Name Check', link: 'https://github.com/HatmanStack/snow-flask-whoami', description: 'This application demonstrates serverless architectures across the three major cloud providers: <a href="https://snow-flask-whoami-gpc-k6cy6vf2la-uc.a.run.app/" target="_blank" rel="noopener noreferrer"><b>Google Cloud Run</b></a>, <a  href="https://l1roun0jr9.execute-api.us-west-1.amazonaws.com/dev" target="_blank" rel="noopener noreferrer"><b>AWS Lambda</b></a>, and <a  href="https://snow-flask-whoami-az.azurewebsites.net/Home" target="_blank" rel="noopener noreferrer"><b>Azure Functions</b></a>. Each backend operates on the same Snowflake database, showcasing their ability to handle a unified workload. Built with Flask for backend logic and Vega-Lite for generating interactive charts, the app highlights the effects of cold starts across providers. Users can interact with the app to initiate workloads, observe how changes propagate between providers, and compare startup performance.' },
+    'Name Check': { title: 'Name Check', link: 'https://github.com/HatmanStack/snow-flask-whoami', description: 'This application demonstrates serverless architectures across the three major cloud providers: <a href="https://snow-flask-whoami-gpc-k6cy6vf2la-uc.a.run.app/" target="_blank" rel="noopener noreferrer"><b>Google Cloud Run</b></a>, <a  href="https://l1roun0jr9.execute-api.us-west-1.amazonaws.com/dev" target="_blank" rel="noopener noreferrer"><b>AWS Lambda</b></a>, and <a  href="https://snow-flask-whoami-az.azurewebsites.net/Home" target="_blank" rel="noopener noreferrer"><b>Azure Functions</b></a>. Each backend operates on the same Snowflake database, showcasing their ability to handle a unified workload. Built with Flask for backend logic and Vega-Lite for generating interactive charts, the app highlights the effects of cold starts across providers. Users can interact with the app to initiate workloads, observe how changes propagate between providers, and compare startup performance.' },
     'NBA': { title: 'NBA Stats', link: 'https://hatmanstack-streamlit-nba-app-dz3nxx.streamlit.app/', description: 'This interactive application, built with Streamlit.io, turns NBA analytics into an engaging prediction challenge. At its core is a custom Keras machine learning model trained on comprehensive 2018 season data, designed to predict game outcomes based on players’ seasonal performance averages. Users can craft dream teams using players from NBA history and pit them against AI-generated squads tailored to four distinct difficulty levels. For transparency and learning, both the training dataset and model script are accessible through the project’s <a href="https://github.com/HatmanStack/streamlit-nba" target="_blank" rel="noopener noreferrer"><b>GitHub repository</b></a>.' },
     'Instant': { title: 'Instant Style', link: 'https://hatman-instantstyle.hf.space', description: 'Instant Style is a Gradio application designed for advanced image generation, leveraging the IPAdapter to transfer styles and layouts dynamically. Running on a Hugging Face space with ZeroGPU architecture, the app allows users to precisely control style transfer by selectively activating or deactivating different layers of the base diffusion model. Users can choose to apply style, layout, both, or neither to the generated image, providing a flexible approach to AI-powered image transformation.' },
     'Canvas Medium': { title: 'Canvas Gone Rogue Art meets chaos, with a side of jailbreak', link: 'https://medium.com/@HatmanStack/aws-nova-canvas-gone-rogue-art-meets-chaos-with-a-side-of-jailbreak-1f4cc2ba7c96', description: 'Challenges encountered when developing the AWS Nova Canvas Gradio App. ' },
@@ -54,7 +53,7 @@ const contentMap = {
   };
 
 
-import Header from '../Header.svelte';
+  import Header from '../Header.svelte';
 </script>
 
 <section>
@@ -66,7 +65,7 @@ import Header from '../Header.svelte';
   {#if contentMap[selectedImage]}
     <h1 class="header-text glow-filter" data-text={contentMap[selectedImage].title} style="margin-bottom: {selectedImage.includes('Splash') ? '10rem' : '0'}"></h1>
     {#if contentMap[selectedImage].description}
-    <p style="margin-bottom: {selectedImage.includes('Medium') ? '3rem' : '0'};margin-top: {selectedImage.includes('Medium') ? '4rem' : '2rem'};">
+    <p style="margin-bottom: {selectedImage.includes('Medium') ? '3rem' : '0'};margin-top: {selectedImage.includes('Medium') ? '4rem' : '2rem'}; text-wrap:balanced;">
     {@html contentMap[selectedImage].description}</p>
     {/if}    
     {#if contentMap[selectedImage].link}

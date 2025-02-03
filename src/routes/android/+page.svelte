@@ -58,7 +58,7 @@
       {#if contentMap[selectedImage]}
         <h1 class="header-text glow-filter" data-text={contentMap[selectedImage].title}></h1>
         {#if contentMap[selectedImage].description}
-        <p>{contentMap[selectedImage].description}</p>
+        <p style="text-wrap:pretty;">{contentMap[selectedImage].description}</p>
         {/if}
         {#if contentMap[selectedImage].link}
         <a href={contentMap[selectedImage].link} target="_blank" rel="noopener noreferrer">
