@@ -33,6 +33,7 @@
 	</div>
 
 	<nav class="tab-bar">
+	
 	<ul class="tab-bar__tabs">
 		<li class="tab-bar__tab">
 			<a class="tab-bar__tab-link" href="/" on:click={navigateToContainer} aria-current={page.url.pathname === '/#container' ? 'page' : undefined}>	<svg class="tab-bar__tab-icon tab-bar__tab-icon--home" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
@@ -70,6 +71,18 @@
                 <line x1="20" y1="14" x2="22" y2="14"/>
             </g>
 				<span class="tab-bar__tab-name">Android</span>
+			</a>
+		</li>
+		<li class="tab-bar__tab">
+			<a class="tab-bar__tab-link" href="/read" aria-current={page.url.pathname === '/read' ? 'page' : undefined}>
+				<svg class="tab-bar__tab-icon tab-bar__tab-icon--read" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
+					<g class="tab-bar__tab-icon-1" fill="var(--focus-t)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<rect class="tab-bar__tab-icon-2" x="1" y="1" rx="2" ry="2" width="11" height="19" />
+						<rect class="tab-bar__tab-icon-3" x="12" y="1" rx="2" ry="2" width="11" height="19" />
+						<line x1="12" y1="21" x2="12" y2="23" />
+					</g>
+				</svg>
+				<span class="tab-bar__tab-name">Read</span>
 			</a>
 		</li>
 		
@@ -184,7 +197,7 @@
 	}
 	&__tab {
 		text-align: center;
-		width: 3em;
+		width: em;
 		min-width: 3em;
 		&-icon,
 		&-name {
@@ -225,6 +238,10 @@
 			&--videos &-3 {
 				fill: var(--tab-bar-bg);
 				stroke: var(--tab-bar-bg);
+			}
+			&--read &-2,
+			&--read &-3 {
+				transform-origin: 12px 21px;
 			}
 			&--android &-2,
 			&--android &-3{
@@ -291,13 +308,22 @@
 			fill: var(--tab-bar-bg);
 		}
 		
-		&-link[aria-current="page"] &-icon--android &-icon-1 {
+		&-link[aria-current="page"] &-icon--android &-icon-1  {
 			animation-name: android-move;
 		}
 		&-link[aria-current="page"] &-icon--android &-icon-2 {
 			animation-name: android-scale-left;
 		}
 		&-link[aria-current="page"] &-icon--android &-icon-3 {
+			animation-name: android-scale-right;
+		}
+		&-link[aria-current="page"] &-icon--read &-icon-1  {
+			animation-name: android-move;
+		}
+		&-link[aria-current="page"] &-icon--read &-icon-2 {
+			animation-name: android-scale-left;
+		}
+		&-link[aria-current="page"] &-icon--read &-icon-3 {
 			animation-name: android-scale-right;
 		}
 		&-link[aria-current="page"] &-icon--profile &-icon-1 {
