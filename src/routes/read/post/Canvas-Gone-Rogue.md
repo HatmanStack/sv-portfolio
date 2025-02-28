@@ -24,4 +24,4 @@ I needed an extra layer of protection to tackle user-uploaded images. My solutio
 
 Despite the issues in content moderation and the occasional cloud cost surprise, working with Nova Canvas has been buttery smooth. From a cost perspective, the AWS team has truly created something game-changing. It’s been fascinating to see how people <a href="https://hatman-aws-nova-canvas.hf.space/">use it</a> (mostly).
 
-![Canvas Gone Rogue](/blog/canvas-gone-rogue-3.gif)
+<img src="/blog/canvas-gone-rogue-3.gif" width="250" height="200" alt="Canvas Gone Rogue">

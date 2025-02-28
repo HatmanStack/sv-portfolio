@@ -10,7 +10,7 @@ time: '5 min read'
 
 Every major cloud provider has great in house tools to make survey results accessible inside their systems. To break out of that system takes a little work. We’ll use Google Forms, Apps Script, Google Cloud Run, and Snowflake Node Connector to <a href="https://github.com/HatmanStack/snow-node-sheets-gpc">make it happen</a>.
 
-![Connect Google Forms with Snowflake](/blog/connect-google-forms-with-snowflake-2.gif)
+<img src="/blog/connect-google-forms-with-snowflake-2.gif" width="300" height="300" alt="Connect Google Forms with Snowflake">
 
 Make a **Google Form** and head to the **Responses** tab. Click the google sheets icon to create a new spreadsheet. It should be linked to your current google account. Head over to the new sheet -> Extensions -> Apps Script. You want to create a script that runs every time there is an entry to the form.
 
@@ -39,7 +39,7 @@ This code sorts the entries by timestamp grabs the first entry and sends it over
 
 Next head over to Google Cloud. If you haven’t already set up an account add a new project to make things easy. Do not comingle.
 
-![Connect Google Forms with Snowflake](/blog/connect-google-forms-with-snowflake-3.gif)
+<img src="/blog/connect-google-forms-with-snowflake-3.gif" width="350" height="200" alt="Connect Google Forms with Snowflake">
 
 Bring up the **API Credentials** page. Navigate to the top left, **IAM & Admin -> Service Accounts -> create service account**. We need the email that was created for us when setting up the service account, save that for later. No need to enable services here but we do need a key so our google sheets knows it’s us.
 
@@ -49,7 +49,7 @@ Next we need to create a service to grab our form entry and deliver it to snowfl
 
 As we’re creating our connector one thing to watch out for is the **SQL insert statement**. Make sure you’ve created the **SCHEMA**…database.reference.table **(DEMO_DB.PUBLIC.SHEETS)** so it can be inserted into Snowflake.
 
-![Connect Google Forms with Snowflake](/blog/connect-google-forms-with-snowflake-4.gif)
+<img src="/blog/connect-google-forms-with-snowflake-4.gif" width="400" height="250" alt="Connect Google Forms with Snowflake">
 
 Now we need to create our service. We’ll need an **index.js**, **Dockerfile**, and **package.json**. Inside the index.js file we need to insert our Snowflake Connection Data and our sheets id. The sheets id can be found in the URL of the sheet.
 
@@ -180,6 +180,6 @@ Back to **gcloud run deploy** -> Source code location:<enter> -> Service name (f
 
 In the top right is a share button. We need to add our sheets service account so it can access the sheet. This is the email we created back in Google Cloud Credentials API. Plug that in and move back to Extensions -> Apps Script and put in our url from the service we created. We should be all hooked up.
 
-![Connect Google Forms with Snowflake](/blog/connect-google-forms-with-snowflake-6.gif)
+<img src="/blog/connect-google-forms-with-snowflake-6.gif" width="400" height="250" alt="Connect Google Forms with Snowflake">
 
 I have noticed a slight lag when entering form data from a cold start but within ~1–2 minutes all the data shows up. If you want to check out a working demo you can fill out this <a href="https://docs.google.com/forms/d/e/1FAIpQLSce94QihTjunjBvYzFdalz0mYGhVS6Ngy17uRrXkqLI_Da7nA/viewform?pli=1">form</a> and have the response populate <a href="https://www.gemenielabs.com/projects/#snowflake">here</a>.

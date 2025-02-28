@@ -10,7 +10,7 @@ time: '3 min read'
 
 Anyone who builds things knows it can get messy. The <a href="https://hatman-pixel-prompt.hf.space/">demo</a> for this Cloud Bound series was one of those times. I ran into glitches with Hugging Face Spaces that were avoidable with the right resources. Resources that you’ll know about by the end of this post. Let’s light this candle!
 
-![Cloud Bound HuggingFace Spaces](/blog/cloud-bound-huggingface-spaces-2.gif)
+<img src="/blog/cloud-bound-huggingface-spaces-2.gif" width="300" height="300" alt="Canvas Gone Rogue">
 
 Cloud environments can be challenging when going serverless. Our demo on Hugging Face Spaces uses Hugging Faces’s Inference-API to eliminate the complexity of building an inference pipeline. Hugging Face’s Inference-API has a free tier using a shared framework that fits most non-production use cases. For production workloads, Hugging Face <a href="https://huggingface.co/inference-api">offers plans</a> that fit the needs of small or large-scale projects.
 

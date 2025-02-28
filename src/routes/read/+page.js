@@ -17,8 +17,8 @@ export const load = async () => {
         ...post.metadata
       };
     })
-    .filter(post => post !== null); // Remove any invalid posts
-
+    .filter(post => post !== null) // Remove any invalid posts
+    .sort((a, b) => new Date(b.date) - new Date(a.date)); 
     
     
     return {
