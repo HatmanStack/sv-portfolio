@@ -4,70 +4,38 @@
 </svelte:head>
 
 <script>
- 
-  import canvasMediuma from '$lib/images/canvas-medium.avif';
-  import ppMediuma from '$lib/images/pp-medium.avif';
-  import connectorMediuma from '$lib/images/connector-medium.avif';
-  import hugMediuma from '$lib/images/hug-medium.avif';
-  import studioBrowsera from '$lib/images/as-medium.avif';
- 
-
-
-
-  import nine from '$lib/images/slices/9.jpg';
-  import ten from '$lib/images/slices/10.jpg';
-  import eleven from '$lib/images/slices/11.jpg';
-  import twelve from '$lib/images/slices/12.jpg';
-  import thirteen from '$lib/images/slices/13.jpg';
-
- let selectedImage = 'Splash'; 
-const contentMap = {
-    'Splash': { title: 'Blog Stuff'},
-    'Canvas Medium': { title: 'Canvas Gone Rogue Art meets chaos, with a side of jailbreak', link: 'https://medium.com/@HatmanStack/aws-nova-canvas-gone-rogue-art-meets-chaos-with-a-side-of-jailbreak-1f4cc2ba7c96', description: 'Challenges encountered when developing the AWS Nova Canvas Gradio App. ' },
-    'Plot Palette Medium': { title: 'Creating Plot Palette 100K with Cloud9 for LLM Training', link: 'https://medium.com/@HatmanStack/creating-plot-palette-100k-with-cloud9-for-llm-training-7a63384ca329', description: 'A how to on managing and executing multi-threaded tasks efficiently despite API limitations, with potential to streamline the process using CloudFormation.' },
-    'Connector Medium': { title: 'Connect Google Forms with Snowflake', link: 'https://medium.com/@HatmanStack/connect-google-forms-with-snowflake-ac8a2a6837b', description: 'Seamlessly integrate Google Forms with Snowflake for data transfer with scripts to handle and route form entries securely and efficiently.' },
-    'Hug Medium': { title: 'Cloud Bound: Hugging Face Spaces', link: 'https://medium.com/@HatmanStack/cloud-bound-hugging-face-spaces-1101c569690d', description: 'This demo faced issues with Hugging Face Spaces, which can streamline inference pipelines with its API and Docker setup, offering scalable solutions for different project needs.' },
-    'AS Medium': { title: 'Android Studio in the Browser', link: 'https://medium.com/@HatmanStack/android-studio-in-the-browser-dcada6243442', description: 'Transform any computer into a powerful Android development machine with reduced backend complexity.' }
-  };
-
-
   import Header from '../Header.svelte';
+   export let data;
+    
 </script>
 
 <section>
-<Header />
+  <Header />
 </section>
 
 <section>
-<div class="wrapper-column">
-  {#if contentMap[selectedImage]}
-    <h1 class="header-text glow-filter" data-text={contentMap[selectedImage].title} style="margin-bottom: {selectedImage.includes('Splash') ? '10rem' : '0'}"></h1>
-    {#if contentMap[selectedImage].description}
-    <p style="margin-bottom: {selectedImage.includes('Medium') ? '3rem' : '0'};margin-top: {selectedImage.includes('Medium') ? '4rem' : '2rem'}; text-wrap:balanced;">
-    {@html contentMap[selectedImage].description}</p>
-    {/if}    
-    {#if contentMap[selectedImage].link}
-      <a href={contentMap[selectedImage].link} target="_blank" rel="noopener noreferrer">
-        <button class="button">More Stuff</button>
-      </a>
-    {/if}
-  {/if}
-<div class="wrapper">
-  <div class="items">
- 
-
-    <div class="item" tabindex="0" role="button" style="--initial-img: url({nine}); --active-img: url({canvasMediuma});"  on:click="{(event) => selectedImage === 'Canvas Medium' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Canvas Medium'}"></div>
-    <div class="item" tabindex="0" role="button" style="--initial-img: url({ten}); --active-img: url({ppMediuma});"  on:click="{(event) => selectedImage === 'Plot Palette Medium' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Plot Palette Medium'}"></div>
-    <div class="item" tabindex="0" role="button" style="--initial-img: url({eleven}); --active-img: url({connectorMediuma});"  on:click="{(event) => selectedImage === 'Connector Medium' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Connector Medium'}"></div>
-    <div class="item" tabindex="0" role="button" style="--initial-img: url({twelve}); --active-img: url({hugMediuma});"  on:click="{(event) => selectedImage === 'Hug Medium' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Hug Medium'}"></div>
-    <div class="item" tabindex="0" role="button" style="--initial-img: url({thirteen}); --active-img: url({studioBrowsera});"  on:click="{(event) => selectedImage === 'AS Medium' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'AS Medium'}"></div>
-
-
-    </div>
-      
-    </div>
-    </div>
+  <div class="wrapper-column">
+    <h1 class="header-text glow-filter" data-text="Blog Stuff"></h1>
+    <div class="articles-list">
+  {#each data.posts as post}
+    <a href="/read/post/{post.slug}" class="article-link">
+      <div class="article-card">
+        <div class="card-header">
+          <h2>{post.title}</h2>
+          <p class="date">{post.date}</p>
+        </div>
+        <div class="card-content">
+          <p class="description">{post.description}</p>
+          <p class="time">{post.time}</p>
+        </div>
+      </div>
+    </a>
+  {/each}
+</div>
+  </div>
 </section>
+
+
 <section>
     <svg class="filters" width='1440px' height='300px' viewBox='0 0 1440 300' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
@@ -145,6 +113,85 @@ const contentMap = {
     --transition: cubic-bezier(.1, .7, 0, 1);
 }
 
+ 
+ .card-header h2 {
+  color: #000000;
+  font-size: 1.5rem;
+  margin: 0;
+  flex: 1;
+  white-space: normal;  
+  text-align: center;  
+  margin-right: 1rem;   
+  line-height: 1.3;   
+  text-wrap: balanced;  
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;  /* Align items to top when title wraps */
+  margin-bottom: 1rem;
+  min-height: 2.5rem;
+}
+
+
+
+  .card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .card-content .description {
+    flex: 1;
+    margin: 0;
+  }
+
+  .card-content .time {
+    font-size: 0.9rem;
+    white-space: nowrap;
+    margin: 0;
+  }
+
+ .articles-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .article-link {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .article-card {
+    padding: .6rem;
+    border-radius: var(--border-radius);
+    background: rgba(255, 255, 255, 0.03);
+    transition: transform 0.3s ease, background 0.3s ease;
+  }
+
+  .article-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .article-card h2 {
+    color:rgb(51, 51, 51);
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .article-card p {
+    color:rgb(51, 51, 51);
+    font-size: .8rem;
+    text-align: left;
+  }
+
 .wrapper-column {
     display: flex;
     flex-direction: column;
@@ -152,26 +199,11 @@ const contentMap = {
     margin-top: 1rem;
 }
 
-.wrapper{
-    margin-top: 10rem;
-}
-
 .glow-filter {
    display: flex; 
     justify-content: center; 
     align-items: center; 
   animation: onloadscale 1s ease-out forwards;
-}
-
-p {
-  color: #86868b;
-  font-weight: 600;
-  background: linear-gradient(0deg, #86868b 0%, #bdc2c9 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  max-width: 60em;
-  text-align: center;
 }
 
 svg.filters {
@@ -217,142 +249,5 @@ svg.filters {
   100% { opacity: 1; }
 }
 
-.button {
-  padding: 15px 30px;
-  color: var(--text-color);
-  font-size: 14px;
-  border-radius: var(--border-radius);
-  transition: color var(--transition-speed), background var(--transition-speed);
-  position: relative;
-  overflow: hidden;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: .5rem;
-  background: transparent;
-  color: var(--accent-color);
-}
-
-.button::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: -100%;
-  background: var(--accent-color);
-  z-index: -1;
-  transition: all var(--transition-speed);
-}
-
-.button:hover::before {
-  left: 0;
-}
-
-.button:hover {
-  color: var(--text-color);
-}
-
-.items{
-    display: flex;
-    gap: 0.4rem;
-    perspective: calc(var(--index) * 35);
-}
-
-.item{
-    width: calc(var(--index) * 3);
-    height: calc(var(--index) * 12);
-    background-color: #222;
-    background-size: cover;
-    background-position: center;
-    cursor: pointer;
-    filter: grayscale(1) brightness(.5);
-    transition: transform 1.25s var(--transition), filter 3s var(--transition), width 1.25s var(--transition);
-    will-change: transform, filter, rotateY, width;
-}
-
-.item::before, .item::after{
-    content: '';
-    position: absolute;
-    height: 100%;
-    width: 20px;
-    right: calc(var(--index) * -1);
-}
-
-.item::after{
-    left: calc(var(--index) * -1);
-}
-
-.items .item:hover{
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 10));
-}
-
-/*Right*/
-
-.items .item:hover + *{
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 8.5)) rotateY(35deg);
-    z-index: -1;
-}
-
-.items .item:hover + * + *{
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 5.6)) rotateY(40deg);
-    z-index: -2;
-}
-
-.items .item:hover + * + * + *{
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 2.5)) rotateY(30deg);
-    z-index: -3;
-}
-
-.items .item:hover + * + * + * + *{
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * .6)) rotateY(15deg);
-    z-index: -4;
-}
-
-
-/*Left*/
-
-.items .item:has( + :hover){
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 8.5)) rotateY(-35deg);
-}
-
-.items .item:has( + * + :hover){
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 5.6)) rotateY(-40deg);
-}
-
-.items .item:has( + * + * + :hover){
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 2.5)) rotateY(-30deg);
-}
-
-.items .item:has( + * + * + * + :hover){
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * .6)) rotateY(-15deg);
-}
-
-.items .item:active, .items .item:focus {
-	width: 28vw;
-	filter: inherit;
-	z-index: 100;
-	transform: translateZ(calc(var(--index) * 10));
-    margin: 0 .45vw;
-}
-
-.items .item:focus {
-  background-image: var(--active-img);
-  filter: brightness(1.1); 
-  transform: scale(1.9); 
-}
-
-.items .item{
-  background-image: var(--initial-img);
-  
-}
 
 </style>

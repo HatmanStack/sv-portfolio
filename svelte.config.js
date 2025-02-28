@@ -1,24 +1,33 @@
 import adapter from '@sveltejs/adapter-static';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import { mdsvex } from 'mdsvex';
 import sveltePreprocess from 'svelte-preprocess';
 
-export default {
+const config = {
   kit: {
     adapter: adapter({
-			// default options are shown. On some platforms
-			// these options are set automatically — see below
-			pages: 'build',
-			assets: 'build',
-			fallback: undefined,
-			precompress: false,
-			strict: true
-		})
-    
+      pages: 'build',
+      assets: 'build',
+      fallback: 'index.html',  // Add this for SPA fallback
+      precompress: false,
+      strict: false  // Relaxing the strict mode
+    }),
+    prerender: {
+      entries: ['*', '/read/post/*']  // Add this to handle dynamic routes
+    }
   },
-  preprocess: sveltePreprocess({
-    scss: {
-      includePaths: ['src'], 
-    },
-  }),
-  
+  extensions: ['.svelte', '.md'],
+  preprocess: [
+    sveltePreprocess({
+      scss: {
+        includePaths: ['src']
+      }
+    }),
+    vitePreprocess(),
+    mdsvex({
+      extensions: ['.md']
+    })
+  ]
 };
 
+export default config;

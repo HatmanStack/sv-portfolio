@@ -36,7 +36,7 @@ const contentMap = {
     'Plot Palette': { title: 'Plot Palette', link: 'https://github.com/HatmanStack/plot-palette', description: 'Created to finetune LLM’s, Plot Pallete is a Dataset to generate Ideas for creative writing. It comes in 10K and 100K sizes and is easily deployed using the DataSet library from HuggingFace. The Dataset includes five tasks that the data was generated from: Creative Writing, Open Question, Poem, Question Answer, and BrainStorm.' },
     'Name Check': { title: 'Name Check', link: 'https://github.com/HatmanStack/snow-flask-whoami', description: 'This application demonstrates serverless architectures across the three major cloud providers: <a href="https://snow-flask-whoami-gpc-k6cy6vf2la-uc.a.run.app/" target="_blank" rel="noopener noreferrer"><b>Google Cloud Run</b></a>, <a  href="https://l1roun0jr9.execute-api.us-west-1.amazonaws.com/dev" target="_blank" rel="noopener noreferrer"><b>AWS Lambda</b></a>, and <a  href="https://snow-flask-whoami-az.azurewebsites.net/Home" target="_blank" rel="noopener noreferrer"><b>Azure Functions</b></a>. Each backend operates on the same Snowflake database, showcasing their ability to handle a unified workload. Built with Flask for backend logic and Vega-Lite for generating interactive charts, the app highlights the effects of cold starts across providers. Users can interact with the app to initiate workloads, observe how changes propagate between providers, and compare startup performance.' },
     'NBA': { title: 'NBA Stats', link: 'https://hatmanstack-streamlit-nba-app-dz3nxx.streamlit.app/', description: 'This interactive application, built with Streamlit.io, turns NBA analytics into an engaging prediction challenge. At its core is a custom Keras machine learning model trained on comprehensive 2018 season data, designed to predict game outcomes based on players’ seasonal performance averages. Users can craft dream teams using players from NBA history and pit them against AI-generated squads tailored to four distinct difficulty levels. For transparency and learning, both the training dataset and model script are accessible through the project’s <a href="https://github.com/HatmanStack/streamlit-nba" target="_blank" rel="noopener noreferrer"><b>GitHub repository</b></a>.' },
-    'Instant': { title: 'Instant Style', link: 'https://hatman-instantstyle.hf.space', description: 'Instant Style is a Gradio application designed for advanced image generation, leveraging the IPAdapter to transfer styles and layouts dynamically. Running on a Hugging Face space with ZeroGPU architecture, the app allows users to precisely control style transfer by selectively activating or deactivating different layers of the base diffusion model. Users can choose to apply style, layout, both, or neither to the generated image, providing a flexible approach to AI-powered image transformation.' },
+    'Instant': { title: 'InstantStyle FLUX & SDXL', link: 'https://hatman-instantstyle-flux-sdxl.hf.space/', description: 'This is a Gradio application designed for advanced image generation, leveraging the IP Adapter with InstantStyle to transfer styles and layouts dynamically. Running on a Hugging Face space with ZeroGPU architecture, the app allows users to precisely control style transfer by selectively activating or deactivating different layers of two different diffusion models. Users can choose to apply style, layout, both, or neither to the generated image, providing a flexible approach to AI-powered image transformation.' },
      };
 
 
@@ -173,6 +173,35 @@ const contentMap = {
     align-items: center; 
   animation: onloadscale 1s ease-out forwards;
 }
+
+:global(p a) {
+    color: #86868b;
+    text-decoration: none;
+    background: linear-gradient(0deg,#67676b 0%, #bdc2c9 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+    font-weight: 600;
+  }
+
+  :global(p a::after) {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background: linear-gradient(90deg,#67676b 0%, #bdc2c9 100%);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+
+  :global(p a:hover::after) {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
 
 p {
   color: #86868b;

@@ -7,6 +7,7 @@
   import linkedIn from '$lib/images/linkedIn.svg';
   import huggingface from '$lib/images/hf.svg';
   import x from '$lib/images/x.svg';
+  import calendly from '$lib/images/calendly.svg';
   import Header from '../Header.svelte';
 </script>
 
@@ -23,6 +24,7 @@
 	<li><a href="https://www.linkedin.com/in/christopher-galliart-gemenie-labs/" target="_blank"><img src={linkedIn} alt="LinkedIn" /></a></li>
 	<li><a href="https://huggingface.co/Hatman" target="_blank"><img src={huggingface} alt="Hugging Face" /></a></li>
 	<li><a href="https://twitter.com/HatmanStack" target="_blank"><img src={x} alt="X" /></a></li>
+  <li><a href="https://calendly.com/christopher-galliart" target="_blank"><img src={calendly} alt="Calendly" /></a></li>
 	</ul>
   </section>
 </div>
