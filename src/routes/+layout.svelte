@@ -1,14 +1,25 @@
 <script lang="ts">
 	import '../app.css';
 	import { page } from '$app/stores';
-	let { children } = $props();
+	import { onMount } from 'svelte';
+	let loaded = false;
+
+	onMount(() => {
+		console.log('layout mounted');
+        setTimeout(() => {
+            loaded = true;
+        }, 100); 
+    });
 </script>
 
-<div class="app">
-	<main>
-		{@render children()}
-	</main>
-</div>
+{#if loaded}
+    <div class="app">
+        <main>
+            <slot />
+        </main>
+    </div>
+{/if}
+
 
 <style>
 	.app {
