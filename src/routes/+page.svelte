@@ -14,6 +14,7 @@
 <script lang="ts">
 	import '../app.css';
 	import Header from './Header.svelte';
+
   import nba from '$lib/images/nba.gif';
   import novaCanvas from '$lib/images/nova-canvas.gif';
   import pixelPrompt from '$lib/images/pixel-prompt.gif';
@@ -47,7 +48,14 @@
   import novaCanvasj from '$lib/images/nova-canvas.jpg';
   import savorSwipej from '$lib/images/savorswipe.jpg';
   import sloth from '$lib/images/sloth_stuff.jpg'
+
+  import { useSound } from "$lib/components/useSound";
+  import click from "$lib/sounds/click.wav";
+  const click_sound = useSound(click,["click"])
+
+  
 </script>
+
 
 <section>
 <div class="scroll-container">
@@ -118,11 +126,11 @@
 				<span>Float</span>
 				<p>Cross-Platform</p>
 			</div>
-			<div class="wrapper">			
+			<div class="wrapper" >			
 				<div class="profile_quote">
 					<p style="font-size:.8em" class="fade-in">Float is a cross-platform meditation app built with React Native and Expo. It uses Google Generative AI, Google TTS, and a library of sound files to create personalized meditation experiences based on user-submitted incidents that have affected them emotionally, which we refer to as “floats”. Floats are categorized by emotion and intensity, featuring a timer and a color scheme that convey the duration, summary, and reasoning for the category.</p>
 				<a href="https://float-app.fun" >
-        <button type="button" class="gooey-button">
+        <button type="button" class="gooey-button" use:click_sound>
             Meditate
         </button></a>
         </div>
@@ -135,11 +143,11 @@
 				<span>Nova Canvas</span>
 				<p>Web</p>
 			</div>
-			<div class="wrapper">				
+			<div class="wrapper" >				
 				<div class="profile_quote">
 					<p style="font-size:.8em" class="fade-in">The AWS Nova Canvas foundation model presented in a gradio app. The model enables users to generate, edit, and refine images through sophisticated tools like text-to-image generation, inpainting, outpainting, and background removal. Users can explore innovative image creation methods, including color-guided content manipulation and image conditioning, providing control over visual design and artistic expression.</p>
 				<a href="https://hatman-aws-nova-canvas.hf.space/" >
-        <button type="button" class="gooey-button">
+        <button type="button" class="gooey-button" use:click_sound>
             Infer
         </button></a>
         </div>
@@ -152,11 +160,11 @@
 				<span>Savor Swipe</span>
 				<p>Cross-Platform</p>
 			</div>
-			<div class="wrapper">				
+			<div class="wrapper" >				
 				<div class="profile_quote">
 					<p style="font-size:.8em" class="fade-in">SavorSwipe is a recipe discovery app that lets you swipe through dishes to decide what to make. When adding a recipe, simply take a picture of either the ingredients or the directions. The app uses OpenAI’s OCR technology to automatically extract the relevant information, then leverages Google’s Custom Search API to find matching food images. This creates a visual collection of dishes that you can easily swipe through.</p>
 				<a href="https://savorswipe.fun" >
-        <button type="button" class="gooey-button">
+        <button type="button" class="gooey-button" use:click_sound>
             Eat
         </button></a>
         </div>
@@ -164,6 +172,7 @@
 		</div>
 	</div>
 </section>
+
 
 <svg width="0" height="0" style="position: absolute;">
   <filter id="goo" x="-50%" y="-50%" width="200%" height="200%">

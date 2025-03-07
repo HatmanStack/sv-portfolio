@@ -3,18 +3,21 @@
 	import { goto } from '$app/navigation';
 	import logo from '$lib/images/logo.svg';
 	import github from '$lib/images/github.svg';	
+	import { useSound } from "$lib/components/useSound";
+	import click from "$lib/sounds/click.wav";
+	const click_sound = useSound(click,["click"])
 
 	function navigateToContainer(event) {
-	event.preventDefault();
-	console.log('header');
-	const currentPath = window.location.pathname;
-	if (currentPath !== '/') {
-		goto('/').then(() => {
-		scrollToHeaderContainer();
-		});
-	} else {
-		scrollToHeaderContainer();
-	}
+		event.preventDefault();
+		console.log('header');
+		const currentPath = window.location.pathname;
+		if (currentPath !== '/') {
+			goto('/').then(() => {
+			scrollToHeaderContainer();
+			});
+		} else {
+			scrollToHeaderContainer();
+		}
 	}
 
 	function scrollToHeaderContainer() {
@@ -23,6 +26,8 @@
 		container.scrollIntoView({ behavior: 'auto' });
 	}
 	}
+
+	
 </script>
 
 <header>
@@ -36,7 +41,7 @@
 	
 	<ul class="tab-bar__tabs">
 		<li class="tab-bar__tab">
-			<a class="tab-bar__tab-link" href="/" on:click={navigateToContainer} aria-current={page.url.pathname === '/#container' ? 'page' : undefined}>	<svg class="tab-bar__tab-icon tab-bar__tab-icon--home" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
+			<a class="tab-bar__tab-link" use:click_sound href="/" on:click={navigateToContainer} aria-current={page.url.pathname === '/#container' ? 'page' : undefined}>	<svg class="tab-bar__tab-icon tab-bar__tab-icon--home" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
 					<g class="tab-bar__tab-icon-1" fill="var(--focus-t)" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
 						<polygon points="12 1,23 10,23 23,16 23,16 14,8 14,8 23,1 23,1 10" />
 					</g>
@@ -44,7 +49,7 @@
 				<span class="tab-bar__tab-name">Home</span>
 			</a>
 		</li>
-		<li class="tab-bar__tab">
+		<li class="tab-bar__tab" use:click_sound>
 			<a class="tab-bar__tab-link" href="/web" aria-current={page.url.pathname === '/web' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--videos" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
 					<g fill="var(--focus-t)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -60,7 +65,7 @@
 				<span class="tab-bar__tab-name">Web</span>
 			</a>
 		</li>
-		<li class="tab-bar__tab">
+		<li class="tab-bar__tab" use:click_sound>
 			<a class="tab-bar__tab-link" href="/android" aria-current={page.url.pathname === '/android' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--android" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
 				<g class="tab-bar__tab-icon-1" fill="var(--focus-t)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -73,7 +78,7 @@
 				<span class="tab-bar__tab-name">Android</span>
 			</a>
 		</li>
-		<li class="tab-bar__tab">
+		<li class="tab-bar__tab" use:click_sound>
 			<a class="tab-bar__tab-link" href="/read" aria-current={page.url.pathname === '/read' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--read" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
 					<g class="tab-bar__tab-icon-1" fill="var(--focus-t)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -86,7 +91,7 @@
 			</a>
 		</li>
 		
-		<li class="tab-bar__tab">
+		<li class="tab-bar__tab" use:click_sound>
 			<a class="tab-bar__tab-link" href="/about" aria-current={page.url.pathname === '/about' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--profile" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
 					<g fill="var(--focus-t)" stroke="currentColor" stroke-width="2">

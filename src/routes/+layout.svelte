@@ -1,25 +1,24 @@
 <script lang="ts">
 	import '../app.css';
-	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
-	let loaded = false;
-
-	onMount(() => {
-		console.log('layout mounted');
-        setTimeout(() => {
-            loaded = true;
-        }, 100); 
-    });
+  	let mounted = false;
+	
+	onMount(async () => {
+    console.log('page mounted');
+    setTimeout(() => {
+      console.log('showing content now');
+      mounted = true;
+    }, 1000); 
+  });
 </script>
 
-{#if loaded}
-    <div class="app">
-        <main>
-            <slot />
-        </main>
-    </div>
-{/if}
-
+<div class="page-content" class:visible={mounted}>
+<div class="app">
+	<main>
+	  <slot />
+	</main>
+  </div>
+</div>
 
 <style>
 	.app {
@@ -27,6 +26,15 @@
 		flex-direction: column;
 		min-height: 100vh;
 	}
+
+	.page-content {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+  }
+  
+  .visible {
+    opacity: 1;
+  }
 
 	main {
 		flex: 1;

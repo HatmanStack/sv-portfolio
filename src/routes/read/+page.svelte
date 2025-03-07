@@ -5,8 +5,11 @@
 
 <script>
   import Header from '../Header.svelte';
-   export let data;
-    
+  export let data;
+
+import { useSound } from "$lib/components/useSound";
+import click from "$lib/sounds/click.wav";
+const click_sound = useSound(click,["click"])
 </script>
 
 <section>
@@ -18,7 +21,7 @@
     <h1 class="header-text glow-filter" data-text="Blog Stuff"></h1>
     <div class="articles-list">
   {#each data.posts as post}
-    <a href="/read/post/{post.slug}" class="article-link">
+    <a href="/read/post/{post.slug}" class="article-link" use:click_sound>
       <div class="article-card">
         <div class="card-header">
           <h2>{post.title}</h2>

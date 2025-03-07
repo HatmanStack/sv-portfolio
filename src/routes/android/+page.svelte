@@ -17,8 +17,9 @@
   import vocabs from '$lib/images/vocabulary.svg';
   import loopers from '$lib/images/looper.jpg';
   import italians from '$lib/images/italian.svg';
-
+  
   let selectedImage = 'Android Stuff'; 
+
   const contentMap = {
     'Android Stuff':{ title: 'Android Stuff'},
     'Looper': { title: 'Looper', link: 'https://play.google.com/store/apps/details?id=gemenielabs.looper&pli=1', description: 'An audio looping application. Create tracks by pressing the record/stop buttons or import from your own library of audio files. Every list item has independent stop/pause/delete buttons with volume/speed sliders. You can save edited files to your device.' },
@@ -28,31 +29,38 @@
     'Stocks': { title: 'Stocks', link: 'https://play.google.com/store/apps/details?id=gemenielabs.sentiment', description: 'Stocks uses a custom bag-of-words strategy and natural language processing (NLP) for sentiment analysis to analyze news articles. This is combined with other metrics, such as price and volume, to employ multivariate logistic regression to forecast market movements over varied time frames. These calculations are conducted off-device through serverless microservices. (update pending)' },
     'Italian': { title: 'Italian', link: 'https://play.google.com/store/apps/details?id=gemenielabs.italian', description: 'This is a proof of concept app for an Italian restaurant. It provides menu and nutritional information with an ability to pick items from a menu with pricing. Local location information is searched for and presented in custom map markers. The map markers open windows that display the restaurants location information and open/close status. Once the window is clicked a screen displaying the restaurant’s phone number and hours of operation is displayed. (No longer supported)' }
   };
+
+  import { useSound } from "$lib/components/useSound";
+  import click from "$lib/sounds/click.wav";
+  import swoosh from "$lib/sounds/swoosh.mp3";
+  const click_sound = useSound(click,["click"])
+  const swoosh_sound = useSound(swoosh,["swoosh"])
 </script>
 
 <section style="margin-bottom:1rem;">
 <Header />
 </section>
 
+
 <section>
   <fieldset>
     <label style="--initial-img: url({loopers}); --active-img: url({looper});">
-       <input type="radio" name="images" on:change="{() => selectedImage = 'Looper'}">
+       <input type="radio" name="images" on:change="{() => selectedImage = 'Looper'}" use:swoosh_sound>
     </label>
     <label style="--initial-img: url({vocabs}); --active-img: url({vocab});">
-       <input type="radio" name="images" on:change="{() => selectedImage = 'Vocabulary'}">
+       <input type="radio" name="images" on:change="{() => selectedImage = 'Vocabulary'}" use:swoosh_sound>
     </label>
     <label style="--initial-img: url({trachtenbergs}); --active-img: url({trachtenberg});">
-       <input type="radio" name="images"  on:change="{() => selectedImage = 'Trachtenberg'}">
+       <input type="radio" name="images"  on:change="{() => selectedImage = 'Trachtenberg'}" use:swoosh_sound>
     </label>
     <label style="--initial-img: url({moviess}); --active-img: url({movies});">
-       <input type="radio" name="images"  on:change="{() => selectedImage = 'Movies'}">
+       <input type="radio" name="images"  on:change="{() => selectedImage = 'Movies'}" use:swoosh_sound>
     </label>
     <label style="--initial-img: url({stocks}); --active-img: url({stock});">
-       <input type="radio" name="images" on:change="{() => selectedImage = 'Stocks'}">
+       <input type="radio" name="images" on:change="{() => selectedImage = 'Stocks'}" use:swoosh_sound>
     </label>
     <label style="--initial-img: url({italians}); --active-img: url({italian});">
-       <input type="radio" name="images" on:change="{() => selectedImage = 'Italian'}">
+       <input type="radio" name="images" on:change="{() => selectedImage = 'Italian'}" use:swoosh_sound>
     </label>
     <label class="content-label">
       {#if contentMap[selectedImage]}
@@ -62,7 +70,7 @@
         {/if}
         {#if contentMap[selectedImage].link}
         <a href={contentMap[selectedImage].link} target="_blank" rel="noopener noreferrer">
-          <button class="button">Other Stuff</button>
+          <button class="button" use:click_sound>Other Stuff</button>
         </a>
         {/if}
       {/if}
@@ -146,6 +154,7 @@
   --index: calc(1vw + 1vh);
     --transition: cubic-bezier(.1, .7, 0, 1);
 }
+
 
 .button {
   padding: 15px 30px;

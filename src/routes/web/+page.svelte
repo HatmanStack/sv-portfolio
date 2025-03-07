@@ -41,6 +41,13 @@ const contentMap = {
 
 
   import Header from '../Header.svelte';
+
+  import { useSound } from "$lib/components/useSound";
+  import { applyClickSound } from "$lib/components/applyClickSound";
+  import click from "$lib/sounds/click.wav";
+  import expand from "$lib/sounds/expand.wav";
+  const expand_sound = useSound(expand,["expand"])
+  const click_sound = useSound(click,["click"])
 </script>
 
 <section>
@@ -52,26 +59,26 @@ const contentMap = {
   {#if contentMap[selectedImage]}
     <h1 class="header-text glow-filter" data-text={contentMap[selectedImage].title} style="margin-bottom: {selectedImage.includes('Splash') ? '10rem' : '0'}"></h1>
     {#if contentMap[selectedImage].description}
-    <p style="margin-bottom: {selectedImage.includes('Medium') ? '3rem' : '0'};margin-top: {selectedImage.includes('Medium') ? '4rem' : '2rem'}; text-wrap:balanced;">
+    <p use:applyClickSound style="margin-bottom: {selectedImage.includes('Medium') ? '3rem' : '0'};margin-top: {selectedImage.includes('Medium') ? '4rem' : '2rem'}; text-wrap:balanced;">
     {@html contentMap[selectedImage].description}</p>
     {/if}    
     {#if contentMap[selectedImage].link}
       <a href={contentMap[selectedImage].link} target="_blank" rel="noopener noreferrer">
-        <button class="button">More Stuff</button>
+        <button class="button" use:click_sound>More Stuff</button>
       </a>
     {/if}
   {/if}
 <div class="wrapper">
   <div class="items">
  
-    <div class="item" tabindex="0" role="button" style="--initial-img: url({one}); --active-img: url({pixelPrompta});" on:click="{(event) => selectedImage === 'Pixel Prompt' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Pixel Prompt'}"></div>
-    <div class="item" tabindex="0" role="button" style="--initial-img: url({two}); --active-img: url({twaa});" on:click="{(event) => selectedImage === 'TWA' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'TWA'}"></div>
-    <div class="item" tabindex="0" role="button" style="--initial-img: url({three}); --active-img: url({credentialsa});"  on:click="{(event) => selectedImage === 'Credentials' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Credentials'}"></div>
-    <div class="item" tabindex="0" role="button" style="--initial-img: url({four}); --active-img: url({connectora});" on:click="{(event) => selectedImage === 'Connector' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Connector'}"></div>
-    <div class="item" tabindex="0" role="button" style="--initial-img: url({five}); --active-img: url({plotPalettea});" on:click="{(event) => selectedImage === 'Plot Palette' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Plot Palette'}"></div>
-    <div class="item" tabindex="0" role="button" style="--initial-img: url({six}); --active-img: url({whoamia});" on:click="{(event) => selectedImage === 'Name Check' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Name Check'}"></div>
-    <div class="item" tabindex="0" role="button" style="--initial-img: url({seven}); --active-img: url({nbaa});"  on:click="{(event) => selectedImage === 'NBA' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'NBA'}"></div>
-    <div class="item" tabindex="0" role="button" style="--initial-img: url({eight}); --active-img: url({instanta});"  on:click="{(event) => selectedImage === 'Instant' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Instant'}"></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({one}); --active-img: url({pixelPrompta});" on:click="{(event) => selectedImage === 'Pixel Prompt' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Pixel Prompt'}" use:expand_sound></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({two}); --active-img: url({twaa});" on:click="{(event) => selectedImage === 'TWA' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'TWA'}" use:expand_sound></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({three}); --active-img: url({credentialsa});"  on:click="{(event) => selectedImage === 'Credentials' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Credentials'}" use:expand_sound></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({four}); --active-img: url({connectora});" on:click="{(event) => selectedImage === 'Connector' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Connector'}" use:expand_sound></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({five}); --active-img: url({plotPalettea});" on:click="{(event) => selectedImage === 'Plot Palette' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Plot Palette'}" use:expand_sound></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({six}); --active-img: url({whoamia});" on:click="{(event) => selectedImage === 'Name Check' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Name Check'}" use:expand_sound></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({seven}); --active-img: url({nbaa});"  on:click="{(event) => selectedImage === 'NBA' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'NBA'}" use:expand_sound></div>
+    <div class="item" tabindex="0" role="button" style="--initial-img: url({eight}); --active-img: url({instanta});"  on:click="{(event) => selectedImage === 'Instant' ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = 'Instant'}" use:expand_sound></div>
   
 
     </div>

@@ -6,6 +6,11 @@
   $: firstHalf = titleWords.slice(0, Math.ceil(titleWords.length / 2)).join(' ');
   $: secondHalf = titleWords.slice(Math.ceil(titleWords.length / 2)).join(' ');
   $: needsSplit = titleWords.length > 6;
+  import { applyClickSound } from "$lib/components/applyClickSound";
+  import { useSound } from "$lib/components/useSound";
+	import click from "$lib/sounds/click.wav";
+	const click_sound = useSound(click,["click"])
+
 </script>
 
 <article>
@@ -16,7 +21,7 @@
   {:else}
     <h1 class="header-text glow-filter" style="margin-top:.3em;" data-text={data.title}/>
   {/if}
-<div class="post-layout"><br>
+<div class="post-layout" use:applyClickSound><br>
    <svelte:component this={data.content} />
   <p text-align="center"><a href={data.link} target="_blank" rel="noopener noreferrer">Read on Medium</a></p>
   </div>
