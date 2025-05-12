@@ -11,7 +11,31 @@
   <meta name="twitter:image" content={sloth} />
 </svelte:head>
 
+
+
 <script lang="ts">
+
+  import { onMount } from 'svelte';
+  import { goto } from '$app//navigation';
+  import { browser } from '$app/environment';
+
+  const REDIRECT_FLAG = 'firefoxRedirected';
+  
+
+  onMount(() => {
+   if (browser && navigator.userAgent.includes("Firefox")) {
+   const scrollContainer = document.querySelector('.scroll-container');
+   if (scrollContainer) { // Check if the element was found
+    scrollContainer.style.display = 'none';
+  }
+   
+   if (!sessionStorage.getItem(REDIRECT_FLAG)) {
+     
+        goto('/read'); 
+        sessionStorage.setItem(REDIRECT_FLAG, 'true');
+      }
+    }
+  });
 	import '../app.css';
 	import Header from './Header.svelte';
 
