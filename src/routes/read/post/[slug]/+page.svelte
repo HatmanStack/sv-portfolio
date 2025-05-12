@@ -143,8 +143,8 @@
   }
 
   :global(.post-layout img) {
-    margin: 2rem 0;
-    justify-self: center;
+    display: block; 
+    margin: 2rem auto; 
   }
 
     :global(.post-layout pre) {

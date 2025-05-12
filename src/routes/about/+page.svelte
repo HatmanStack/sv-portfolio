@@ -4,7 +4,7 @@
 </svelte:head>
 
 <script>
-  import linkedIn from '$lib/images/linkedIn.svg';
+  import linkedIn from '$lib/images/link_short.svg';
   import huggingface from '$lib/images/hf.svg';
   import x from '$lib/images/x.svg';
   import calendly from '$lib/images/calendly.svg';

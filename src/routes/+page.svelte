@@ -146,7 +146,9 @@
 			<div class="wrapper" >				
 				<div class="profile_quote">
 					<p style="font-size:.8em" class="fade-in">The AWS Nova Canvas foundation model presented in a gradio app. The model enables users to generate, edit, and refine images through sophisticated tools like text-to-image generation, inpainting, outpainting, and background removal. Users can explore innovative image creation methods, including color-guided content manipulation and image conditioning, providing control over visual design and artistic expression.</p>
-				<a href="https://iu2ggxd43p.us-west-2.awsapprunner.com/" >
+
+				<a href="https://t7bmxtdc6ojbkd3zgknxe32xdm0oqxkw.lambda-url.us-west-2.on.aws/" >
+
         <button type="button" class="gooey-button" use:click_sound>
             Infer
         </button></a>
