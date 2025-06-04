@@ -123,7 +123,7 @@
   }
   .app-grid:has(.app-item:nth-child(1) input:checked) .app-item:nth-child(1) {
     background-image: var(--active-img);
-    background-size: cover;
+    background-size: auto 125%;
   }
 
   .app-grid:has(.app-item:nth-child(2) input:checked) {
@@ -133,7 +133,7 @@
   }
   .app-grid:has(.app-item:nth-child(2) input:checked) .app-item:nth-child(2) {
     background-image: var(--active-img);
-    background-size: cover;
+    background-size: auto 125%;
   }
 
   .app-grid:has(.app-item:nth-child(3) input:checked) {
@@ -143,7 +143,7 @@
   }
   .app-grid:has(.app-item:nth-child(3) input:checked) .app-item:nth-child(3) {
     background-image: var(--active-img);
-    background-size: cover;
+    background-size: auto 125%;
   }
 
   .app-grid:has(.app-item:nth-child(4) input:checked) {
@@ -153,7 +153,7 @@
   }
   .app-grid:has(.app-item:nth-child(4) input:checked) .app-item:nth-child(4) {
     background-image: var(--active-img);
-    background-size: cover;
+    background-size: auto 125%;
   }
 
   .app-grid:has(.app-item:nth-child(5) input:checked) {
@@ -163,7 +163,7 @@
   }
   .app-grid:has(.app-item:nth-child(5) input:checked) .app-item:nth-child(5) {
     background-image: var(--active-img);
-    background-size: cover;
+    background-size: auto 125%;
   }
 
   .app-grid:has(.app-item:nth-child(6) input:checked) {
@@ -172,7 +172,7 @@
   }
   .app-grid:has(.app-item:nth-child(6) input:checked) .app-item:nth-child(6) {
     background-image: var(--active-img);
-    background-size: cover;
+    background-size: auto 125%;
   }
 
   /* Content Panel */
