@@ -1,0 +1,123 @@
+// Button styles
+.gooey-button {
+  --hue: 170deg;
+  --button: hsl(var(--hue), 66%, 66%);
+  --size: 1em;
+  border: none;
+  background: transparent;
+  color: hsla(var(--hue), 80%, 30%, 0.7);
+  font-size: 1.8em;
+  position: relative;
+  padding: calc(var(--size)) calc(var(--size)*1.5);
+  animation: color 20s linear infinite both;
+  scale: 0.92;
+  isolation: isolate;
+  cursor: pointer;
+  
+  &:hover {
+    transition-duration: .5s, 1s;
+    box-shadow: none;
+    opacity: 1;
+    scale: 1;
+  }
+  
+  &:before {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    inset: 0em;
+    border: none;
+    filter: blur(12px) url(#goo) drop-shadow(0 .25em .5em hsla(0deg, 0%, 0%, 0.8)); 
+    background-image: linear-gradient(0deg,var(--button),var(--button));
+    background-clip: content-box, border-box;
+    padding: 20px;
+    z-index: -1;
+    border: inherit;
+    animation: color 20s linear infinite both; 
+  }
+}
+
+// Goo filter for buttons
+.goo-filter {
+  width: 0;
+  height: 0;
+  position: absolute;
+  
+  filter {
+    #goo {
+      x: -50%;
+      y: -50%;
+      width: 200%;
+      height: 200%;
+      
+      feComponentTransfer:first-child feFuncA {
+        type: discrete;
+        tableValues: "0 1";
+      }
+      
+      feGaussianBlur {
+        stdDeviation: 5;
+      }
+      
+      feComponentTransfer:last-child feFuncA {
+        type: table;
+        tableValues: "-5 11";
+      }
+    }
+  }
+}
+
+@property --hue {
+  syntax: "<angle>";
+  initial-value: 170deg;
+  inherits: false;
+}
+
+@keyframes color {
+  from {
+    --hue: 170deg;
+  }
+  to {
+    --hue: 530deg;
+  }
+}
+
+// Container styles
+.portfolio-container {
+  overflow: hidden; 
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 89vh;
+  background-image: var(--bg-color);
+}
+
+.category-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch; 
+  flex-wrap: nowrap;
+  gap: calc(var(--gap) * 2);
+  width: 100%;
+  height: 80%; 
+}
+
+// Fade in animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  opacity: 0;
+  
+  &.animate {
+    animation: fadeIn 1s ease-in 0.3s forwards;
+  }
+}

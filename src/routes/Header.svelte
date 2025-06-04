@@ -41,7 +41,8 @@
 	
 	<ul class="tab-bar__tabs">
 		<li class="tab-bar__tab">
-			<a class="tab-bar__tab-link" use:click_sound href="/" on:click={navigateToContainer} aria-current={page.url.pathname === '/#container' ? 'page' : undefined}>	<svg class="tab-bar__tab-icon tab-bar__tab-icon--home" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
+			<a class="tab-bar__tab-link" use:click_sound href="/" on:click={navigateToContainer} aria-current={page.url.pathname === '/#container' ? 'page' : undefined}>
+				<svg class="tab-bar__tab-icon tab-bar__tab-icon--home" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
 					<g class="tab-bar__tab-icon-1" fill="var(--focus-t)" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
 						<polygon points="12 1,23 10,23 23,16 23,16 14,8 14,8 23,1 23,1 10" />
 					</g>
@@ -117,6 +118,7 @@
 		--hue: 100;
 		--fg: #c8bdbe;
 		--focus: #816769;
+		--focus-t: var(--tab-bar-bg);
 		--ease-out: cubic-bezier(0.33,1,0.68,1);
 		--ease-in-out: cubic-bezier(0.65,0,0.35,1);
 		--tab-bar-bg: #171C1B;

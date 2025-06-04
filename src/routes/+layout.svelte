@@ -1,21 +1,32 @@
 <script lang="ts">
 	import '../app.css';
+	import '$lib/styles/variables.scss';
+	import '$lib/styles/components.scss';
 	import { onMount } from 'svelte';
-  	let mounted = false;
+	import { appStore } from '$lib/stores/app.svelte.js';
 	
-	onMount(async () => {
-    console.log('page mounted');
-    setTimeout(() => {
-      console.log('showing content now');
-      mounted = true;
-    }, 1000); 
-  });
+	interface Props {
+		children: any;
+	}
+	
+	let { children }: Props = $props();
+  	let mounted = $state(false);
+	
+	onMount(() => {
+		console.log('page mounted');
+		appStore.init();
+		
+		setTimeout(() => {
+			console.log('showing content now');
+			mounted = true;
+		}, 1000); 
+	});
 </script>
 
 <div class="page-content" class:visible={mounted}>
 <div class="app">
 	<main>
-	  <slot />
+	  {@render children()}
 	</main>
   </div>
 </div>

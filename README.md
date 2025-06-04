@@ -41,6 +41,10 @@
 - **Creator**: Teona Mushambadze
 - **Original Pen**: [3D Wave Animation](https://codepen.io/HighFlyer/pen/GRLZYKw)
 
+### Gooey Button
+- **Creator**: Simon Goellner
+- **Original Pen**: [Gooey Button](https://codepen.io/simeydotme/pen/pomRJeE)
+
 ## Technologies
 
 - Svelte
