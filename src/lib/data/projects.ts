@@ -40,7 +40,7 @@ export const projects: ProjectCard[] = [
       profession: savorSwipea,
       profile: savorSwipej
     },
-    link: 'https://savorswipe.fun',
+    link: 'https://main.d21v5ak15nf4k9.amplifyapp.com/',
     buttonText: 'Eat'
   }
 ];
