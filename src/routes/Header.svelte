@@ -43,7 +43,7 @@
 		<li class="tab-bar__tab">
 			<a class="tab-bar__tab-link" use:click_sound href="/" on:click={navigateToContainer} aria-current={page.url.pathname === '/#container' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--home" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
-					<g class="tab-bar__tab-icon-1" fill="var(--focus-t)" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+					<g class="tab-bar__tab-icon-1" fill="var(--color-nav-focus-alt)" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
 						<polygon points="12 1,23 10,23 23,16 23,16 14,8 14,8 23,1 23,1 10" />
 					</g>
 				</svg>
@@ -53,7 +53,7 @@
 		<li class="tab-bar__tab" use:click_sound>
 			<a class="tab-bar__tab-link" href="/web" aria-current={page.url.pathname === '/web' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--videos" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
-					<g fill="var(--focus-t)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<g fill="var(--color-nav-focus-alt)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 						<line class="tab-bar__tab-icon-1" x1="3" y1="1" x2="21" y2="1" />
 						<line x1="2" y1="5" x2="22" y2="5" />
 						<g class="tab-bar__tab-icon-2" transform="translate(1,9)">
@@ -69,7 +69,7 @@
 		<li class="tab-bar__tab" use:click_sound>
 			<a class="tab-bar__tab-link" href="/android" aria-current={page.url.pathname === '/android' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--android" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
-				<g class="tab-bar__tab-icon-1" fill="var(--focus-t)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<g class="tab-bar__tab-icon-1" fill="var(--color-nav-focus-alt)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle class="tab-bar__tab-icon-2" cx="7" cy="6" r="2"/>
                 <circle class="tab-bar__tab-icon-2" cx="17" cy="6" r="2"/>
                 <rect class="tab-bar__tab-icon-3" x="4" y="10" width="16" height="12" rx="2"/>
@@ -82,7 +82,7 @@
 		<li class="tab-bar__tab" use:click_sound>
 			<a class="tab-bar__tab-link" href="/read" aria-current={page.url.pathname === '/read' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--read" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
-					<g class="tab-bar__tab-icon-1" fill="var(--focus-t)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<g class="tab-bar__tab-icon-1" fill="var(--color-nav-focus-alt)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 						<rect class="tab-bar__tab-icon-2" x="1" y="1" rx="2" ry="2" width="11" height="19" />
 						<rect class="tab-bar__tab-icon-3" x="12" y="1" rx="2" ry="2" width="11" height="19" />
 						<line x1="12" y1="21" x2="12" y2="23" />
@@ -91,11 +91,11 @@
 				<span class="tab-bar__tab-name">Read</span>
 			</a>
 		</li>
-		
+
 		<li class="tab-bar__tab" use:click_sound>
 			<a class="tab-bar__tab-link" href="/about" aria-current={page.url.pathname === '/about' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--profile" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
-					<g fill="var(--focus-t)" stroke="currentColor" stroke-width="2">
+					<g fill="var(--color-nav-focus-alt)" stroke="currentColor" stroke-width="2">
 						<circle class="tab-bar__tab-icon-1" cx="12" cy="6.5" r="5.5"/>
 						<path d="M20.473,23H3.003c-1.276,0-2.228-1.175-1.957-2.422,.705-3.239,3.029-8.578,10.693-8.578s9.987,5.336,10.692,8.575c.272,1.248-.681,2.425-1.959,2.425Z"/>
 					</g>
@@ -114,18 +114,7 @@
 </header>
 
 <style lang="scss">
-	:root {
-		--hue: 100;
-		--fg: #c8bdbe;
-		--focus: #816769;
-		--focus-t: var(--tab-bar-bg);
-		--ease-out: cubic-bezier(0.33,1,0.68,1);
-		--ease-in-out: cubic-bezier(0.65,0,0.35,1);
-		--tab-bar-bg: #171C1B;
-		--trans-dur: 0.3s;
-		--trans-timing: cubic-bezier(0.65,0,0.35,1);
-		font-size: calc(14px + (30 - 14) * (100vw - 280px) / (3840 - 280));
-	}
+	/* All design tokens now come from tokens.css */
 
 	header {
 		display: flex;
@@ -185,11 +174,11 @@
 
 
 .tab-bar {
-	background-color: var(--tab-bar-bg);
-	border-radius: 2em;
-	box-shadow: 0 0 0.75em hsla(var(--hue),10%,10%,0.1);
+	background-color: var(--color-nav-bg);
+	border-radius: var(--radius-2xl);
+	box-shadow: var(--shadow-nav);
 	margin: auto;
-	width: calc(100% - 1.5em);
+	width: calc(100% - var(--space-6));
 	max-width: 30em;
 	transition:
 		background-color var(--trans-dur),
@@ -236,15 +225,15 @@
 			&-3 {
 				animation: {
 					duration: calc(var(--trans-dur) * 2.5);
-					timing-function: var(--ease-in-out);
+					timing-function: var(--ease-in-out-custom);
 				}
 			}
 			&--home &-1 {
 				transform-origin: 12px 24px;
 			}
 			&--videos &-3 {
-				fill: var(--tab-bar-bg);
-				stroke: var(--tab-bar-bg);
+				fill: var(--color-nav-bg);
+				stroke: var(--color-nav-bg);
 			}
 			&--read &-2,
 			&--read &-3 {
@@ -270,7 +259,7 @@
                 transform var(--trans-dur) var(--trans-timing);
 		}
 		&-link {
-			color: var(--fg);
+			color: var(--color-nav-fg);
 			display: flex;
 			position: relative;
 			text-decoration: none;
@@ -280,11 +269,11 @@
 			-webkit-tap-highlight-color: transparent;
 			&:hover,
 			&:focus-visible {
-				color: var(--focus);
+				color: var(--color-nav-focus);
 			}
 		}
 		&-link[aria-current="page"] {
-			color: var(--focus);
+			color: var(--color-nav-focus);
 		}
 		&-link[aria-current="page"] &-icon {
 			transform: translateY(-50%);
@@ -293,7 +282,7 @@
 			path,
 			polygon,
 			rect {
-				fill: var(--focus);
+				fill: var(--color-nav-focus);
 			}
 		}
 		&-link[aria-current="page"] &-name {
@@ -312,7 +301,7 @@
 		&-link[aria-current="page"] &-icon--videos &-icon-3 {
 			animation-name: video-fade-slide;
 			opacity: 1;
-			fill: var(--tab-bar-bg);
+			fill: var(--color-nav-bg);
 		}
 		
 		&-link[aria-current="page"] &-icon--android &-icon-1  {
@@ -384,7 +373,7 @@
 		transform: translate(0,0);
 	}
 	40% {
-		animation-timing-function: var(--ease-out);
+		animation-timing-function: var(--ease-out-custom);
 		opacity: 1;
 		stroke: hsla(0,0%,0%,0);
 		transform: translate(-4px,0);
@@ -392,7 +381,7 @@
 	60%,
 	to {
 		opacity: 1;
-		stroke: var(--tab-bar-bg);
+		stroke: var(--color-nav-bg);
 		transform: translate(0,0);
 	}
 }
