@@ -3,12 +3,15 @@
   <meta name="description" content="CG - Portfolio with Stuff" />
   <meta property="og:title" content="CG - Portfolio with Stuff" />
   <meta property="og:description" content="A portfolio made with some of my favorite Codepen.io's from 2024" />
-  <meta property="og:image" content={sloth} /> 
+  <meta property="og:image" content={sloth} />
   <meta property="og:url" content="https://www.cg-portfolio.com" />
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="CG - Portfolio with Stuff">
   <meta name="twitter:description" content="A portfolio made with some of my favorite Codepen.io's from 2024">
   <meta name="twitter:image" content={sloth} />
+
+  <!-- Preload hero image -->
+  <link rel="preload" as="image" href={sloth} type="image/jpeg" />
 </svelte:head>
 
 <script lang="ts">
@@ -69,8 +72,6 @@
 </svg>
 
 <style>
-  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
-  
   :root {
     --dark: #121212;
     --light: #ffffff;
