@@ -12,7 +12,6 @@
 	},
 	"devDependencies": {
 		"@fontsource/fira-mono": "^5.0.0",
-		"@neoconfetti/svelte": "^2.0.0",
 		"@sveltejs/adapter-auto": "^7.0.0",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.48.5",
@@ -27,8 +26,7 @@
 	},
 	"dependencies": {
 		"mdsvex": "^0.12.3",
-		"run": "^1.5.0",
-		"swiper": "^11.2.1"
+		"run": "^1.5.0"
 	},
 	"pnpm": {
 		"overrides": {
