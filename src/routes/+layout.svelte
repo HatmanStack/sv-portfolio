@@ -1,7 +1,5 @@
 <script lang="ts">
 	import '../app.css';
-	import '$lib/styles/variables.scss';
-	import '$lib/styles/components.scss';
 	import { appStore } from '$lib/stores/app.svelte.js';
 
 	interface Props {
@@ -13,7 +11,7 @@
 
 	$effect(() => {
 		console.log('page mounted');
-		appStore.init();
+		appStore.init(); // Initializes theme, preferences, and listeners
 
 		const timeoutId = setTimeout(() => {
 			console.log('showing content now');
