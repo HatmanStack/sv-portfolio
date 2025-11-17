@@ -8,8 +8,8 @@
   import Header from '../Header.svelte';
   import SVGFilters from '$lib/components/ui/SVGFilters.svelte';
 
-  import { useSound } from "$lib/components/useSound";
-  import { applyClickSound } from "$lib/components/applyClickSound";
+  import { useSound } from "$lib/hooks/useSound";
+  import { applyClickSound } from "$lib/hooks/applyClickSound";
   import click from "$lib/sounds/click.wav";
   import expand from "$lib/sounds/expand.wav";
   

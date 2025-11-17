@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import logo from '$lib/images/logo.svg';
 	import github from '$lib/images/github.svg';	
-	import { useSound } from "$lib/components/useSound";
+	import { useSound } from "$lib/hooks/useSound";
 	import click from "$lib/sounds/click.wav";
 	const click_sound = useSound(click,["click"])
 

@@ -6,8 +6,8 @@
   $: firstHalf = titleWords.slice(0, Math.ceil(titleWords.length / 2)).join(' ');
   $: secondHalf = titleWords.slice(Math.ceil(titleWords.length / 2)).join(' ');
   $: needsSplit = titleWords.length > 6;
-  import { applyClickSound } from "$lib/components/applyClickSound";
-  import { useSound } from "$lib/components/useSound";
+  import { applyClickSound } from "$lib/hooks/applyClickSound";
+  import { useSound } from "$lib/hooks/useSound";
 	import click from "$lib/sounds/click.wav";
 	const click_sound = useSound(click,["click"])
 

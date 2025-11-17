@@ -10,7 +10,7 @@
   
   let selectedImage = 'Android Stuff';
 
-  import { useSound } from "$lib/components/useSound";
+  import { useSound } from "$lib/hooks/useSound";
   import click from "$lib/sounds/click.wav";
   import swoosh from "$lib/sounds/swoosh.mp3";
   const click_sound = useSound(click,["click"])

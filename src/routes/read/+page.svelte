@@ -8,7 +8,7 @@
   import SVGFilters from '$lib/components/ui/SVGFilters.svelte';
   export let data;
 
-import { useSound } from "$lib/components/useSound";
+import { useSound } from "$lib/hooks/useSound";
 import click from "$lib/sounds/click.wav";
 const click_sound = useSound(click,["click"])
 </script>
