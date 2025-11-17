@@ -67,9 +67,9 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--dark);
+    background-color: var(--color-card-dark);
     opacity: 0.6;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity var(--transition-slow) ease-in-out;
   }
 
   .content:hover::before {
@@ -117,16 +117,16 @@
   }
 
   .profile_detail span {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--light);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-card-light);
     text-wrap: nowrap;
   }
 
   .profile_detail p {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--light);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-card-light);
   }
 
   .wrapper {
@@ -152,9 +152,9 @@
 
   .profile_quote p {
     flex: 1;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--light);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-card-light);
   }
 
   .profile_quote button {
