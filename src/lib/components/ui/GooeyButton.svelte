@@ -1,49 +1,47 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  
   interface Props {
     children?: any;
     onclick?: () => void;
   }
-  
+
   let { children, onclick }: Props = $props();
-  
+
   let buttonElement: HTMLButtonElement;
   let introInterval: number;
-  
+
   function moveBg(e: PointerEvent) {
     const rect = (e.target as HTMLElement).getBoundingClientRect();
     (e.target as HTMLElement).style.setProperty('--x', `${(e.clientX - rect.x) / rect.width * 100}`);
     (e.target as HTMLElement).style.setProperty('--y', `${(e.clientY - rect.y) / rect.height * 100}`);
   }
-  
+
   function intro() {
     let i = 4;
     if (!buttonElement) return;
-    
+
     buttonElement.style.setProperty('--a', '100%');
     introInterval = setInterval(() => {
       if (!buttonElement) return;
-      
+
       buttonElement.style.setProperty('--x', `${((Math.cos(i) + 2) / 3.6) * 100}`);
       buttonElement.style.setProperty('--y', `${((Math.sin(i) + 2) / 3.6) * 100}`);
       i += 0.03;
-      
+
       if (i > 11.5) {
         clearInterval(introInterval);
         buttonElement.style.setProperty('--a', '');
       }
     }, 16);
   }
-  
+
   function handlePointerOver(e: PointerEvent) {
     clearInterval(introInterval);
     (e.target as HTMLElement).style.setProperty('--a', '');
   }
-  
-  onMount(() => {
+
+  $effect(() => {
     intro();
-    
+
     return () => {
       if (introInterval) {
         clearInterval(introInterval);
