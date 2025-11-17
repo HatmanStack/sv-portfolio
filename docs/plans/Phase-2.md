@@ -795,6 +795,18 @@ Before proceeding to Phase 3, ensure:
 - [ ] **Header.svelte NOT modified** (reserved for Phase 6)
 - [ ] Navigation components untouched
 
+## Review Feedback (Iteration 1)
+
+### Task 4: GooeyButton Component
+
+> **Consider:** Looking at `/src/lib/components/ui/GooeyButton.svelte` lines 69-71, what event handler syntax is being used?
+>
+> **Think about:** When you run `pnpm run check`, you see warnings about deprecated event directives. What does Svelte 5's documentation say about the `on:click` directive versus the `onclick` attribute?
+>
+> **Reflect:** You've successfully migrated to `$effect()` and `$props()` for this component. Are the event handlers also using Svelte 5's modern syntax, or are they still using the deprecated `on:` directive syntax?
+>
+> **Hint:** Check lines 69-71. Should `on:click={onclick}` be `onclick={onclick}`? Should `on:pointermove={moveBg}` be `onpointermove={moveBg}`?
+
 ## Integration Points
 
 This phase prepares for:
