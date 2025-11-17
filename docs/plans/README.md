@@ -38,19 +38,19 @@ This plan breaks the work into digestible phases, each designed to fit within a 
 | Phase | Goal | Token Estimate |
 |-------|------|----------------|
 | **Phase 0** | Foundation & Architecture Decisions | N/A (Reference) |
-| **Phase 1** | File Structure & Naming Conventions | ~85,000 |
+| **Phase 1** | File Structure & Naming Conventions | ~95,000 |
 | **Phase 2** | Component Modernization (Non-Navigation) | ~95,000 |
 | **Phase 3** | Styling Architecture Migration | ~90,000 |
 | **Phase 4** | Type System Organization | ~70,000 |
 | **Phase 5** | Performance Optimizations | ~80,000 |
 | **Phase 6** | Navigation System (Conservative) | ~75,000 |
 | **Phase 7** | Final Testing & Documentation | ~60,000 |
-| **TOTAL** | | ~555,000 |
+| **TOTAL** | | ~565,000 |
 
 ## Navigation
 
 - **[Phase 0: Foundation](./Phase-0.md)** - Architecture decisions, conventions, patterns, and testing strategy
-- **[Phase 1: File Structure & Naming](./Phase-1.md)** - Rename components to PascalCase, reorganize directories
+- **[Phase 1: File Structure & Naming](./Phase-1.md)** - Update dependencies, fix vulnerabilities, rename components to PascalCase, reorganize directories
 - **[Phase 2: Component Modernization](./Phase-2.md)** - Convert components to Svelte 5 runes patterns
 - **[Phase 3: Styling Architecture](./Phase-3.md)** - Migrate SCSS variables to CSS custom properties
 - **[Phase 4: Type System](./Phase-4.md)** - Refine and organize TypeScript definitions
