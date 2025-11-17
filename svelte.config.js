@@ -9,7 +9,7 @@ const config = {
       pages: 'build',
       assets: 'build',
       fallback: 'index.html',  // Add this for SPA fallback
-      precompress: false,
+      precompress: true, // Enable gzip and brotli compression
       strict: false  // Relaxing the strict mode
     }),
     prerender: {
