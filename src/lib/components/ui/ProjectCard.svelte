@@ -6,9 +6,10 @@
 
   interface Props {
     project: Project;
+    lazy?: boolean;
   }
 
-  let { project }: Props = $props();
+  let { project, lazy = true }: Props = $props();
   
   const clickSound = createSoundStore(click);
   
@@ -18,8 +19,20 @@
 </script>
 
 <div class="content">
-  <img src={project.images.profession} class="profession_image" alt="{project.title} profession" />
-  <img src={project.images.profile} class="profile_image" alt="{project.title} profile" />
+  <img
+    src={project.images.profession}
+    class="profession_image"
+    alt="{project.title} profession"
+    loading={lazy ? 'lazy' : 'eager'}
+    decoding="async"
+  />
+  <img
+    src={project.images.profile}
+    class="profile_image"
+    alt="{project.title} profile"
+    loading={lazy ? 'lazy' : 'eager'}
+    decoding="async"
+  />
   <div class="profile_detail">
     <span>{project.title}</span>
     <p>{project.category}</p>

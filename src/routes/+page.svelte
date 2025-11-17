@@ -49,8 +49,8 @@
 
 <section class="portfolio-container">
   <div class="category-container">
-    {#each projects as project}
-      <ProjectCard {project} />
+    {#each projects as project, index}
+      <ProjectCard {project} lazy={index > 0} />
     {/each}
   </div>
 </section>
