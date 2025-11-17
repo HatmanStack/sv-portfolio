@@ -3,7 +3,7 @@
 	<meta name="description" content="stuff from the web" />
 </svelte:head>
 
-<script>
+<script lang="ts">
   import { webProjects, webContentMap } from '$lib/data/webProjects';
   import Header from '../Header.svelte';
   import SVGFilters from '$lib/components/ui/SVGFilters.svelte';
@@ -12,11 +12,11 @@
   import { applyClickSound } from "$lib/hooks/applyClickSound";
   import click from "$lib/sounds/click.wav";
   import expand from "$lib/sounds/expand.wav";
-  
+
   const expand_sound = useSound(expand,["expand"]);
   const click_sound = useSound(click,["click"]);
-  
-  let selectedImage = 'Splash';
+
+  let selectedImage = $state('Splash');
 </script>
 
 <section>

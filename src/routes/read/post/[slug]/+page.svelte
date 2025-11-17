@@ -1,16 +1,22 @@
-<script>
-  export let data;
+<script lang="ts">
+  import type { PageData } from './$types';
   import Header from '../../../Header.svelte';
-
-  $: titleWords = data.title.split(' ');
-  $: firstHalf = titleWords.slice(0, Math.ceil(titleWords.length / 2)).join(' ');
-  $: secondHalf = titleWords.slice(Math.ceil(titleWords.length / 2)).join(' ');
-  $: needsSplit = titleWords.length > 6;
   import { applyClickSound } from "$lib/hooks/applyClickSound";
   import { useSound } from "$lib/hooks/useSound";
-	import click from "$lib/sounds/click.wav";
-	const click_sound = useSound(click,["click"])
+  import click from "$lib/sounds/click.wav";
 
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
+
+  let titleWords = $derived(data.title.split(' '));
+  let firstHalf = $derived(titleWords.slice(0, Math.ceil(titleWords.length / 2)).join(' '));
+  let secondHalf = $derived(titleWords.slice(Math.ceil(titleWords.length / 2)).join(' '));
+  let needsSplit = $derived(titleWords.length > 6);
+
+  const click_sound = useSound(click,["click"])
 </script>
 
 <article>

@@ -3,12 +3,12 @@
 	<meta name="description" content="stuff from google play" />
 </svelte:head>
 
-<script>
+<script lang="ts">
   import { androidApps, androidContentMap } from '$lib/data/androidApps';
   import Header from '../Header.svelte';
   import AndroidFilters from '$lib/components/ui/AndroidFilters.svelte';
-  
-  let selectedImage = 'Android Stuff';
+
+  let selectedImage = $state('Android Stuff');
 
   import { useSound } from "$lib/hooks/useSound";
   import click from "$lib/sounds/click.wav";

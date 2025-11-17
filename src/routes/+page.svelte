@@ -12,7 +12,6 @@
 </svelte:head>
 
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { browser } from '$app/environment';
   import '../app.css';
@@ -24,16 +23,16 @@
   import sloth from '$lib/images/sloth_stuff.jpg';
 
   const REDIRECT_FLAG = 'firefoxRedirected';
-  
-  onMount(() => {
+
+  $effect(() => {
     if (browser && navigator.userAgent.includes("Firefox")) {
       const scrollContainer = document.querySelector('.scroll-container');
       if (scrollContainer) {
         scrollContainer.style.display = 'none';
       }
-      
+
       if (!sessionStorage.getItem(REDIRECT_FLAG)) {
-        goto('/read'); 
+        goto('/read');
         sessionStorage.setItem(REDIRECT_FLAG, 'true');
       }
     }
