@@ -1,13 +1,13 @@
 <script lang="ts">
-  import type { ProjectCard } from '$lib/types/index.js';
+  import type { Project } from '$lib/types/index.js';
   import { createSoundStore } from '$lib/hooks/useSound.svelte.js';
   import GooeyButton from './GooeyButton.svelte';
   import click from '$lib/sounds/click.wav';
-  
+
   interface Props {
-    project: ProjectCard;
+    project: Project;
   }
-  
+
   let { project }: Props = $props();
   
   const clickSound = createSoundStore(click);

@@ -1,19 +1,4 @@
-interface NavigationState {
-  currentSection: string;
-  isMenuOpen: boolean;
-}
-
-interface UserPreferences {
-  soundEnabled: boolean;
-  reducedMotion: boolean;
-  theme: 'light' | 'dark' | 'auto';
-}
-
-interface AppState {
-  navigation: NavigationState;
-  preferences: UserPreferences;
-  isLoading: boolean;
-}
+import type { AppState, NavigationState, UserPreferences, Theme } from '$lib/types/index.js';
 
 function createAppStore() {
   let state = $state<AppState>({
@@ -51,7 +36,7 @@ function createAppStore() {
       this.savePreferences();
     },
     
-    setTheme(theme: 'light' | 'dark' | 'auto') {
+    setTheme(theme: Theme) {
       state.preferences.theme = theme;
       this.savePreferences();
       this.applyTheme();

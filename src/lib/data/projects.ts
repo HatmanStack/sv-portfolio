@@ -1,4 +1,4 @@
-import type { ProjectCard } from '$lib/types/index.js';
+import type { Project } from '$lib/types/index.js';
 import floata from '$lib/images/float.avif';
 import floatj from '$lib/images/float.jpg';
 import novaCanvasa from '$lib/images/nova-canvas.avif';
@@ -6,7 +6,7 @@ import novaCanvasj from '$lib/images/nova-canvas.jpg';
 import savorSwipea from '$lib/images/savorswipe.avif';
 import savorSwipej from '$lib/images/savorswipe.jpg';
 
-export const projects: ProjectCard[] = [
+export const projects: Project[] = [
   {
     id: 'float',
     title: 'Float',
