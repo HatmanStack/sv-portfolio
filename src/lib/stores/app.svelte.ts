@@ -127,4 +127,5 @@ function createAppStore() {
   };
 }
 
+export { createAppStore };
 export const appStore = createAppStore();

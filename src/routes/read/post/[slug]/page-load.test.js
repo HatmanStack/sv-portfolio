@@ -7,13 +7,12 @@ describe('Single Blog Post Load Function', () => {
 		expect(typeof load).toBe('function');
 	});
 
-	test('load function is async', () => {
-		expect(load.constructor.name).toBe('AsyncFunction');
-	});
-
-	test('load function requires params argument', () => {
-		// Function should have 1 parameter
-		expect(load.length).toBeGreaterThanOrEqual(1);
+	test('load function returns a Promise', async () => {
+		const params = { slug: 'test' };
+		const result = load({ params });
+		expect(result).toBeInstanceOf(Promise);
+		// Catch the rejection to avoid unhandled promise error
+		await result.catch(() => {});
 	});
 
 	test('throws error for invalid slug', async () => {

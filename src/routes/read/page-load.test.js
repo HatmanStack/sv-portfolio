@@ -7,8 +7,9 @@ describe('Blog List Load Function', () => {
 		expect(typeof load).toBe('function');
 	});
 
-	test('load function is async', () => {
-		expect(load.constructor.name).toBe('AsyncFunction');
+	test('load function returns a Promise', () => {
+		const result = load();
+		expect(result).toBeInstanceOf(Promise);
 	});
 
 	test('load function returns object with posts array', async () => {
@@ -73,8 +74,7 @@ describe('Blog List Load Function', () => {
 		});
 	});
 
-	test('returns empty array on error (resilience)', async () => {
-		// Test the error handling path is defined
+	test('always returns an object with posts array property', async () => {
 		const result = await load();
 
 		// Should always return an object with posts array

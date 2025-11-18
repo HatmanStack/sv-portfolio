@@ -139,10 +139,13 @@ export function createMockUserPreferences(
  * Creates a mock AppState object with default values that can be overridden
  */
 export function createMockAppState(overrides: Partial<AppState> = {}): AppState {
+	// Extract nested overrides separately to prevent clobbering
+	const { navigation, preferences, ...topLevelOverrides } = overrides;
+
 	return {
-		navigation: createMockNavigationState(overrides.navigation),
-		preferences: createMockUserPreferences(overrides.preferences),
+		navigation: createMockNavigationState(navigation),
+		preferences: createMockUserPreferences(preferences),
 		isLoading: false,
-		...overrides
+		...topLevelOverrides // Only spread top-level fields like isLoading
 	};
 }
