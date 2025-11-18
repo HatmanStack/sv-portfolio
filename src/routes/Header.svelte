@@ -7,7 +7,7 @@
 	import click from "$lib/sounds/click.wav";
 	const click_sound = useSound(click,["click"])
 
-	function navigateToContainer(event) {
+	function navigateToContainer(event: MouseEvent) {
 		event.preventDefault();
 		console.log('header');
 		const currentPath = window.location.pathname;
@@ -69,13 +69,14 @@
 		<li class="tab-bar__tab" use:click_sound>
 			<a class="tab-bar__tab-link" href="/android" aria-current={page.url.pathname === '/android' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--android" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
-				<g class="tab-bar__tab-icon-1" fill="var(--color-nav-focus-alt)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle class="tab-bar__tab-icon-2" cx="7" cy="6" r="2"/>
-                <circle class="tab-bar__tab-icon-2" cx="17" cy="6" r="2"/>
-                <rect class="tab-bar__tab-icon-3" x="4" y="10" width="16" height="12" rx="2"/>
-                <line x1="2" y1="14" x2="4" y2="14"/>
-                <line x1="20" y1="14" x2="22" y2="14"/>
-            </g>
+					<g class="tab-bar__tab-icon-1" fill="var(--color-nav-focus-alt)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<circle class="tab-bar__tab-icon-2" cx="7" cy="6" r="2"/>
+						<circle class="tab-bar__tab-icon-2" cx="17" cy="6" r="2"/>
+						<rect class="tab-bar__tab-icon-3" x="4" y="10" width="16" height="12" rx="2"/>
+						<line x1="2" y1="14" x2="4" y2="14"/>
+						<line x1="20" y1="14" x2="22" y2="14"/>
+					</g>
+				</svg>
 				<span class="tab-bar__tab-name">Android</span>
 			</a>
 		</li>
@@ -149,8 +150,6 @@
 		justify-content: center;
 		align-items: center;
 		list-style: none;
-		background: var(--background);
-		background-size: contain;
 	}
 
 	li {
