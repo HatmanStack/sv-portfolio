@@ -26,7 +26,7 @@
   <fieldset class="app-grid">
     {#each androidApps as app}
       <label class="app-item" style="--initial-img: url({app.initialImg}); --active-img: url({app.activeImg});">
-         <input type="radio" name="images" on:change="{() => selectedImage = app.title}" use:swoosh_sound>
+         <input type="radio" name="images" onchange="{() => selectedImage = app.title}" use:swoosh_sound>
       </label>
     {/each}
     <div class="content-panel">

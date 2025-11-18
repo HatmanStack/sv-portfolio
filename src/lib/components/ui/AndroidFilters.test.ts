@@ -71,7 +71,7 @@ describe('AndroidFilters', () => {
 	test('SVG is positioned absolutely', () => {
 		const { container } = render(AndroidFilters);
 
-		const svg = container.querySelector('svg') as HTMLElement;
+		const svg = container.querySelector('svg') as SVGSVGElement;
 		const styles = window.getComputedStyle(svg);
 
 		expect(styles.position).toBe('absolute');

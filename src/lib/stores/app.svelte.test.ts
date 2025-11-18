@@ -21,18 +21,18 @@ describe('AppStore', () => {
 
 		// Mock localStorage
 		mockLocalStorage = createMockLocalStorage();
-		global.localStorage = mockLocalStorage as any;
+		globalThis.localStorage = mockLocalStorage as any;
 
 		// Mock matchMedia
 		mockMatchMedia = createMockMatchMedia(false);
-		global.window = { matchMedia: mockMatchMedia } as any;
+		globalThis.window = { matchMedia: mockMatchMedia } as any;
 
 		// Mock document
 		mockDocumentElement = {
 			setAttribute: vi.fn(),
 			style: { setProperty: vi.fn() }
 		};
-		global.document = { documentElement: mockDocumentElement } as any;
+		globalThis.document = { documentElement: mockDocumentElement } as any;
 	});
 
 	describe('Navigation State', () => {

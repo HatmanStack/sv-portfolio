@@ -52,7 +52,7 @@ describe('Android Apps Data', () => {
 		test('all links are valid URLs when present', () => {
 			androidApps.forEach((app) => {
 				if (app.link) {
-					expect(() => new URL(app.link)).not.toThrow();
+					expect(() => new URL(app.link!)).not.toThrow();
 				}
 			});
 		});

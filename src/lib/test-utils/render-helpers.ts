@@ -14,6 +14,7 @@ export function render<T extends SvelteComponent>(
 	component: ComponentType<T>,
 	options?: RenderOptions<T>
 ) {
+	// @ts-expect-error - Type mismatch between Svelte 5 ComponentType and testing-library types
 	return testingLibraryRender(component, options);
 }
 

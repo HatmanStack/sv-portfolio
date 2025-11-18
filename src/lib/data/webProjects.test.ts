@@ -52,7 +52,7 @@ describe('Web Projects Data', () => {
 		test('all links are valid URLs when present', () => {
 			webProjects.forEach((project) => {
 				if (project.link) {
-					expect(() => new URL(project.link)).not.toThrow();
+					expect(() => new URL(project.link!)).not.toThrow();
 				}
 			});
 		});

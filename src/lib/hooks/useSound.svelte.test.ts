@@ -44,10 +44,10 @@ describe('Sound Hooks', () => {
 		};
 
 		// Mock the global Audio constructor - use vi.fn() for spy functionality
-		global.Audio = vi.fn(function () {
+		globalThis.Audio = vi.fn(function () {
 			return mockAudio;
 		}) as any;
-		global.window = {} as any;
+		globalThis.window = {} as any;
 	});
 
 	describe('createSoundStore', () => {
@@ -55,7 +55,7 @@ describe('Sound Hooks', () => {
 			const soundStore = createSoundStore('/test-sound.mp3');
 
 			expect(soundStore.audio).toBeDefined();
-			expect(global.Audio).toHaveBeenCalledWith('/test-sound.mp3');
+			expect(globalThis.Audio).toHaveBeenCalledWith('/test-sound.mp3');
 		});
 
 		test('sets volume from options', () => {
