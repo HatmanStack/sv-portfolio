@@ -1,25 +1,22 @@
 <script lang="ts">
 	import '../app.css';
-	import '$lib/styles/variables.scss';
-	import '$lib/styles/components.scss';
-	import { onMount } from 'svelte';
 	import { appStore } from '$lib/stores/app.svelte.js';
-	
+
 	interface Props {
 		children: any;
 	}
-	
+
 	let { children }: Props = $props();
-  	let mounted = $state(false);
-	
-	onMount(() => {
-		console.log('page mounted');
-		appStore.init();
-		
-		setTimeout(() => {
-			console.log('showing content now');
+	let mounted = $state(false);
+
+	$effect(() => {
+		appStore.init(); // Initializes theme, preferences, and listeners
+
+		const timeoutId = setTimeout(() => {
 			mounted = true;
-		}, 1000); 
+		}, 1000);
+
+		return () => clearTimeout(timeoutId);
 	});
 </script>
 

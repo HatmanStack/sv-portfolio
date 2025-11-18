@@ -1,4 +1,5 @@
 // Web projects data
+import type { WebProject } from '$lib/types/index.js';
 import pixelPrompta from '$lib/images/pixel-prompt.avif';
 import twaa from '$lib/images/twa.avif';
 import credentialsa from '$lib/images/credentials.avif';
@@ -16,15 +17,6 @@ import five from '$lib/images/slices/5.jpg';
 import six from '$lib/images/slices/6.jpg';
 import seven from '$lib/images/slices/7.jpg';
 import eight from '$lib/images/slices/8.jpg';
-
-export interface WebProject {
-  id: string;
-  title: string;
-  link?: string;
-  description?: string;
-  initialImg: string;
-  activeImg: string;
-}
 
 export const webProjects: WebProject[] = [
   {

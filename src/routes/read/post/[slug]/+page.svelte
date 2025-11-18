@@ -1,29 +1,35 @@
-<script>
-  export let data;
+<script lang="ts">
+  import type { PageData } from './$types';
   import Header from '../../../Header.svelte';
+  import { applyClickSound } from "$lib/hooks/applyClickSound";
+  import { useSound } from "$lib/hooks/useSound";
+  import click from "$lib/sounds/click.wav";
 
-  $: titleWords = data.title.split(' ');
-  $: firstHalf = titleWords.slice(0, Math.ceil(titleWords.length / 2)).join(' ');
-  $: secondHalf = titleWords.slice(Math.ceil(titleWords.length / 2)).join(' ');
-  $: needsSplit = titleWords.length > 6;
-  import { applyClickSound } from "$lib/components/applyClickSound";
-  import { useSound } from "$lib/components/useSound";
-	import click from "$lib/sounds/click.wav";
-	const click_sound = useSound(click,["click"])
+  interface Props {
+    data: PageData;
+  }
 
+  let { data }: Props = $props();
+
+  let titleWords = $derived(data.title.split(' '));
+  let firstHalf = $derived(titleWords.slice(0, Math.ceil(titleWords.length / 2)).join(' '));
+  let secondHalf = $derived(titleWords.slice(Math.ceil(titleWords.length / 2)).join(' '));
+  let needsSplit = $derived(titleWords.length > 6);
+
+  const click_sound = useSound(click,["click"])
 </script>
 
 <article>
 <Header />
 {#if needsSplit}
-    <h1 class="header-text glow-filter" style="margin-top:.3em;" data-text={firstHalf}/>
-    <h1 class="header-text glow-filter" style="margin-top:1.3em;" data-text={secondHalf}/>
+    <h1 class="header-text glow-filter" style="margin-top:.3em;" data-text={firstHalf}></h1>
+    <h1 class="header-text glow-filter" style="margin-top:1.3em;" data-text={secondHalf}></h1>
   {:else}
-    <h1 class="header-text glow-filter" style="margin-top:.3em;" data-text={data.title}/>
+    <h1 class="header-text glow-filter" style="margin-top:.3em;" data-text={data.title}></h1>
   {/if}
 <div class="post-layout" use:applyClickSound><br>
-   <svelte:component this={data.content} />
-  <p text-align="center"><a href={data.link} target="_blank" rel="noopener noreferrer">Read on Medium</a></p>
+   <data.content />
+  <p style="text-align: center;"><a href={data.link} target="_blank" rel="noopener noreferrer">Read on Medium</a></p>
   </div>
 </article>
 

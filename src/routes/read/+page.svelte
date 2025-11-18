@@ -3,14 +3,20 @@
 	<meta name="description" content="stuff to Read" />
 </svelte:head>
 
-<script>
+<script lang="ts">
+  import type { PageData } from './$types';
   import Header from '../Header.svelte';
   import SVGFilters from '$lib/components/ui/SVGFilters.svelte';
-  export let data;
 
-import { useSound } from "$lib/components/useSound";
-import click from "$lib/sounds/click.wav";
-const click_sound = useSound(click,["click"])
+  interface Props {
+    data: PageData;
+  }
+
+  let { data }: Props = $props();
+
+  import { useSound } from "$lib/hooks/useSound";
+  import click from "$lib/sounds/click.wav";
+  const click_sound = useSound(click,["click"])
 </script>
 
 <section>

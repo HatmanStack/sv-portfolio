@@ -1,4 +1,5 @@
 // Android apps data
+import type { AndroidApp } from '$lib/types/index.js';
 import trachtenberg from '$lib/images/trachtenberg.avif';
 import stock from '$lib/images/stock.avif';
 import movies from '$lib/images/movies.avif';
@@ -11,15 +12,6 @@ import moviess from '$lib/images/movies.jpg';
 import vocabs from '$lib/images/vocabulary.svg';
 import loopers from '$lib/images/looper.jpg';
 import italians from '$lib/images/italian.svg';
-
-export interface AndroidApp {
-  id: string;
-  title: string;
-  link?: string;
-  description?: string;
-  initialImg: string;
-  activeImg: string;
-}
 
 export const androidApps: AndroidApp[] = [
   {

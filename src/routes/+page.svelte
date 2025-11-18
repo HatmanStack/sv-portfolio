@@ -3,16 +3,18 @@
   <meta name="description" content="CG - Portfolio with Stuff" />
   <meta property="og:title" content="CG - Portfolio with Stuff" />
   <meta property="og:description" content="A portfolio made with some of my favorite Codepen.io's from 2024" />
-  <meta property="og:image" content={sloth} /> 
+  <meta property="og:image" content={sloth} />
   <meta property="og:url" content="https://www.cg-portfolio.com" />
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="CG - Portfolio with Stuff">
   <meta name="twitter:description" content="A portfolio made with some of my favorite Codepen.io's from 2024">
   <meta name="twitter:image" content={sloth} />
+
+  <!-- Preload hero image -->
+  <link rel="preload" as="image" href={sloth} type="image/jpeg" />
 </svelte:head>
 
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import { browser } from '$app/environment';
   import '../app.css';
@@ -24,16 +26,16 @@
   import sloth from '$lib/images/sloth_stuff.jpg';
 
   const REDIRECT_FLAG = 'firefoxRedirected';
-  
-  onMount(() => {
+
+  $effect(() => {
     if (browser && navigator.userAgent.includes("Firefox")) {
-      const scrollContainer = document.querySelector('.scroll-container');
+      const scrollContainer = document.querySelector('.scroll-container') as HTMLElement | null;
       if (scrollContainer) {
         scrollContainer.style.display = 'none';
       }
-      
+
       if (!sessionStorage.getItem(REDIRECT_FLAG)) {
-        goto('/read'); 
+        goto('/read');
         sessionStorage.setItem(REDIRECT_FLAG, 'true');
       }
     }
@@ -50,8 +52,8 @@
 
 <section class="portfolio-container">
   <div class="category-container">
-    {#each projects as project}
-      <ProjectCard {project} />
+    {#each projects as project, index}
+      <ProjectCard {project} lazy={index > 0} />
     {/each}
   </div>
 </section>
@@ -70,8 +72,6 @@
 </svg>
 
 <style>
-  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
-  
   :root {
     --dark: #121212;
     --light: #ffffff;

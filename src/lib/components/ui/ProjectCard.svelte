@@ -1,14 +1,15 @@
 <script lang="ts">
-  import type { ProjectCard } from '$lib/types/index.js';
+  import type { Project } from '$lib/types/index.js';
   import { createSoundStore } from '$lib/hooks/useSound.svelte.js';
   import GooeyButton from './GooeyButton.svelte';
   import click from '$lib/sounds/click.wav';
-  
+
   interface Props {
-    project: ProjectCard;
+    project: Project;
+    lazy?: boolean;
   }
-  
-  let { project }: Props = $props();
+
+  let { project, lazy = true }: Props = $props();
   
   const clickSound = createSoundStore(click);
   
@@ -18,8 +19,20 @@
 </script>
 
 <div class="content">
-  <img src={project.images.profession} class="profession_image" alt="{project.title} profession" />
-  <img src={project.images.profile} class="profile_image" alt="{project.title} profile" />
+  <img
+    src={project.images.profession}
+    class="profession_image"
+    alt="{project.title} profession"
+    loading={lazy ? 'lazy' : 'eager'}
+    decoding="async"
+  />
+  <img
+    src={project.images.profile}
+    class="profile_image"
+    alt="{project.title} profile"
+    loading={lazy ? 'lazy' : 'eager'}
+    decoding="async"
+  />
   <div class="profile_detail">
     <span>{project.title}</span>
     <p>{project.category}</p>
@@ -67,9 +80,9 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--dark);
+    background-color: var(--color-card-dark);
     opacity: 0.6;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity var(--transition-slow) ease-in-out;
   }
 
   .content:hover::before {
@@ -117,16 +130,16 @@
   }
 
   .profile_detail span {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--light);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-card-light);
     text-wrap: nowrap;
   }
 
   .profile_detail p {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--light);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-card-light);
   }
 
   .wrapper {
@@ -152,9 +165,9 @@
 
   .profile_quote p {
     flex: 1;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--light);
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-card-light);
   }
 
   .profile_quote button {

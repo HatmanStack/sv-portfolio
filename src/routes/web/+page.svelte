@@ -3,20 +3,20 @@
 	<meta name="description" content="stuff from the web" />
 </svelte:head>
 
-<script>
+<script lang="ts">
   import { webProjects, webContentMap } from '$lib/data/webProjects';
   import Header from '../Header.svelte';
   import SVGFilters from '$lib/components/ui/SVGFilters.svelte';
 
-  import { useSound } from "$lib/components/useSound";
-  import { applyClickSound } from "$lib/components/applyClickSound";
+  import { useSound } from "$lib/hooks/useSound";
+  import { applyClickSound } from "$lib/hooks/applyClickSound";
   import click from "$lib/sounds/click.wav";
   import expand from "$lib/sounds/expand.wav";
-  
+
   const expand_sound = useSound(expand,["expand"]);
   const click_sound = useSound(click,["click"]);
-  
-  let selectedImage = 'Splash';
+
+  let selectedImage = $state('Splash');
 </script>
 
 <section>
@@ -33,21 +33,51 @@
     {/if}    
     {#if webContentMap[selectedImage].link}
       <a href={webContentMap[selectedImage].link} target="_blank" rel="noopener noreferrer">
+        {#if click_sound}
         <button class="button" use:click_sound>More Stuff</button>
+        {:else}
+        <button class="button">More Stuff</button>
+        {/if}
       </a>
     {/if}
   {/if}
 <div class="wrapper">
   <div class="items">
     {#each webProjects as project}
-      <div 
-        class="item" 
-        tabindex="0" 
-        role="button" 
-        style="--initial-img: url({project.initialImg}); --active-img: url({project.activeImg});" 
-        on:click="{(event) => selectedImage === project.title ? (selectedImage = 'Splash', event.target.blur()) : selectedImage = project.title}" 
+      {#if expand_sound}
+      <div
+        class="item"
+        tabindex="0"
+        role="button"
+        style="--initial-img: url({project.initialImg}); --active-img: url({project.activeImg});"
+        onclick={(event) => {
+          if (selectedImage === project.title) {
+            selectedImage = 'Splash';
+            const target = event.target as HTMLElement | null;
+            target?.blur();
+          } else {
+            selectedImage = project.title;
+          }
+        }}
         use:expand_sound
       ></div>
+      {:else}
+      <div
+        class="item"
+        tabindex="0"
+        role="button"
+        style="--initial-img: url({project.initialImg}); --active-img: url({project.activeImg});"
+        onclick={(event) => {
+          if (selectedImage === project.title) {
+            selectedImage = 'Splash';
+            const target = event.target as HTMLElement | null;
+            target?.blur();
+          } else {
+            selectedImage = project.title;
+          }
+        }}
+      ></div>
+      {/if}
     {/each}
   </div>      
 </div>
