@@ -1,868 +1,694 @@
-# Phase 6: Navigation System (Conservative Approach)
+# Phase 6: CI/CD Integration & Documentation
 
 ## Phase Goal
 
-Carefully and conservatively modernize the Header.svelte navigation component using Svelte 5 patterns while maintaining 100% functionality. This is the most cautious phase because navigation has been problematic historically. We'll make small, incremental changes with extensive testing after each step, ensuring the navigation remains rock-solid throughout.
+Integrate the test suite into the CI/CD pipeline, set up automated coverage reporting, and create comprehensive documentation. This phase ensures tests run automatically on every commit, coverage is tracked, and the team understands how to use the testing infrastructure.
 
-**Success Criteria**:
-- Header component uses modern Svelte 5 patterns where beneficial
-- All navigation functionality preserved
-- No visual regressions
-- No interaction bugs
-- Mobile menu works perfectly (if applicable)
-- Active route highlighting works
-- Keyboard navigation functional
-- Tested exhaustively on multiple browsers
+**Success criteria**:
+- GitHub Actions workflow runs tests on every push and PR
+- Coverage reports are generated and visible
+- Coverage thresholds are enforced
+- Documentation is complete and accessible
+- Test suite is fully integrated into development workflow
 
-**Estimated tokens**: ~75,000
-
----
+**Estimated tokens**: ~18,000
 
 ## Prerequisites
 
-- Phase 0 read (especially ADR-007 on navigation approach)
-- Phases 1-5 complete (all other refactoring done)
-- **Critical**: Navigation must be working before starting
-- Git ready to rollback at any point
-- Multiple browsers available for testing
-
----
-
-## ⚠️ CRITICAL SAFETY GUIDELINES
-
-Before starting ANY task in this phase:
-
-1. **Test Current State**: Verify navigation works perfectly
-2. **Make Small Changes**: One change at a time
-3. **Test Immediately**: After every change, test thoroughly
-4. **Commit Often**: Commit after each successful change
-5. **Rollback Fast**: If anything breaks, rollback immediately
-
-### Testing Checklist (Use After Every Change)
-- [ ] Menu opens and closes correctly
-- [ ] All navigation links work on all routes
-- [ ] Mobile menu works (if applicable)
-- [ ] Active route highlighting works
-- [ ] Keyboard navigation works (Tab, Enter, Escape)
-- [ ] No console errors
-- [ ] No visual glitches
-- [ ] Animations smooth (if any)
-- [ ] Works on Chrome, Firefox, Safari
-
-**If ANY item fails, STOP and rollback the change.**
-
----
+- Phase 0, 1, 2, 3, 4, and 5 completed and verified
+- All tests passing locally
+- Coverage meeting 80% threshold
+- Understanding of GitHub Actions
+- Repository has GitHub Actions enabled
 
 ## Tasks
 
-### Task 1: Audit Current Navigation Implementation
+### Task 1: Create GitHub Actions Workflow
 
-**Goal**: Thoroughly understand the current Header.svelte implementation before making ANY changes, documenting every detail.
+**Goal**: Set up automated test execution on every push and pull request.
 
-**Files to Review**:
-- `/src/routes/Header.svelte` - Main navigation component
-- `/src/lib/data/navigation.ts` (if exists) - Navigation data
-- `/src/routes/+layout.svelte` - How Header is used
-- `/src/lib/stores/app.svelte.ts` - Navigation state
+**Files to Modify/Create**:
+- `.github/workflows/test.yml` - CI workflow configuration
 
 **Prerequisites**:
-- None, but navigation must be working
+- All previous phases completed
+- Tests passing locally with `pnpm test`
+- Coverage threshold met
 
 **Implementation Steps**:
+1. Create .github/workflows directory if it doesn't exist
+2. Create test.yml workflow file
+3. Configure workflow to run on push and pull_request events
+4. Set up Node.js and pnpm
+5. Install dependencies and run tests
+6. Upload coverage reports
+7. Fail build if tests fail or coverage drops below threshold
 
-1. Read Header.svelte completely:
-   - Understand current props
-   - Note all local state (menu open, current route, etc.)
-   - Document event handlers
-   - Identify any reactive statements
-   - Check for lifecycle hooks
-   - Note any animations/transitions
+**Workflow Configuration**:
+```yaml
+name: Test Suite
 
-2. Document current behavior:
-   ```markdown
-   ## Current Header Implementation
+on:
+  push:
+    branches: [ main, claude/* ]
+  pull_request:
+    branches: [ main ]
 
-   ### Props
-   - (list all props if any)
+jobs:
+  test:
+    runs-on: ubuntu-latest
 
-   ### Local State
-   - menuOpen: boolean (for mobile menu)
-   - currentRoute: string (for active link highlighting)
-   - (any other state)
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
 
-   ### Features
-   - Desktop navigation links
-   - Mobile hamburger menu
-   - Active route highlighting
-   - Smooth transitions
-   - (any other features)
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-   ### Known Issues
-   - (document any problems you see)
-   ```
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
 
-3. Test current functionality exhaustively:
-   - Load app and test every navigation feature
-   - Try all routes
-   - Test mobile menu (resize browser)
-   - Test keyboard navigation
-   - Note anything that doesn't work perfectly
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
-4. Take screenshots:
-   - Desktop navigation
-   - Mobile menu open
-   - Mobile menu closed
-   - Active states
-   - Reference for visual comparison
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
-5. Identify what needs modernization:
-   - `export let` → `$props()` ?
-   - Local state → `$state()` ?
-   - Reactive statements → `$derived()` ?
-   - `onMount` → `$effect()` ?
-   - Event handlers → Modern patterns?
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
-6. Assess risk level:
-   - High risk: Complex reactive logic, animations
-   - Medium risk: Simple state, straightforward logic
-   - Low risk: Just props, no complex behavior
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-7. Create modernization plan:
-   - List changes in order of risk (lowest first)
-   - Plan to do one change at a time
-   - Identify rollback points
+      - name: Run tests
+        run: pnpm test
+
+      - name: Run tests with coverage
+        run: pnpm test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/coverage-final.json
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
+
+      - name: Check coverage thresholds
+        run: pnpm test:coverage
+```
 
 **Verification Checklist**:
-- [ ] Header.svelte fully understood
-- [ ] Current behavior documented
-- [ ] All features tested and working
-- [ ] Screenshots taken for reference
-- [ ] Modernization plan created
-- [ ] Risk assessment done
+- [ ] .github/workflows/test.yml created
+- [ ] Workflow runs on push and PR
+- [ ] Tests execute in CI
+- [ ] Coverage reports generated
+- [ ] Matrix tests multiple Node versions
+- [ ] Caching configured for faster builds
 
 **Testing Instructions**:
-- Manual: Test every navigation feature
-- Document: Record how everything works
-- Visual: Take screenshots
-- Notes: Document any quirks or issues
+- Push changes to trigger workflow
+- Check GitHub Actions tab for results
+- Verify workflow passes
 
 **Commit Message Template**:
 ```
-docs(navigation): audit Header component before modernization
+ci(tests): add github actions workflow
 
-- Document current implementation
-- Test all navigation functionality
-- Take reference screenshots
-- Create modernization plan
-- Assess risks for each change
+- Add test.yml workflow for CI/CD
+- Run tests on push and pull requests
+- Test on Node 18 and 20
+- Upload coverage reports
+- Enforce coverage thresholds
+- Cache pnpm dependencies
 ```
 
-**Estimated tokens**: ~10,000
+**Estimated tokens**: ~5,000
 
 ---
 
-### Task 2: Add TypeScript Props Interface (If Not Already Typed)
+### Task 2: Configure Coverage Reporting
 
-**Goal**: Add TypeScript interface for Header props if not already present, improving type safety without changing behavior.
+**Goal**: Set up detailed coverage reporting and badge display.
 
-**Files to Modify**:
-- `/src/routes/Header.svelte` - Add prop types
-- `/src/lib/types/index.ts` - Add HeaderProps interface (if props exist)
+**Files to Modify/Create**:
+- `.github/workflows/test.yml` - Add coverage badge update
+- `README.md` - Add coverage badge
+- `vitest.config.ts` - Ensure coverage reporter configuration
 
 **Prerequisites**:
-- Task 1 complete (audit done)
-- Navigation tested and working
+- Task 1 completed (CI workflow running)
+- Tests generating coverage reports
 
 **Implementation Steps**:
+1. Sign up for Codecov if not already done (free for open source)
+2. Add Codecov badge to README
+3. Configure coverage reporters in vitest.config.ts
+4. Add coverage upload step to CI
+5. Set up coverage thresholds enforcement
 
-1. Check if Header receives props:
-   - Look for `export let` statements
-   - Check how Header is used in +layout.svelte
-   - Determine if props are needed
+**Vitest Coverage Configuration**:
+Update vitest.config.ts to ensure proper coverage reporting:
+```typescript
+coverage: {
+  provider: 'v8',
+  reporter: ['text', 'json', 'html', 'lcov'],
+  exclude: [
+    'node_modules/',
+    'src/test-utils/',
+    '**/*.test.ts',
+    '**/*.test.js',
+    '**/*.config.ts',
+    '**/*.config.js',
+    '**/types/',
+    'build/',
+    '.svelte-kit/'
+  ],
+  thresholds: {
+    statements: 80,
+    branches: 75,
+    functions: 80,
+    lines: 80
+  }
+}
+```
 
-2. If Header receives NO props:
-   - Skip this task (nothing to type)
-   - Move to next task
+**README Badge Addition**:
+```markdown
+# SvelteKit Portfolio
 
-3. If Header receives props:
-   - Define interface in `/lib/types/index.ts`:
-   ```typescript
-   /**
-    * Props for Header component.
-    */
-   export interface HeaderProps {
-     // Add actual props here
-     currentRoute?: string;
-     // ... other props
-   }
-   ```
+[![Test Suite](https://github.com/HatmanStack/sv-portfolio/actions/workflows/test.yml/badge.svg)](https://github.com/HatmanStack/sv-portfolio/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/HatmanStack/sv-portfolio/branch/main/graph/badge.svg)](https://codecov.io/gh/HatmanStack/sv-portfolio)
 
-4. Update Header.svelte:
-   ```svelte
-   <script lang="ts">
-     import type { HeaderProps } from '$lib/types';
-
-     // If using $props() (Svelte 5)
-     let { currentRoute }: HeaderProps = $props();
-
-     // OR if keeping export let (safer)
-     export let currentRoute: string | undefined = undefined;
-   </script>
-   ```
-
-5. **Decision point**: Use $props() or keep export let?
-   - **Safe choice**: Keep `export let` for now
-   - Only switch to `$props()` if you're confident
-   - Can change in later task
-
-6. Test thoroughly:
-   - Run full navigation testing checklist
-   - Verify TypeScript check passes
-   - Ensure no regressions
-
-7. If anything breaks, rollback immediately
+...rest of README...
+```
 
 **Verification Checklist**:
-- [ ] Props interface defined (if props exist)
-- [ ] TypeScript types added to Header
-- [ ] TypeScript check passes
-- [ ] **All navigation functionality works**
-- [ ] No visual changes
-- [ ] No console errors
+- [ ] Coverage reporters configured
+- [ ] Coverage badges added to README
+- [ ] Coverage uploaded to Codecov
+- [ ] Thresholds enforced
+- [ ] Coverage visible on PRs
 
 **Testing Instructions**:
-- TypeScript: `pnpm run check`
-- Full: Run navigation testing checklist
-- Visual: Compare to screenshots
-- Verify: Identical behavior
+- Run `pnpm test:coverage` locally
+- Check coverage report in coverage/ directory
+- Verify badges appear in README
+- Check Codecov dashboard
 
 **Commit Message Template**:
 ```
-refactor(navigation): add TypeScript props interface to Header
+ci(coverage): configure coverage reporting
 
-- Define HeaderProps interface
-- Add type annotations to props
-- Verify TypeScript check passes
-- Test all navigation functionality (no regressions)
+- Add coverage reporters to vitest config
+- Add coverage badge to README
+- Configure Codecov integration
+- Set coverage thresholds
+- Exclude test files from coverage
 ```
 
-**Estimated tokens**: ~10,000
+**Estimated tokens**: ~4,000
 
 ---
 
-### Task 3: Modernize Simple Local State (If Safe)
+### Task 3: Create Testing Documentation
 
-**Goal**: Convert simple local state variables to `$state()` if they exist and are straightforward, avoiding complex reactive state.
+**Goal**: Document testing practices, patterns, and how to write/run tests.
 
-**Files to Modify**:
-- `/src/routes/Header.svelte` - Convert local state
-
-**Prerequisites**:
-- Task 2 complete (props typed)
-- Navigation tested and working
-
-**Implementation Steps**:
-
-1. Identify local state in Header:
-   - Look for `let` variables that change
-   - Example: `let menuOpen = false;`
-   - Note which are reactive and which aren't
-
-2. Assess safety:
-   - **Safe to migrate**:
-     - Simple boolean flags (menuOpen)
-     - Simple counters or strings
-     - No complex reactive dependencies
-   - **Risky to migrate**:
-     - State with reactive statements depending on it
-     - State involved in animations
-     - State with side effects
-
-3. Start with safest state first:
-   ```svelte
-   <!-- ❌ Before -->
-   <script lang="ts">
-     let menuOpen = false;
-
-     function toggleMenu() {
-       menuOpen = !menuOpen;
-     }
-   </script>
-
-   <!-- ✅ After -->
-   <script lang="ts">
-     let menuOpen = $state(false);
-
-     function toggleMenu() {
-       menuOpen = !menuOpen;
-     }
-   </script>
-   ```
-
-4. Make ONE state change at a time:
-   - Convert one variable
-   - Test thoroughly
-   - Commit
-   - Move to next variable
-
-5. Test after each change:
-   - Full navigation testing checklist
-   - Pay special attention to feature using that state
-   - Example: If converting `menuOpen`, test mobile menu extensively
-
-6. If anything breaks:
-   - Rollback immediately
-   - Document why it broke
-   - Keep that state in old format
-
-7. Document any state left in old format:
-   - Add comment explaining why not migrated
-   - Note that it works fine as-is
-
-**Verification Checklist**:
-- [ ] Simple local state identified
-- [ ] Safety assessment done
-- [ ] State migrated one variable at a time
-- [ ] Each migration tested thoroughly
-- [ ] **All navigation functionality works**
-- [ ] Problematic state left as-is (if any)
-- [ ] Decisions documented
-
-**Testing Instructions**:
-- After EACH state migration:
-  - Run full navigation testing checklist
-  - Focus on feature using that state
-  - Compare to screenshots
-  - Check console for errors
-
-**Commit Message Template (per state variable)**:
-```
-refactor(navigation): convert [stateName] to $state()
-
-- Migrate [stateName] to Svelte 5 $state()
-- Test [feature] functionality thoroughly
-- Verify no regressions
-- Confirm navigation works perfectly
-```
-
-**Estimated tokens**: ~12,000
-
----
-
-### Task 4: Modernize Derived Values (If Any)
-
-**Goal**: Convert reactive statements that compute derived values to `$derived()` if they exist and are safe to migrate.
-
-**Files to Modify**:
-- `/src/routes/Header.svelte` - Convert reactive statements
+**Files to Modify/Create**:
+- `docs/TESTING.md` - Comprehensive testing guide
+- `README.md` - Add testing section
 
 **Prerequisites**:
-- Task 3 complete (local state modernized)
-- Navigation tested and working
+- All phases completed
+- Test suite fully functional
 
 **Implementation Steps**:
+1. Create docs/TESTING.md with detailed guide
+2. Document how to run tests
+3. Explain testing patterns used
+4. Provide examples of writing new tests
+5. Document mocking strategies
+6. Add troubleshooting section
+7. Update main README with testing overview
 
-1. Identify reactive statements in Header:
-   ```svelte
-   <!-- Example reactive statement -->
-   $: activeRoute = $page.url.pathname;
-   $: isHome = activeRoute === '/';
-   ```
+**TESTING.md Contents**:
+```markdown
+# Testing Guide
 
-2. Assess which are derived values vs side effects:
-   - **Derived values**: Compute something from other values
-   - **Side effects**: Do something (update DOM, call function)
-   - Only migrate derived values in this task
+## Overview
 
-3. Convert derived values to `$derived()`:
-   ```svelte
-   <!-- ❌ Before -->
-   <script lang="ts">
-     import { page } from '$app/stores';
+This project uses Vitest and @testing-library/svelte for comprehensive test coverage. Tests follow a unit-focused approach, prioritizing fast feedback and deployment confidence.
 
-     $: activeRoute = $page.url.pathname;
-     $: isHome = activeRoute === '/';
-   </script>
+## Running Tests
 
-   <!-- ✅ After -->
-   <script lang="ts">
-     import { page } from '$app/stores';
+### All Tests
+\`\`\`bash
+pnpm test
+\`\`\`
 
-     let activeRoute = $derived($page.url.pathname);
-     let isHome = $derived(activeRoute === '/');
-   </script>
-   ```
+### Watch Mode (for development)
+\`\`\`bash
+pnpm test:watch
+\`\`\`
 
-4. Be careful with store subscriptions:
-   - `$page` is a SvelteKit store
-   - Auto-subscription (`$page`) works in both old and new syntax
-   - `$derived($page.url.pathname)` is safe
+### Interactive UI
+\`\`\`bash
+pnpm test:ui
+\`\`\`
 
-5. Convert ONE reactive statement at a time:
-   - Migrate one
-   - Test thoroughly
-   - Commit
-   - Next one
+### Coverage Report
+\`\`\`bash
+pnpm test:coverage
+\`\`\`
 
-6. Test active route highlighting:
-   - Navigate to each route
-   - Verify correct link is highlighted
-   - Check visual states match screenshots
+## Test Organization
 
-7. If derived values are complex or risky:
-   - Leave as reactive statements
-   - Document why not migrated
-   - Simple is better than modern
+Tests are colocated with source files:
+- `component.svelte` � `component.test.ts`
+- `store.ts` � `store.test.ts`
+- `+page.js` � `+page.test.js`
+
+Shared utilities live in `src/lib/test-utils/`:
+- `mock-factories.ts` - Factory functions for test data
+- `render-helpers.ts` - Component rendering utilities
+- `fixtures/` - Static test data
+
+## Writing Tests
+
+### Component Tests
+
+Test observable behavior, not implementation:
+
+\`\`\`typescript
+import { render } from '@testing-library/svelte';
+import { createMockProject } from '$lib/test-utils/mock-factories';
+import ProjectCard from './ProjectCard.svelte';
+
+test('renders project title', () => {
+  const project = createMockProject({ title: 'My Project' });
+  const { getByText } = render(ProjectCard, { props: { project } });
+
+  expect(getByText('My Project')).toBeInTheDocument();
+});
+\`\`\`
+
+### Store Tests
+
+Test state mutations and side effects:
+
+\`\`\`typescript
+import { createAppStore } from './app.svelte';
+import { createMockLocalStorage } from '$lib/test-utils/store-helpers';
+
+test('toggleSound updates preference', () => {
+  const store = createAppStore();
+  global.localStorage = createMockLocalStorage();
+
+  store.toggleSound();
+
+  expect(store.state.preferences.soundEnabled).toBe(false);
+});
+\`\`\`
+
+### Route Tests
+
+Test load functions and data transformation:
+
+\`\`\`typescript
+import { load } from './+page.js';
+
+test('loads blog posts', async () => {
+  const result = await load();
+
+  expect(result.posts).toBeDefined();
+  expect(result.posts.length).toBeGreaterThan(0);
+});
+\`\`\`
+
+## Mocking Strategies
+
+### Sound Hooks
+\`\`\`typescript
+vi.mock('$lib/hooks/useSound.svelte', () => ({
+  createSoundStore: vi.fn(() => ({
+    play: vi.fn(),
+    pause: vi.fn()
+  }))
+}));
+\`\`\`
+
+### Browser APIs
+\`\`\`typescript
+global.localStorage = createMockLocalStorage();
+global.window = { matchMedia: vi.fn() } as any;
+\`\`\`
+
+## Coverage Goals
+
+- Statements: 80%
+- Branches: 75%
+- Functions: 80%
+- Lines: 80%
+
+## Troubleshooting
+
+### Tests timing out
+Increase timeout in vitest.config.ts:
+\`\`\`typescript
+test: {
+  testTimeout: 10000
+}
+\`\`\`
+
+### Import errors
+Check path aliases in vitest.config.ts match svelte.config.js
+
+### Coverage not updating
+Delete coverage/ directory and re-run: `pnpm test:coverage`
+
+## Best Practices
+
+1. **Test behavior, not implementation** - Focus on what users see/do
+2. **Keep tests fast** - Mock external dependencies
+3. **One assertion per test** - Or closely related assertions
+4. **Descriptive test names** - Explain what and when
+5. **Use factories** - createMockX for consistent test data
+6. **Clean up** - Tests should not affect each other
+
+## CI/CD
+
+Tests run automatically on:
+- Every push to any branch
+- Every pull request to main
+- Both Node 18 and Node 20
+
+Builds fail if:
+- Any test fails
+- Coverage drops below thresholds
+- Type checking fails
+
+## Resources
+
+- [Vitest Documentation](https://vitest.dev/)
+- [Testing Library](https://testing-library.com/docs/svelte-testing-library/intro/)
+- [SvelteKit Testing](https://kit.svelte.dev/docs/testing)
+```
+
+**README.md Update**:
+Add testing section to main README:
+```markdown
+## Testing
+
+This project has comprehensive test coverage using Vitest.
+
+### Quick Start
+\`\`\`bash
+# Run all tests
+pnpm test
+
+# Watch mode
+pnpm test:watch
+
+# Coverage report
+pnpm test:coverage
+\`\`\`
+
+### Documentation
+See [docs/TESTING.md](./docs/TESTING.md) for complete testing guide.
+
+### Coverage
+Current coverage: ![codecov](https://codecov.io/gh/HatmanStack/sv-portfolio/branch/main/graph/badge.svg)
+```
 
 **Verification Checklist**:
-- [ ] Reactive statements identified
-- [ ] Derived vs side-effects distinguished
-- [ ] Derived values converted to $derived()
-- [ ] Each migration tested
-- [ ] Active route highlighting works
-- [ ] **All navigation functionality works**
-- [ ] Complex reactivity left as-is (if safer)
+- [ ] docs/TESTING.md created
+- [ ] README.md updated with testing section
+- [ ] All testing commands documented
+- [ ] Examples provided
+- [ ] Troubleshooting guide included
 
 **Testing Instructions**:
-- After EACH migration:
-  - Navigate to all routes
-  - Verify active link highlighting
-  - Test any features using derived value
-  - Run full navigation checklist
-
-**Commit Message Template (per derived value)**:
-```
-refactor(navigation): convert [derivedValue] to $derived()
-
-- Migrate reactive statement to $derived()
-- Test [feature] functionality
-- Verify active route highlighting works
-- Confirm navigation works perfectly
-```
-
-**Estimated tokens**: ~12,000
-
----
-
-### Task 5: Handle Side Effects Conservatively
-
-**Goal**: Review any reactive side effects (reactive statements that DO things) and decide whether to migrate to `$effect()` or leave as-is.
-
-**Files to Modify**:
-- `/src/routes/Header.svelte` - Review reactive side effects
-
-**Prerequisites**:
-- Task 4 complete (derived values modernized)
-- Navigation tested and working
-
-**Implementation Steps**:
-
-1. Identify reactive side effects:
-   ```svelte
-   <!-- Example: Side effect reactive statement -->
-   $: if (menuOpen) {
-     document.body.style.overflow = 'hidden';
-   } else {
-     document.body.style.overflow = '';
-   }
-   ```
-
-2. **Conservative approach**: Leave complex side effects as-is
-   - Reactive statements with side effects work fine in Svelte 5
-   - Only migrate if there's a clear benefit
-   - Risk is higher with side effects
-
-3. If you do decide to migrate:
-   ```svelte
-   <!-- ❌ Before -->
-   $: if (menuOpen) {
-     document.body.style.overflow = 'hidden';
-   } else {
-     document.body.style.overflow = '';
-   }
-
-   <!-- ✅ After -->
-   $effect(() => {
-     if (menuOpen) {
-       document.body.style.overflow = 'hidden';
-     } else {
-       document.body.style.overflow = '';
-     }
-   });
-   ```
-
-4. Be extra careful with:
-   - Animation triggers
-   - DOM manipulations
-   - Event listener setup/cleanup
-   - Anything affecting the menu behavior
-
-5. Test extensively if migrating:
-   - Open and close menu many times
-   - Check body scroll locking works
-   - Verify no side effect runs twice
-   - Check cleanup happens correctly
-
-6. **Recommendation**: Only migrate simple, obvious side effects
-   - If in doubt, leave as-is
-   - Reactive statements still work perfectly
-
-7. Document decision:
-   - If migrated: Note what was changed and why
-   - If left as-is: Note that it works fine and migration is risky
-
-**Verification Checklist**:
-- [ ] Side effect reactive statements identified
-- [ ] Migration decision made for each (migrate or keep)
-- [ ] If migrated: tested extensively
-- [ ] If kept: documented as working fine
-- [ ] **All navigation functionality works**
-- [ ] No double-execution of effects
-- [ ] Cleanup working properly
-
-**Testing Instructions**:
-- If migrating side effects:
-  - Test the specific feature repeatedly
-  - Check for double-execution
-  - Verify cleanup on unmount
-  - Run full navigation checklist
+- Read through TESTING.md for completeness
+- Verify all commands work as documented
+- Check that examples are accurate
 
 **Commit Message Template**:
 ```
-refactor(navigation): [migrate/document] reactive side effects
+docs(tests): add comprehensive testing documentation
 
-- [Migrate X to $effect() OR Document reactive statements as working]
-- Test side effect execution
-- Verify cleanup
-- Confirm navigation works perfectly
+- Create docs/TESTING.md with testing guide
+- Document running tests and coverage
+- Provide code examples and patterns
+- Add mocking strategies
+- Include troubleshooting section
+- Update README with testing overview
 ```
 
-**Estimated tokens**: ~12,000
+**Estimated tokens**: ~5,000
 
 ---
 
-### Task 6: Review and Optimize Styles (Conservative)
+### Task 4: Add Pre-commit Hook (Optional)
 
-**Goal**: Review Header component styles, ensure they use CSS custom properties from Phase 3, and verify no styling issues.
+**Goal**: Run tests before commits to catch issues early.
 
-**Files to Modify**:
-- `/src/routes/Header.svelte` - Style block
+**Files to Modify/Create**:
+- `.husky/pre-commit` - Git pre-commit hook
+- `package.json` - Add husky scripts
 
 **Prerequisites**:
-- Task 5 complete (side effects handled)
-- Navigation tested and working
+- Task 3 completed (documentation ready)
+- Understanding of git hooks
 
 **Implementation Steps**:
+1. Install husky for git hooks
+2. Set up pre-commit hook to run tests
+3. Configure to run only on staged files if possible
+4. Make hook skippable for WIP commits
 
-1. Read Header `<style>` block:
-   - Check if using CSS custom properties
-   - Look for hardcoded colors, spacing
-   - Verify theme compatibility
+**Note**: This task is optional. Only implement if the team wants automatic pre-commit testing.
 
-2. If styles need updating:
-   - Replace hardcoded values with tokens:
-   ```css
-   /* ❌ Before */
-   .header {
-     background: #ffffff;
-     color: #1f2937;
-     padding: 16px;
-   }
+**Installation**:
+```bash
+pnpm add -D husky
+npx husky install
+npx husky add .husky/pre-commit "pnpm test"
+```
 
-   /* ✅ After */
-   .header {
-     background: var(--color-bg-primary);
-     color: var(--color-text-primary);
-     padding: var(--space-4);
-   }
-   ```
+**Pre-commit Hook**:
+```bash
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
 
-3. Make style changes VERY carefully:
-   - One change at a time
-   - Test visual appearance after each
-   - Compare to screenshots
-   - Check both light and dark themes
+echo "Running tests before commit..."
+pnpm test
 
-4. Test mobile menu styles:
-   - Verify menu opens/closes smoothly
-   - Check animations
-   - Test responsive breakpoints
-   - Verify z-index layering
+if [ $? -ne 0 ]; then
+  echo "Tests failed. Commit aborted."
+  echo "Use 'git commit --no-verify' to skip tests."
+  exit 1
+fi
+```
 
-5. Test active link styles:
-   - Navigate to each route
-   - Verify active state styling
-   - Check hover states
-   - Test focus states (keyboard navigation)
-
-6. If any style change breaks layout:
-   - Rollback immediately
-   - Document the issue
-   - Keep old styles if safer
-
-7. Verify theme switching:
-   - Switch between light and dark themes
-   - Header should adapt correctly
-   - No hardcoded colors remain
+**package.json Update**:
+```json
+{
+  "scripts": {
+    "prepare": "husky install",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
+  }
+}
+```
 
 **Verification Checklist**:
-- [ ] Header styles reviewed
-- [ ] CSS custom properties used (or decision to keep current)
-- [ ] Theme switching works in header
-- [ ] Mobile menu styles intact
-- [ ] Active link styles working
-- [ ] Animations smooth
-- [ ] **No visual regressions**
-- [ ] Matches screenshots
+- [ ] Husky installed (if implementing)
+- [ ] Pre-commit hook created
+- [ ] Hook runs tests before commit
+- [ ] Can be skipped with --no-verify
+- [ ] Team agrees to use pre-commit hooks
 
 **Testing Instructions**:
-- Visual: Compare to reference screenshots
-- Theme: Switch light/dark, verify header adapts
-- Mobile: Test mobile menu at various screen sizes
-- States: Test hover, active, focus states
-- Animation: Verify smooth transitions
+- Make a change and try to commit
+- Verify tests run automatically
+- Test --no-verify flag works
 
 **Commit Message Template**:
 ```
-style(navigation): update Header styles to use CSS custom properties
+chore(tests): add pre-commit hook for testing
 
-- Replace hardcoded colors with theme tokens
-- Use spacing scale for padding/margins
-- Verify theme switching works
-- Test mobile menu styles
-- Confirm no visual regressions
+- Install husky for git hooks
+- Add pre-commit hook to run tests
+- Allow skip with --no-verify flag
+- Update package.json with prepare script
 ```
 
-**Estimated tokens**: ~10,000
+**Estimated tokens**: ~3,000
 
 ---
 
-### Task 7: Comprehensive Cross-Browser Testing
+### Task 5: Final Verification and Cleanup
 
-**Goal**: Test the modernized Header component across multiple browsers to ensure compatibility and catch any browser-specific issues.
+**Goal**: Ensure everything is working end-to-end and clean up any temporary files or comments.
 
-**Files to Test**:
-- `/src/routes/Header.svelte` - Test in all browsers
+**Files to Modify/Create**:
+- Various files may need cleanup
 
 **Prerequisites**:
-- All previous tasks complete
-- Navigation working in primary browser
+- All previous tasks in all phases completed
 
 **Implementation Steps**:
-
-1. Test in Chrome/Chromium:
-   - Run through full navigation checklist
-   - Test on desktop
-   - Test on mobile view (DevTools)
-   - Check console for errors
-   - Verify performance
-
-2. Test in Firefox:
-   - Same checklist as Chrome
-   - Pay attention to:
-     - Firefox-specific CSS bugs
-     - Event handling differences
-     - Potential performance differences
-   - Check console for errors
-
-3. Test in Safari (if available):
-   - MacOS Safari if possible
-   - iOS Safari if possible (actual device or simulator)
-   - Safari has stricter standards
-   - Check for CSS differences
-   - Verify JavaScript works
-
-4. Test in Edge (Chromium-based):
-   - Similar to Chrome but verify anyway
-   - Quick smoke test
-
-5. Test on actual mobile devices (if possible):
-   - iOS device (Safari)
-   - Android device (Chrome)
-   - Test touch interactions
-   - Verify mobile menu
-
-6. Document any browser-specific issues:
-   ```markdown
-   ## Browser Compatibility
-
-   ### Chrome ✅
-   - All features working
-   - No issues
-
-   ### Firefox ✅
-   - All features working
-   - Note: [any specific behavior]
-
-   ### Safari ✅
-   - All features working
-   - Note: [any specific behavior]
-
-   ### Edge ✅
-   - All features working
-
-   ### Mobile
-   - iOS Safari ✅
-   - Android Chrome ✅
-   ```
-
-7. Fix any browser-specific issues:
-   - Use CSS prefixes if needed
-   - Add polyfills if necessary
-   - Use progressive enhancement
-   - Test fixes in all browsers
-
-8. Performance check:
-   - Lighthouse scores on multiple browsers
-   - Navigation should be snappy everywhere
-   - No janky animations
+1. Run full test suite locally and verify all pass
+2. Run coverage and verify thresholds met
+3. Push to trigger CI and verify workflow passes
+4. Review all test files for TODO comments or debug code
+5. Remove any console.logs added during testing
+6. Verify all documentation is accurate
+7. Create a final summary of what was accomplished
 
 **Verification Checklist**:
-- [ ] Tested in Chrome/Chromium
-- [ ] Tested in Firefox
-- [ ] Tested in Safari (if available)
-- [ ] Tested in Edge
-- [ ] Tested on mobile devices (if available)
-- [ ] All features work in all browsers
-- [ ] No browser-specific bugs
-- [ ] Performance acceptable everywhere
+- [ ] All tests pass locally
+- [ ] Coverage meets 80% threshold
+- [ ] CI workflow passes on GitHub
+- [ ] No console.logs or debug code in tests
+- [ ] No TODO comments left unaddressed
+- [ ] Documentation is complete and accurate
+- [ ] README badges display correctly
+
+**Final Tests to Run**:
+```bash
+# Clean install
+rm -rf node_modules pnpm-lock.yaml
+pnpm install
+
+# Run all tests
+pnpm test
+
+# Generate coverage
+pnpm test:coverage
+
+# Run type checking
+pnpm check
+
+# Build application
+pnpm build
+```
 
 **Testing Instructions**:
-- For EACH browser:
-  - Run full navigation testing checklist
-  - Test all routes
-  - Test mobile menu
-  - Test keyboard navigation
-  - Check console
-  - Document results
+- Run all verification commands
+- Push to GitHub and watch CI
+- Review GitHub Actions output
+- Check coverage on Codecov
+- Verify badges in README
 
 **Commit Message Template**:
 ```
-test(navigation): verify cross-browser compatibility
+chore(tests): final verification and cleanup
 
-- Test Header in Chrome, Firefox, Safari, Edge
-- Verify all features work across browsers
-- Test mobile devices
-- Fix any browser-specific issues
-- Document browser compatibility
+- Verify all tests pass locally and in CI
+- Confirm coverage thresholds met
+- Remove debug code and console.logs
+- Clean up TODO comments
+- Validate documentation accuracy
+- Test full build pipeline
 ```
 
-**Estimated tokens**: ~9,000
+**Estimated tokens**: ~3,000
 
 ---
 
 ## Phase Verification
 
-Before proceeding to Phase 7, ensure:
+Before declaring the project complete, verify:
 
-### Modernization Complete
-- [ ] Header component reviewed and understood
-- [ ] TypeScript props added (if applicable)
-- [ ] Local state modernized to $state() (if safe)
-- [ ] Derived values converted to $derived() (if safe)
-- [ ] Side effects handled appropriately
-- [ ] Styles use CSS custom properties
+### CI/CD Integration
+- [ ] GitHub Actions workflow created
+- [ ] Tests run on every push
+- [ ] Tests run on pull requests
+- [ ] Matrix testing multiple Node versions
+- [ ] Workflow passes successfully
 
-### Functionality Preserved
-- [ ] Menu opens and closes correctly
-- [ ] All navigation links work on all routes
-- [ ] Mobile menu works (if applicable)
-- [ ] Active route highlighting works
-- [ ] Keyboard navigation works (Tab, Enter, Escape)
-- [ ] Smooth animations (if any)
-- [ ] Theme switching works in header
+### Coverage Reporting
+- [ ] Coverage uploaded to Codecov
+- [ ] Coverage badges in README
+- [ ] Thresholds enforced in CI
+- [ ] Coverage reports accessible
+- [ ] Coverage meets 80% target
 
-### Cross-Browser Tested
-- [ ] Works in Chrome
-- [ ] Works in Firefox
-- [ ] Works in Safari (if tested)
-- [ ] Works in Edge
-- [ ] Works on mobile devices
+### Documentation
+- [ ] docs/TESTING.md comprehensive and accurate
+- [ ] README includes testing section
+- [ ] All commands documented
+- [ ] Examples provided
+- [ ] Troubleshooting guide helpful
 
-### Visual Consistency
-- [ ] No visual regressions
-- [ ] Matches reference screenshots
-- [ ] Styles consistent across themes
-- [ ] Responsive behavior intact
+### Clean Code
+- [ ] No debug code left in files
+- [ ] No TODO comments unresolved
+- [ ] No console.logs in production code
+- [ ] All files properly formatted
 
-### Code Quality
-- [ ] TypeScript check passes
-- [ ] No console errors
-- [ ] Code is clean and readable
-- [ ] Comments added where helpful
-- [ ] Risky areas documented
+### End-to-End Validation
+- [ ] Fresh install works
+- [ ] All tests pass
+- [ ] Coverage meets thresholds
+- [ ] Type checking passes
+- [ ] Application builds successfully
+- [ ] CI workflow green
 
-### Testing
-- [ ] Navigation tested exhaustively
-- [ ] Every route navigated to multiple times
-- [ ] Mobile menu tested extensively
-- [ ] Keyboard navigation verified
-- [ ] All browsers tested
-- [ ] No regressions found
+### Git Validation
+- [ ] All work committed
+- [ ] Commit author is HatmanStack
+- [ ] Conventional commit format used
+- [ ] Branch is claude/design-test-suite-01WFo7NCaD3Mu3DAxuTmXn1o
 
-### Git
-- [ ] Each change committed separately
-- [ ] Conventional commits format
-- [ ] Git author is HatmanStack
-- [ ] Commit history shows incremental changes
-- [ ] Can rollback to any point if needed
+## Final Deliverables
 
-## Rollback Plan
+This test suite implementation delivers:
 
-If anything is broken at the end of this phase:
-
-1. **Identify the issue**: What's broken?
-2. **Find the breaking commit**: Use git log to identify
-3. **Rollback**: `git revert <commit-hash>` or `git reset --hard <good-commit>`
-4. **Test**: Verify navigation works again
-5. **Document**: Note what broke and why
-6. **Decide**: Fix forward or keep rollback?
-
-## Known Limitations
-
-- Some Svelte 4 patterns may remain (if migration was risky)
-- Navigation might not use all Svelte 5 features (intentionally conservative)
-- Complex reactive statements might stay as-is (safer)
-- This is acceptable - functionality over modernization
+1. **Comprehensive Test Coverage**: 80%+ coverage across all application layers
+2. **Fast Feedback Loop**: Tests run in under 30 seconds
+3. **Automated CI/CD**: Tests run on every commit and PR
+4. **Coverage Tracking**: Codecov integration with badges
+5. **Clear Documentation**: Complete testing guide and examples
+6. **Maintainable Tests**: Reusable utilities, factories, and fixtures
+7. **Deployment Confidence**: Catch regressions before production
 
 ## Success Metrics
 
-Phase 6 is successful when:
-- Navigation works perfectly in all browsers
-- Header component is more modern than before
-- No functionality broken
-- No visual regressions
-- TypeScript types improved
-- Code is maintainable
-- User can navigate the site flawlessly
-- You're confident the navigation is solid
+-  154,000 tokens of implementation work completed
+-  100+ tests written across all layers
+-  80% code coverage achieved
+-  <30 second test execution time
+-  CI/CD pipeline integrated
+-  Zero regressions detected
+-  Complete documentation
 
----
+## Next Steps (Post-Implementation)
 
-## Review Feedback (Iteration 1)
+After this plan is complete, consider:
 
-### Git Authorship Issue (CRITICAL)
+1. **E2E Testing**: Add Playwright for critical user flows
+2. **Visual Regression**: Add Percy or Chromatic for visual testing
+3. **Performance Testing**: Add lighthouse CI for performance budgets
+4. **Accessibility Testing**: Add automated a11y testing
+5. **Mutation Testing**: Add Stryker for test quality validation
 
-> **Consider:** Looking at the git history with `git log --format='%an <%ae>' 13611ca..HEAD`, who is shown as the author of all 4 Phase 6 commits?
->
-> **Think about:** The Phase Verification checklist at line 806 specifies "Git author is HatmanStack". Are your commits using the correct author?
->
-> **Reflect:** This is the same issue identified in Phase 5 review. Has the git configuration been corrected? If not, why are commits still authored by "Claude <noreply@anthropic.com>"?
+## Celebration
 
-### Task 7: Manual Cross-Browser Testing
-
-> **Consider:** Task 7 requires "Comprehensive Cross-Browser Testing" including testing in Chrome, Firefox, Safari, and Edge. Looking at `docs/PHASE_6_TESTING.md`, what is the actual testing status?
->
-> **Think about:** The document states "Build Verified, Manual Testing Required" with a comprehensive checklist. Have any of the manual browser tests been performed?
->
-> **Reflect:** The Phase Verification checklist (lines 775-781) requires checkmarks for "Works in Chrome", "Works in Firefox", "Works in Safari", "Works in Edge", and "Works on mobile devices". Can you verify these with actual tool-based evidence, or is manual testing still required?
->
-> **Question:** If manual testing cannot be performed in the automated environment, should the Phase 6 completion documentation clarify that it's "ready for manual testing" rather than "complete"?
-
-### Conservative Approach Validation (Positive Note)
-
-> **Reflect:** You correctly identified that Tasks 2-5 should be skipped because the Header component was already using modern Svelte 5 patterns. This shows good judgment!
->
-> **Consider:** Looking at `docs/PHASE_6_AUDIT.md` lines 123-150, did the audit correctly assess that no modernization was needed? Does the current Header.svelte (lines 1-31) confirm this assessment?
->
-> **Think about:** The changes in commit `c4e7534` were minimal (3 fixes). Does this align with the conservative approach prescribed in the Phase 6 plan?
+Congratulations! You've built a comprehensive, maintainable test suite that will provide deployment confidence and enable fearless refactoring. The application is now protected against regressions and ready for continuous delivery.

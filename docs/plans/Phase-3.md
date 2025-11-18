@@ -1,822 +1,741 @@
-# Phase 3: Styling Architecture Migration
+# Phase 3: Stores & Hooks Testing
 
 ## Phase Goal
 
-Migrate from SCSS variables to CSS custom properties (CSS variables) for all theming and design tokens, creating a modern, runtime-themeable styling system. This enables better browser DevTools support, runtime theme switching, and reduces reliance on build-time preprocessing. If CSS custom properties cause insurmountable issues, we have a fallback plan to use a hybrid approach (CSS vars for theme values, SCSS for complex logic).
+Test all Svelte stores and custom hooks to ensure state management works correctly, persistence functions properly, and side effects are handled. This phase covers the reactive state layer of the application including the app store and sound hooks.
 
-**Success Criteria**:
-- Design token system using CSS custom properties
-- Light/dark theme switching works correctly
-- All SCSS variables migrated to CSS custom properties
-- SCSS retained only for complex mixins/nesting if beneficial
-- No visual regressions
-- Theme switching is smooth and functional
+**Success criteria**:
+- App store state management is fully tested
+- localStorage persistence is validated with proper mocking
+- Sound hooks are tested with Audio API mocks
+- Side effects (DOM manipulation, event listeners) are verified
+- All store methods and hook functions have test coverage
 
-**Estimated tokens**: ~90,000
-
----
+**Estimated tokens**: ~28,000
 
 ## Prerequisites
 
-- Phase 0 read (especially ADR-004 on styling architecture)
-- Phase 1 complete (file structure organized)
-- Phase 2 complete (components modernized)
-- Application builds and runs successfully
-
----
+- Phase 0, 1, and 2 completed and verified
+- Understanding of Svelte 5 runes ($state, $derived, $effect)
+- Familiarity with src/lib/stores/app.svelte.ts structure
+- Familiarity with src/lib/hooks/useSound.svelte.ts structure
+- Test infrastructure working properly
 
 ## Tasks
 
-### Task 1: Audit Current Styling System
+### Task 1: Set Up Store Testing Utilities
 
-**Goal**: Understand the current SCSS setup, identify all variables, analyze theming implementation, and plan the migration to CSS custom properties.
+**Goal**: Create helper utilities specifically for testing Svelte stores with runes.
 
-**Files to Review**:
-- `/src/lib/styles/*.scss` (variables.scss, components.scss)
-- `/src/app.css` - Global styles
-- Component `<style>` blocks - How they use SCSS
-- Current theme implementation in app store
+**Files to Modify/Create**:
+- `src/lib/test-utils/store-helpers.ts` - Store testing utilities
 
 **Prerequisites**:
-- None
+- Phase 1 completed (test-utils directory exists)
+- Understanding of how Svelte 5 stores work with runes
 
 **Implementation Steps**:
+1. Create store-helpers.ts in test-utils directory
+2. Build utilities for testing reactive state
+3. Create helpers for mocking localStorage
+4. Create helpers for mocking browser APIs (matchMedia, etc.)
+5. Export all helpers for use in store tests
 
-1. Catalog current SCSS files:
-   - Read `/src/lib/styles/variables.scss` (if exists)
-   - Read `/src/lib/styles/components.scss` (if exists)
-   - List all SCSS variables being used
+**Utilities to Create**:
+- `createMockLocalStorage()` - Returns a localStorage mock
+- `createMockMatchMedia(matches: boolean)` - Returns matchMedia mock
+- `flushPromises()` - Helper to flush pending promises in tests
+- `waitForStateUpdate()` - Helper to wait for reactive updates
 
-2. Identify variable categories:
-   - Colors (primitives and semantic)
-   - Spacing/sizing
-   - Typography (fonts, sizes, weights)
-   - Effects (shadows, borders, radius)
-   - Breakpoints
-   - Z-index layers
-   - Transitions/animations
-
-3. Review theme implementation:
-   - How is light/dark theme currently handled?
-   - Where is theme applied? (app store, root layout, CSS)
-   - Are theme colors hardcoded or variable-based?
-
-4. Analyze SCSS usage patterns:
-   - Which components use SCSS features?
-   - Are there complex mixins or functions?
-   - Is nesting heavily used?
-   - Any build-time calculations?
-
-5. Identify migration challenges:
-   - SCSS features that can't be replicated in CSS
-   - Complex calculations that need SCSS
-   - Browser compatibility concerns (very unlikely for CSS vars)
-
-6. Document migration plan:
-   - Which SCSS variables → CSS custom properties
-   - Which SCSS features to keep (mixins, nesting)
-   - Fallback scenarios
+**Example Pattern**:
+```typescript
+export function createMockLocalStorage() {
+  const storage = new Map<string, string>();
+  return {
+    getItem: vi.fn((key: string) => storage.get(key) ?? null),
+    setItem: vi.fn((key: string, value: string) => storage.set(key, value)),
+    removeItem: vi.fn((key: string) => storage.delete(key)),
+    clear: vi.fn(() => storage.clear())
+  };
+}
+```
 
 **Verification Checklist**:
-- [ ] All SCSS files identified and reviewed
-- [ ] All SCSS variables cataloged
-- [ ] Current theme implementation understood
-- [ ] SCSS feature usage documented
-- [ ] Migration challenges identified
-- [ ] Clear plan for CSS custom properties
+- [ ] store-helpers.ts created
+- [ ] localStorage mock helper implemented
+- [ ] matchMedia mock helper implemented
+- [ ] All helpers are exported
+- [ ] TypeScript has no errors
 
 **Testing Instructions**:
-- No testing for audit
-- Documentation as notes or comments
+- Import helpers in a test to verify no import errors
+- Test localStorage mock stores and retrieves values
 
 **Commit Message Template**:
 ```
-docs(styles): audit current SCSS system for CSS custom properties migration
+test(utils): add store testing utilities
 
-- Catalog all SCSS variables and usage
-- Document current theme implementation
-- Identify migration challenges
-- Plan CSS custom properties structure
+- Add createMockLocalStorage helper
+- Add createMockMatchMedia helper
+- Add flushPromises utility
+- Add waitForStateUpdate helper
+- Export all store testing utilities
 ```
 
-**Estimated tokens**: ~10,000
+**Estimated tokens**: ~4,000
 
 ---
 
-### Task 2: Create CSS Custom Properties Design Token System
+### Task 2: Test App Store - Navigation State
 
-**Goal**: Create a comprehensive design token system using CSS custom properties in a new file, defining all color primitives, semantic colors, spacing, typography, and effects.
+**Goal**: Test the navigation-related state and methods in app.svelte.ts.
 
-**Files to Create/Modify**:
-- `/src/lib/styles/tokens.css` - New file for design tokens
-- `/src/app.css` - Import tokens
+**Files to Modify/Create**:
+- `src/lib/stores/app.svelte.test.ts` - App store tests
 
 **Prerequisites**:
-- Task 1 complete (audit done, variables cataloged)
+- Task 1 completed (store helpers available)
+- Review src/lib/stores/app.svelte.ts navigation methods
 
 **Implementation Steps**:
+1. Create app.svelte.test.ts next to app.svelte.ts
+2. Import the createAppStore function (not the singleton instance)
+3. Create a fresh store instance for each test
+4. Test initial navigation state
+5. Test setCurrentSection method
+6. Test toggleMenu method
+7. Test closeMenu method
+8. Verify state updates are reactive
 
-1. Create `/src/lib/styles/tokens.css` file
+**Test Cases to Include**:
+```typescript
+describe('AppStore - Navigation', () => {
+  test('initializes with default navigation state', () => {
+    const store = createAppStore();
+    expect(store.state.navigation.currentSection).toBe('home');
+    expect(store.state.navigation.isMenuOpen).toBe(false);
+  });
 
-2. Structure design tokens following best practices:
+  test('setCurrentSection updates current section', () => {
+    const store = createAppStore();
+    store.setCurrentSection('about');
+    expect(store.state.navigation.currentSection).toBe('about');
+  });
 
-   ```css
-   /* ===================================
-    * Design Tokens - CSS Custom Properties
-    * ===================================*/
+  test('toggleMenu toggles menu state', () => {
+    const store = createAppStore();
+    expect(store.state.navigation.isMenuOpen).toBe(false);
+    store.toggleMenu();
+    expect(store.state.navigation.isMenuOpen).toBe(true);
+    store.toggleMenu();
+    expect(store.state.navigation.isMenuOpen).toBe(false);
+  });
 
-   :root {
-     /* ===== Color Primitives ===== */
-     /* These are base colors - don't use directly in components */
-
-     --color-gray-50: #f9fafb;
-     --color-gray-100: #f3f4f6;
-     --color-gray-200: #e5e7eb;
-     --color-gray-300: #d1d5db;
-     --color-gray-400: #9ca3af;
-     --color-gray-500: #6b7280;
-     --color-gray-600: #4b5563;
-     --color-gray-700: #374151;
-     --color-gray-800: #1f2937;
-     --color-gray-900: #111827;
-
-     --color-blue-500: #3b82f6;
-     --color-blue-600: #2563eb;
-     /* Add other color primitives from current theme */
-
-     /* ===== Semantic Colors ===== */
-     /* These are what components should use */
-
-     --color-text-primary: var(--color-gray-900);
-     --color-text-secondary: var(--color-gray-600);
-     --color-text-tertiary: var(--color-gray-500);
-     --color-text-inverse: var(--color-gray-50);
-
-     --color-bg-primary: #ffffff;
-     --color-bg-secondary: var(--color-gray-50);
-     --color-bg-tertiary: var(--color-gray-100);
-     --color-bg-inverse: var(--color-gray-900);
-
-     --color-border-primary: var(--color-gray-200);
-     --color-border-secondary: var(--color-gray-300);
-
-     --color-accent-primary: var(--color-blue-600);
-     --color-accent-hover: var(--color-blue-500);
-
-     /* ===== Spacing ===== */
-     --space-1: 0.25rem;   /* 4px */
-     --space-2: 0.5rem;    /* 8px */
-     --space-3: 0.75rem;   /* 12px */
-     --space-4: 1rem;      /* 16px */
-     --space-5: 1.25rem;   /* 20px */
-     --space-6: 1.5rem;    /* 24px */
-     --space-8: 2rem;      /* 32px */
-     --space-10: 2.5rem;   /* 40px */
-     --space-12: 3rem;     /* 48px */
-     --space-16: 4rem;     /* 64px */
-
-     /* ===== Typography ===== */
-     --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-     --font-mono: 'Fira Mono', 'Courier New', monospace;
-
-     --font-size-xs: 0.75rem;    /* 12px */
-     --font-size-sm: 0.875rem;   /* 14px */
-     --font-size-base: 1rem;     /* 16px */
-     --font-size-lg: 1.125rem;   /* 18px */
-     --font-size-xl: 1.25rem;    /* 20px */
-     --font-size-2xl: 1.5rem;    /* 24px */
-     --font-size-3xl: 1.875rem;  /* 30px */
-     --font-size-4xl: 2.25rem;   /* 36px */
-
-     --font-weight-normal: 400;
-     --font-weight-medium: 500;
-     --font-weight-semibold: 600;
-     --font-weight-bold: 700;
-
-     --line-height-tight: 1.25;
-     --line-height-normal: 1.5;
-     --line-height-relaxed: 1.75;
-
-     /* ===== Effects ===== */
-     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-     --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-
-     --radius-sm: 0.25rem;   /* 4px */
-     --radius-md: 0.5rem;    /* 8px */
-     --radius-lg: 0.75rem;   /* 12px */
-     --radius-xl: 1rem;      /* 16px */
-     --radius-full: 9999px;
-
-     --transition-fast: 150ms;
-     --transition-base: 200ms;
-     --transition-slow: 300ms;
-     --transition-slower: 500ms;
-
-     /* ===== Z-Index Scale ===== */
-     --z-base: 0;
-     --z-dropdown: 1000;
-     --z-sticky: 1100;
-     --z-fixed: 1200;
-     --z-modal-backdrop: 1300;
-     --z-modal: 1400;
-     --z-popover: 1500;
-     --z-tooltip: 1600;
-   }
-
-   /* ===== Dark Theme ===== */
-   [data-theme="dark"] {
-     --color-text-primary: var(--color-gray-50);
-     --color-text-secondary: var(--color-gray-400);
-     --color-text-tertiary: var(--color-gray-500);
-     --color-text-inverse: var(--color-gray-900);
-
-     --color-bg-primary: var(--color-gray-900);
-     --color-bg-secondary: var(--color-gray-800);
-     --color-bg-tertiary: var(--color-gray-700);
-     --color-bg-inverse: var(--color-gray-50);
-
-     --color-border-primary: var(--color-gray-700);
-     --color-border-secondary: var(--color-gray-600);
-   }
-
-   /* ===== Reduced Motion ===== */
-   @media (prefers-reduced-motion: reduce) {
-     :root {
-       --transition-fast: 0ms;
-       --transition-base: 0ms;
-       --transition-slow: 0ms;
-       --transition-slower: 0ms;
-     }
-   }
-   ```
-
-3. Adapt the above template to match:
-   - Current color scheme in the portfolio
-   - Actual spacing values being used
-   - Font families from the app
-   - Existing shadow/border styles
-
-4. Import tokens in `/src/app.css`:
-   ```css
-   @import './lib/styles/tokens.css';
-
-   /* Rest of global styles */
-   ```
-
-5. Test tokens load:
-   - Run `pnpm dev`
-   - Inspect root element in DevTools
-   - Verify CSS custom properties appear on `:root`
+  test('closeMenu sets menu to closed', () => {
+    const store = createAppStore();
+    store.state.navigation.isMenuOpen = true;
+    store.closeMenu();
+    expect(store.state.navigation.isMenuOpen).toBe(false);
+  });
+});
+```
 
 **Verification Checklist**:
-- [ ] `/src/lib/styles/tokens.css` file created
-- [ ] All color primitives defined
-- [ ] Semantic color tokens defined
-- [ ] Spacing scale defined
-- [ ] Typography tokens defined
-- [ ] Effects (shadows, radius, transitions) defined
-- [ ] Dark theme overrides defined
-- [ ] Reduced motion support added
-- [ ] Tokens imported in app.css
-- [ ] CSS custom properties visible in DevTools
+- [ ] Test file created for app store
+- [ ] Navigation state initialization tested
+- [ ] setCurrentSection method tested
+- [ ] toggleMenu method tested
+- [ ] closeMenu method tested
+- [ ] All tests pass
 
 **Testing Instructions**:
-- Dev: Run `pnpm dev`
-- Inspect: Open DevTools, inspect `<html>` element
-- Verify: See custom properties like `--color-text-primary`, `--space-4`, etc.
-- Theme: Check that `[data-theme="dark"]` selector is present
+- Run `pnpm test app.svelte`
+- Verify all navigation tests pass
+- Check coverage includes navigation methods
 
 **Commit Message Template**:
 ```
-style(tokens): create CSS custom properties design token system
+test(stores): test app store navigation state
 
-- Create comprehensive design tokens in tokens.css
-- Define color primitives and semantic tokens
-- Add spacing, typography, and effects scales
-- Include dark theme overrides
-- Support reduced motion preference
-- Import in app.css
+- Test initial navigation state
+- Test setCurrentSection method
+- Test toggleMenu functionality
+- Test closeMenu functionality
+- Verify state updates correctly
 ```
 
-**Estimated tokens**: ~15,000
+**Estimated tokens**: ~5,000
 
 ---
 
-### Task 3: Migrate Global Styles to Use CSS Custom Properties
+### Task 3: Test App Store - Preferences State
 
-**Goal**: Update `/src/app.css` and any global SCSS files to use the new CSS custom properties instead of SCSS variables or hardcoded values.
+**Goal**: Test user preferences state management including sound, theme, and reduced motion.
 
-**Files to Modify**:
-- `/src/app.css` - Main global styles
-- `/src/lib/styles/components.scss` - If it exists and has global styles
+**Files to Modify/Create**:
+- `src/lib/stores/app.svelte.test.ts` - Add to existing test file
 
 **Prerequisites**:
-- Task 2 complete (tokens created)
+- Task 2 completed (navigation tests exist)
+- Understanding of preferences structure
 
 **Implementation Steps**:
+1. Add new describe block for preferences in existing test file
+2. Test initial preferences state
+3. Test toggleSound method
+4. Test setTheme method
+5. Test toggleReducedMotion method
+6. Verify preferences are independent of navigation state
 
-1. Read current `/src/app.css`:
-   - Identify all color values (hex, rgb)
-   - Identify spacing/sizing hardcoded values
-   - Note any SCSS variables being used
-   - Check for theme-related styles
+**Test Cases to Include**:
+```typescript
+describe('AppStore - Preferences', () => {
+  test('initializes with default preferences', () => {
+    const store = createAppStore();
+    expect(store.state.preferences.soundEnabled).toBe(true);
+    expect(store.state.preferences.reducedMotion).toBe(false);
+    expect(store.state.preferences.theme).toBe('auto');
+  });
 
-2. Replace hardcoded values with tokens:
-   ```css
-   /* ❌ Before */
-   body {
-     color: #1f2937;
-     background: #ffffff;
-     padding: 16px;
-     font-family: sans-serif;
-   }
+  test('toggleSound toggles sound preference', () => {
+    const store = createAppStore();
+    // Mock localStorage to avoid errors
+    global.localStorage = createMockLocalStorage();
 
-   /* ✅ After */
-   body {
-     color: var(--color-text-primary);
-     background: var(--color-bg-primary);
-     padding: var(--space-4);
-     font-family: var(--font-sans);
-   }
-   ```
+    store.toggleSound();
+    expect(store.state.preferences.soundEnabled).toBe(false);
+    store.toggleSound();
+    expect(store.state.preferences.soundEnabled).toBe(true);
+  });
 
-3. Update theme-aware styles:
-   - Remove manual dark mode styles if they duplicate token system
-   - Rely on `[data-theme="dark"]` overrides in tokens.css
-   - Simplify global styles now that tokens handle theming
+  test('setTheme updates theme preference', () => {
+    const store = createAppStore();
+    global.localStorage = createMockLocalStorage();
 
-4. Verify typography:
-   - Body font uses `var(--font-sans)` or `var(--font-mono)`
-   - Font sizes use token scale
-   - Line heights use tokens
+    store.setTheme('dark');
+    expect(store.state.preferences.theme).toBe('dark');
+  });
 
-5. Update any global component styles:
-   - If `/src/lib/styles/components.scss` has global styles, migrate them too
-   - Replace SCSS variables with CSS custom properties
-   - Keep SCSS only if using mixins or complex logic
+  test('toggleReducedMotion toggles motion preference', () => {
+    const store = createAppStore();
+    global.localStorage = createMockLocalStorage();
+    global.document = { documentElement: { style: { setProperty: vi.fn() } } } as any;
 
-6. Test visual appearance:
-   - Run `pnpm dev`
-   - Verify app looks identical to before
-   - Test light and dark themes
-   - Check spacing, colors, typography
+    store.toggleReducedMotion();
+    expect(store.state.preferences.reducedMotion).toBe(true);
+  });
+});
+```
 
 **Verification Checklist**:
-- [ ] All hardcoded colors in app.css replaced with tokens
-- [ ] All spacing values use token scale
-- [ ] Typography uses font tokens
-- [ ] Theme switching works (light/dark)
-- [ ] Visual appearance unchanged
-- [ ] No regressions
+- [ ] Preferences initialization tested
+- [ ] toggleSound tested
+- [ ] setTheme tested
+- [ ] toggleReducedMotion tested
+- [ ] localStorage mocked properly
+- [ ] All tests pass
 
 **Testing Instructions**:
-- Manual: Load app and visually compare to before
-- Theme: Switch between light/dark (via app store if implemented)
-- Spacing: Verify layout and spacing identical
-- Console: No errors
+- Run `pnpm test app.svelte`
+- Verify preferences tests pass
+- Check that mocks prevent side effects
 
 **Commit Message Template**:
 ```
-style(global): migrate global styles to CSS custom properties
+test(stores): test app store preferences state
 
-- Replace hardcoded colors with semantic tokens
-- Use spacing scale tokens
-- Apply typography tokens
-- Verify theme switching works
-- Maintain visual consistency
+- Test initial preferences state
+- Test toggleSound method
+- Test setTheme method with all theme options
+- Test toggleReducedMotion method
+- Mock localStorage and document APIs
 ```
 
-**Estimated tokens**: ~12,000
+**Estimated tokens**: ~5,000
 
 ---
 
-### Task 4: Migrate Component Styles to CSS Custom Properties
+### Task 4: Test App Store - Persistence
 
-**Goal**: Update all component `<style>` blocks to use CSS custom properties instead of hardcoded values or SCSS variables. This is the largest task in this phase.
+**Goal**: Test that preferences are correctly saved to and loaded from localStorage.
 
-**Files to Modify**:
-- All `.svelte` components with `<style>` blocks
-- Focus on `/src/lib/components/**/*.svelte`
-
-**Prerequisites**:
-- Task 3 complete (global styles migrated)
-
-**Implementation Steps**:
-
-1. Create a systematic approach:
-   - Work through components one by one
-   - Test each component after migration
-   - Commit after each component or small groups
-
-2. For each component `<style>` block:
-   - Identify all color values
-   - Identify all spacing/sizing values
-   - Identify all typography declarations
-   - Identify all effects (shadows, borders, transitions)
-
-3. Replace with tokens:
-   ```css
-   /* ❌ Before */
-   <style lang="scss">
-     .card {
-       background: #ffffff;
-       color: #1f2937;
-       padding: 16px;
-       border-radius: 8px;
-       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-       transition: all 200ms;
-     }
-
-     .card:hover {
-       background: #f3f4f6;
-     }
-   </style>
-
-   /* ✅ After */
-   <style>
-     .card {
-       background: var(--color-bg-primary);
-       color: var(--color-text-primary);
-       padding: var(--space-4);
-       border-radius: var(--radius-md);
-       box-shadow: var(--shadow-sm);
-       transition: all var(--transition-base);
-     }
-
-     .card:hover {
-       background: var(--color-bg-secondary);
-     }
-   </style>
-   ```
-
-4. Handle theme-specific styles:
-   - If a component has different colors for light/dark:
-   - Use semantic tokens (they change automatically)
-   - Don't add theme-specific selectors in components if possible
-   - Let tokens handle the theming
-
-5. Consider removing `lang="scss"`:
-   - If a component only used SCSS for variables, remove `lang="scss"`
-   - Keep `lang="scss"` if using nesting, mixins, or other SCSS features
-   - Evaluate case-by-case
-
-6. Component-by-component checklist:
-   - ProjectCard.svelte
-   - ImageGrid.svelte
-   - GooeyButton.svelte
-   - SVGFilters.svelte
-   - AndroidFilters.svelte
-   - Icon components
-   - Route page components
-   - Any other components
-
-7. Test each component:
-   - Visual appearance unchanged
-   - Hover states work
-   - Animations smooth
-   - Theme switching works
-   - No console errors
-
-8. **Decision point** (ADR-004 fallback):
-   - If CSS custom properties cause major issues (specificity, complexity):
-   - Stop and switch to hybrid approach
-   - Keep CSS vars for theme colors only
-   - Use SCSS for everything else
-   - Document the decision
-
-**Verification Checklist**:
-- [ ] All component styles reviewed
-- [ ] Colors replaced with semantic tokens
-- [ ] Spacing uses scale tokens
-- [ ] Typography uses font tokens
-- [ ] Effects use shadow/transition tokens
-- [ ] Theme switching works in all components
-- [ ] Visual appearance preserved
-- [ ] No regressions in interactions
-- [ ] Decision made: full CSS vars or hybrid approach
-
-**Testing Instructions**:
-- Manual: Visit all routes and test all components
-- Visual: Compare before/after screenshots if possible
-- Interaction: Test hover, click, focus states
-- Theme: Switch light/dark and verify all components adapt
-- Animation: Ensure transitions are smooth
-- Console: No errors
-
-**Commit Message Template (per component or group)**:
-```
-style(components): migrate [ComponentName] to CSS custom properties
-
-- Replace hardcoded colors with semantic tokens
-- Use spacing and typography scales
-- Apply effect tokens (shadows, transitions)
-- Verify visual consistency and theme switching
-```
-
-**Estimated tokens**: ~30,000
-
----
-
-### Task 5: Clean Up SCSS Files
-
-**Goal**: Remove or refactor SCSS variable files that are now redundant, keeping only SCSS features that CSS can't replicate (mixins, complex logic).
-
-**Files to Modify/Remove**:
-- `/src/lib/styles/variables.scss` - Likely can be deleted
-- `/src/lib/styles/components.scss` - Refactor or remove if redundant
-- Any other SCSS files
+**Files to Modify/Create**:
+- `src/lib/stores/app.svelte.test.ts` - Add persistence tests
 
 **Prerequisites**:
-- Task 4 complete (all components migrated)
+- Task 3 completed (preferences tests exist)
+- localStorage mock helpers available
 
 **Implementation Steps**:
+1. Add describe block for persistence tests
+2. Mock localStorage before each test
+3. Test savePreferences method
+4. Test loadPreferences method
+5. Test that preference changes trigger saves
+6. Test loading with existing saved preferences
+7. Test loading with corrupted data (error handling)
 
-1. Review each SCSS file:
-   - Is it still being imported anywhere?
-   - Does it define variables? (can remove, replaced by CSS vars)
-   - Does it have mixins? (keep if useful)
-   - Does it have global styles? (migrate to CSS)
+**Test Cases to Include**:
+```typescript
+describe('AppStore - Persistence', () => {
+  let mockLocalStorage;
 
-2. For `variables.scss`:
-   - If it only defines variables, delete it entirely
-   - If it has mixins, keep only the mixins
-   - Update imports if removing
+  beforeEach(() => {
+    mockLocalStorage = createMockLocalStorage();
+    global.localStorage = mockLocalStorage;
+  });
 
-3. For `components.scss`:
-   - If global component styles, migrate to app.css
-   - If reusable mixins, keep them
-   - If complex SCSS logic, evaluate if still needed
+  test('savePreferences writes to localStorage', () => {
+    const store = createAppStore();
+    store.savePreferences();
 
-4. Update imports:
-   - Remove imports of deleted SCSS files
-   - Update svelte.config.js if SCSS preprocessing can be simplified
-   - Verify build still works
+    expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
+      'portfolio-preferences',
+      expect.any(String)
+    );
+  });
 
-5. Consider keeping SCSS preprocessing:
-   - Even if not using variables, nesting is useful
-   - Mixins might be valuable
-   - Don't remove SCSS entirely unless truly not needed
+  test('loadPreferences reads from localStorage', () => {
+    const savedPrefs = { soundEnabled: false, theme: 'dark', reducedMotion: true };
+    mockLocalStorage.setItem('portfolio-preferences', JSON.stringify(savedPrefs));
 
-6. Document what's kept:
-   - If keeping any SCSS, document why
-   - Note which mixins are valuable
-   - Explain when to use SCSS vs CSS vars
+    const store = createAppStore();
+    global.document = { documentElement: { setAttribute: vi.fn(), style: { setProperty: vi.fn() } } } as any;
+    store.loadPreferences();
+
+    expect(store.state.preferences.soundEnabled).toBe(false);
+    expect(store.state.preferences.theme).toBe('dark');
+  });
+
+  test('loadPreferences handles corrupted data gracefully', () => {
+    mockLocalStorage.setItem('portfolio-preferences', 'invalid json');
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const store = createAppStore();
+    store.loadPreferences();
+
+    // Should use default preferences
+    expect(store.state.preferences.soundEnabled).toBe(true);
+    expect(consoleSpy).toHaveBeenCalled();
+  });
+
+  test('preference changes trigger save', () => {
+    const store = createAppStore();
+    store.toggleSound();
+
+    expect(mockLocalStorage.setItem).toHaveBeenCalled();
+  });
+});
+```
 
 **Verification Checklist**:
-- [ ] SCSS variable files removed or refactored
-- [ ] Only useful SCSS features retained (mixins, nesting)
-- [ ] All imports updated
-- [ ] Build succeeds
-- [ ] No broken styles
+- [ ] savePreferences tested
+- [ ] loadPreferences tested
+- [ ] Error handling tested
+- [ ] Auto-save on preference changes tested
+- [ ] localStorage mock captures all calls
+- [ ] All tests pass
 
 **Testing Instructions**:
-- Build: `pnpm build` should succeed
-- Dev: `pnpm dev` should run
-- Visual: App looks identical
-- Styles: All styles still apply
+- Run `pnpm test app.svelte`
+- Verify localStorage interactions are correct
+- Check error handling works
 
 **Commit Message Template**:
 ```
-refactor(styles): clean up SCSS files after CSS custom properties migration
+test(stores): test app store persistence
 
-- Remove variables.scss (replaced by CSS custom properties)
-- Keep useful SCSS mixins in components.scss
-- Update imports and build configuration
-- Verify all styles functional
+- Test savePreferences writes to localStorage
+- Test loadPreferences reads correctly
+- Test error handling for corrupted data
+- Test auto-save on preference changes
+- Verify localStorage integration
 ```
 
-**Estimated tokens**: ~10,000
+**Estimated tokens**: ~5,000
 
 ---
 
-### Task 6: Enhance Theme Switching Implementation
+### Task 5: Test App Store - Side Effects
 
-**Goal**: Ensure theme switching is robust, testing light/dark/auto modes thoroughly and connecting the app store theme preference to the CSS custom property system.
+**Goal**: Test DOM manipulation side effects like theme application and reduced motion CSS variables.
 
-**Files to Modify**:
-- `/src/lib/stores/app.svelte.ts` - App store with theme state
-- `/src/routes/+layout.svelte` - Apply theme to DOM
-- Any theme switcher UI component (if exists)
+**Files to Modify/Create**:
+- `src/lib/stores/app.svelte.test.ts` - Add side effects tests
 
 **Prerequisites**:
-- Task 5 complete (SCSS cleanup done)
+- Task 4 completed (persistence tests exist)
+- Understanding of applyTheme and applyReducedMotion methods
 
 **Implementation Steps**:
+1. Add describe block for side effects
+2. Mock document.documentElement
+3. Mock window.matchMedia for theme detection
+4. Test applyTheme method for all theme values
+5. Test applyReducedMotion method
+6. Test init method and its side effects
+7. Verify event listeners are attached properly
 
-1. Review current theme implementation:
-   - Read app store to understand current theme state
-   - Check how theme preference is persisted (localStorage)
-   - Identify where theme is applied to DOM
+**Test Cases to Include**:
+```typescript
+describe('AppStore - Side Effects', () => {
+  let mockDocumentElement;
+  let mockMatchMedia;
 
-2. Ensure theme application in layout:
-   ```svelte
-   <!-- /src/routes/+layout.svelte -->
-   <script lang="ts">
-     import { appStore } from '$lib/stores/app.svelte';
-     import { browser } from '$app/environment';
+  beforeEach(() => {
+    mockDocumentElement = {
+      setAttribute: vi.fn(),
+      style: { setProperty: vi.fn() }
+    };
+    global.document = { documentElement: mockDocumentElement } as any;
 
-     $effect(() => {
-       if (browser) {
-         const theme = appStore.preferences.theme;
+    mockMatchMedia = vi.fn();
+    global.window = { matchMedia: mockMatchMedia } as any;
+  });
 
-         let appliedTheme = theme;
-         if (theme === 'auto') {
-           const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-           appliedTheme = prefersDark ? 'dark' : 'light';
-         }
+  test('applyTheme sets light theme', () => {
+    mockMatchMedia.mockReturnValue({ matches: false, addEventListener: vi.fn() });
+    const store = createAppStore();
+    store.setTheme('light');
+    store.applyTheme();
 
-         document.documentElement.setAttribute('data-theme', appliedTheme);
-       }
-     });
-   </script>
-   ```
+    expect(mockDocumentElement.setAttribute).toHaveBeenCalledWith('data-theme', 'light');
+  });
 
-3. Test theme modes:
-   - **Light**: Manually set and verify light colors
-   - **Dark**: Manually set and verify dark colors
-   - **Auto**: Test system preference detection
-     - Change OS theme
-     - Verify app theme follows
+  test('applyTheme sets dark theme', () => {
+    const store = createAppStore();
+    store.setTheme('dark');
+    store.applyTheme();
 
-4. Verify theme persistence:
-   - Change theme
-   - Reload page
-   - Verify theme persists (localStorage)
+    expect(mockDocumentElement.setAttribute).toHaveBeenCalledWith('data-theme', 'dark');
+  });
 
-5. Test all components in both themes:
-   - Navigate through all routes
-   - Verify all components use semantic tokens correctly
-   - Check for any hardcoded colors that don't switch
-   - Ensure readability in both themes
+  test('applyTheme respects system preference for auto', () => {
+    mockMatchMedia.mockReturnValue({ matches: true, addEventListener: vi.fn() }); // System prefers dark
+    const store = createAppStore();
+    store.setTheme('auto');
+    store.applyTheme();
 
-6. Check reduced motion:
-   - Enable "reduce motion" in OS settings
-   - Verify animations are disabled
-   - Check that tokens adjust (if implemented)
+    expect(mockDocumentElement.setAttribute).toHaveBeenCalledWith('data-theme', 'dark');
+  });
 
-7. If theme switcher UI exists, test it:
-   - Click through theme options
-   - Verify immediate visual feedback
-   - Check persistence
+  test('applyReducedMotion sets CSS variable', () => {
+    const store = createAppStore();
+    store.toggleReducedMotion(); // Set to true
+    store.applyReducedMotion();
+
+    expect(mockDocumentElement.style.setProperty).toHaveBeenCalledWith(
+      '--motion-preference',
+      'reduce'
+    );
+  });
+
+  test('init sets up theme listener', () => {
+    const mockListener = { addEventListener: vi.fn() };
+    mockMatchMedia.mockReturnValue(mockListener);
+    global.localStorage = createMockLocalStorage();
+
+    const store = createAppStore();
+    store.init();
+
+    expect(mockListener.addEventListener).toHaveBeenCalledWith('change', expect.any(Function));
+  });
+});
+```
 
 **Verification Checklist**:
-- [ ] Theme switching works (light/dark/auto)
-- [ ] Theme persists across page reloads
-- [ ] System preference detection works (auto mode)
-- [ ] All components adapt to theme correctly
-- [ ] No components have hardcoded theme colors
-- [ ] Reduced motion preference respected
-- [ ] Theme switcher UI functional (if exists)
-- [ ] Smooth theme transitions
+- [ ] applyTheme tested for all theme values
+- [ ] applyReducedMotion tested
+- [ ] init method tested
+- [ ] Event listeners verified
+- [ ] document and window properly mocked
+- [ ] All tests pass
 
 **Testing Instructions**:
-- Manual: Click theme switcher (if UI exists) or modify store directly
-- Light: Verify all pages in light mode
-- Dark: Verify all pages in dark mode
-- Auto: Change OS theme setting and verify app follows
-- Persistence: Reload page, verify theme persists
-- Motion: Enable "reduce motion" in OS, verify animations disabled
+- Run `pnpm test app.svelte`
+- Verify side effects are correctly tested
+- Check mocks prevent actual DOM manipulation
 
 **Commit Message Template**:
 ```
-feat(theme): enhance theme switching with CSS custom properties
+test(stores): test app store side effects
 
-- Connect app store theme to data-theme attribute
-- Support light, dark, and auto (system) modes
-- Ensure theme persistence via localStorage
-- Test all components in both themes
-- Support reduced motion preference
+- Test applyTheme for light/dark/auto
+- Test system theme preference detection
+- Test applyReducedMotion CSS updates
+- Test init method setup
+- Verify event listener registration
 ```
 
-**Estimated tokens**: ~13,000
+**Estimated tokens**: ~5,000
+
+---
+
+### Task 6: Test Sound Hook - createSoundStore
+
+**Goal**: Test the createSoundStore function from useSound.svelte.ts.
+
+**Files to Modify/Create**:
+- `src/lib/hooks/useSound.svelte.test.ts` - Sound hook tests
+
+**Prerequisites**:
+- Task 5 completed (app store fully tested)
+- Understanding of useSound.svelte.ts structure
+
+**Implementation Steps**:
+1. Create useSound.svelte.test.ts
+2. Mock the Audio API constructor
+3. Mock audio element methods (play, pause, etc.)
+4. Test createSoundStore initialization
+5. Test audio loading events
+6. Test play, pause, stop methods
+7. Test setVolume method
+8. Test error handling
+
+**Audio API Mocking Pattern**:
+```typescript
+function createMockAudio() {
+  const mockAudio = {
+    play: vi.fn().mockResolvedValue(undefined),
+    pause: vi.fn(),
+    load: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    volume: 1,
+    loop: false,
+    preload: '',
+    currentTime: 0
+  };
+  return mockAudio;
+}
+
+beforeEach(() => {
+  global.Audio = vi.fn(() => createMockAudio()) as any;
+  global.window = {} as any;
+});
+```
+
+**Test Cases to Include**:
+```typescript
+describe('createSoundStore', () => {
+  test('initializes with audio element', () => {
+    const soundStore = createSoundStore('/sound.mp3');
+    expect(soundStore.audio).toBeDefined();
+    expect(global.Audio).toHaveBeenCalledWith('/sound.mp3');
+  });
+
+  test('sets volume from options', () => {
+    const soundStore = createSoundStore('/sound.mp3', { volume: 0.5 });
+    expect(soundStore.audio.volume).toBe(0.5);
+  });
+
+  test('play method calls audio.play', async () => {
+    const soundStore = createSoundStore('/sound.mp3');
+    // Simulate loaded state
+    soundStore.audio.addEventListener.mock.calls[0][1](); // trigger canplaythrough
+
+    await soundStore.play();
+    expect(soundStore.audio.play).toHaveBeenCalled();
+  });
+
+  test('pause method calls audio.pause', () => {
+    const soundStore = createSoundStore('/sound.mp3');
+    soundStore.pause();
+    expect(soundStore.audio.pause).toHaveBeenCalled();
+  });
+
+  test('stop method pauses and resets time', () => {
+    const soundStore = createSoundStore('/sound.mp3');
+    soundStore.stop();
+    expect(soundStore.audio.pause).toHaveBeenCalled();
+    expect(soundStore.audio.currentTime).toBe(0);
+  });
+
+  test('setVolume clamps value between 0 and 1', () => {
+    const soundStore = createSoundStore('/sound.mp3');
+    soundStore.setVolume(1.5);
+    expect(soundStore.audio.volume).toBe(1);
+    soundStore.setVolume(-0.5);
+    expect(soundStore.audio.volume).toBe(0);
+  });
+});
+```
+
+**Verification Checklist**:
+- [ ] createSoundStore initialization tested
+- [ ] All methods tested (play, pause, stop, setVolume)
+- [ ] Options handling tested
+- [ ] Audio API properly mocked
+- [ ] All tests pass
+
+**Testing Instructions**:
+- Run `pnpm test useSound`
+- Verify Audio mock is working
+- Check all sound methods are tested
+
+**Commit Message Template**:
+```
+test(hooks): test createSoundStore
+
+- Test sound store initialization
+- Test play/pause/stop methods
+- Test setVolume with clamping
+- Test options handling
+- Mock Audio API
+```
+
+**Estimated tokens**: ~5,000
+
+---
+
+### Task 7: Test Sound Hook - useSoundAction
+
+**Goal**: Test the useSoundAction Svelte action from useSound.svelte.ts.
+
+**Files to Modify/Create**:
+- `src/lib/hooks/useSound.svelte.test.ts` - Add action tests
+
+**Prerequisites**:
+- Task 6 completed (createSoundStore tested)
+
+**Implementation Steps**:
+1. Add describe block for useSoundAction
+2. Create mock HTMLElement
+3. Test that action attaches click listener
+4. Test that click triggers sound playback
+5. Test that destroy removes event listener
+6. Verify action lifecycle
+
+**Test Cases to Include**:
+```typescript
+describe('useSoundAction', () => {
+  test('attaches click listener to element', () => {
+    const mockElement = {
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn()
+    };
+
+    const action = useSoundAction('/sound.mp3');
+    action(mockElement as any);
+
+    expect(mockElement.addEventListener).toHaveBeenCalledWith('click', expect.any(Function));
+  });
+
+  test('click triggers sound playback', () => {
+    const mockElement = {
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn()
+    };
+    const mockEvent = { preventDefault: vi.fn() };
+
+    const action = useSoundAction('/sound.mp3');
+    action(mockElement as any);
+
+    // Get the click handler and call it
+    const clickHandler = mockElement.addEventListener.mock.calls[0][1];
+    clickHandler(mockEvent);
+
+    expect(mockEvent.preventDefault).toHaveBeenCalled();
+  });
+
+  test('destroy removes event listener', () => {
+    const mockElement = {
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn()
+    };
+
+    const action = useSoundAction('/sound.mp3');
+    const result = action(mockElement as any);
+    result.destroy();
+
+    expect(mockElement.removeEventListener).toHaveBeenCalledWith('click', expect.any(Function));
+  });
+});
+```
+
+**Verification Checklist**:
+- [ ] useSoundAction lifecycle tested
+- [ ] Event listener attachment tested
+- [ ] Click handler tested
+- [ ] Cleanup tested
+- [ ] All tests pass
+
+**Testing Instructions**:
+- Run `pnpm test useSound`
+- Verify action tests pass
+- Check event listener mocking works
+
+**Commit Message Template**:
+```
+test(hooks): test useSoundAction
+
+- Test click listener attachment
+- Test sound playback on click
+- Test event.preventDefault call
+- Test cleanup on destroy
+- Verify action lifecycle
+```
+
+**Estimated tokens**: ~4,000
 
 ---
 
 ## Phase Verification
 
-Before proceeding to Phase 4, ensure:
+Before moving to Phase 4, verify:
 
-### CSS Custom Properties System
-- [ ] Design tokens created in tokens.css
-- [ ] Color primitives and semantic tokens defined
-- [ ] Spacing, typography, effects scales defined
-- [ ] Dark theme overrides defined
-- [ ] Reduced motion support implemented
+### Test Coverage
+- [ ] App store has comprehensive test coverage
+- [ ] All store methods tested
+- [ ] All side effects tested
+- [ ] Sound hooks fully tested
+- [ ] Coverage >80% for stores and hooks
 
-### Migration Complete
-- [ ] All global styles use CSS custom properties
-- [ ] All component styles use CSS custom properties
-- [ ] No hardcoded colors, spacing, or typography (except edge cases)
-- [ ] SCSS variables removed or refactored
-- [ ] Only necessary SCSS features retained
+### Functionality Validation
+- [ ] Navigation state management works
+- [ ] Preferences state management works
+- [ ] localStorage persistence works
+- [ ] Theme application works
+- [ ] Sound hooks work correctly
 
-### Theme Switching
-- [ ] Light theme works correctly
-- [ ] Dark theme works correctly
-- [ ] Auto (system preference) mode works
-- [ ] Theme persists across reloads
-- [ ] All components adapt to theme
-- [ ] Smooth theme transitions
+### Mocking Validation
+- [ ] localStorage properly mocked
+- [ ] document properly mocked
+- [ ] window.matchMedia properly mocked
+- [ ] Audio API properly mocked
+- [ ] No actual browser APIs called
 
-### Visual Consistency
-- [ ] App looks identical to before refactoring
-- [ ] No visual regressions
-- [ ] Spacing preserved
-- [ ] Typography preserved
-- [ ] Colors accurate in both themes
-- [ ] Shadows, borders, effects intact
+### File Structure
+```
+src/lib/
+  stores/
+    app.svelte.ts
+    app.svelte.test.ts
+  hooks/
+    useSound.svelte.ts
+    useSound.svelte.test.ts
+  test-utils/
+    store-helpers.ts
+```
 
-### Testing
-- [ ] All routes tested in light theme
-- [ ] All routes tested in dark theme
-- [ ] Theme switcher tested (if exists)
-- [ ] Reduced motion tested
-- [ ] No console errors
-- [ ] `pnpm dev` runs successfully
-- [ ] `pnpm build` succeeds
-- [ ] `pnpm preview` works
+### Test Execution
+- [ ] `pnpm test stores` passes
+- [ ] `pnpm test hooks` passes
+- [ ] No console errors or warnings
+- [ ] Tests run quickly (<5 seconds)
 
-### Build
-- [ ] Build process unchanged or simplified
-- [ ] CSS output size reasonable
-- [ ] No SCSS compilation errors
-
-### Git
-- [ ] All changes committed atomically
-- [ ] Conventional commits used
-- [ ] Git author is HatmanStack
-
-## Fallback Scenario
-
-**If CSS custom properties cause major issues in Task 4:**
-
-1. Stop migration at that point
-2. Revert to hybrid approach:
-   - Keep CSS custom properties for theme colors only
-   - Use SCSS variables for spacing, typography, effects
-   - Document the decision in Phase-0.md
-
-3. Adjust tokens.css:
-   ```css
-   /* Only theme colors as CSS vars */
-   :root {
-     --color-text-primary: #1f2937;
-     --color-bg-primary: #ffffff;
-     /* ... only colors */
-   }
-
-   [data-theme="dark"] {
-     --color-text-primary: #f9fafb;
-     --color-bg-primary: #111827;
-   }
-   ```
-
-4. Create SCSS variables for everything else:
-   ```scss
-   // variables.scss
-   $space-4: 1rem;
-   $font-sans: sans-serif;
-   // ... other tokens
-   ```
-
-5. Update components to use hybrid:
-   ```css
-   .component {
-     color: var(--color-text-primary); /* CSS var for theme */
-     padding: $space-4;                 /* SCSS var for spacing */
-   }
-   ```
-
-6. Continue with rest of refactoring
-
-**Trigger for fallback**:
-- CSS specificity battles become unmanageable
-- Performance issues with many custom properties
-- Browser bugs with custom properties (extremely unlikely)
-- Migration complexity exceeds benefits
-
-## Integration Points
-
-This phase enables:
-- **Phase 4**: Type system can include theme types
-- **Phase 5**: Performance benefits from simpler CSS
-- **Phase 6**: Navigation can use consistent theme system
-- **Future**: Easy runtime theme customization, new color schemes
+### Git Validation
+- [ ] All tasks committed separately
+- [ ] Commit author is HatmanStack
+- [ ] Conventional commit format used
+- [ ] Working on correct branch
 
 ## Known Limitations
 
-- Some SVG filter values might not support CSS custom properties (color literals required)
-- Complex SCSS mixins may still be needed for special cases
-- Build-time calculations can't be fully replaced by runtime CSS vars
+- Event listener callbacks are tested but not their actual behavior with real events
+- Audio playback is mocked, not actually tested for sound output
+- Timing-based behavior (debounce, throttle) not tested if present
 
-## Success Metrics
+## Next Phase
 
-Phase 3 is successful when:
-- Entire app uses CSS custom properties for theming
-- Light and dark themes work flawlessly
-- Visual appearance is 100% preserved
-- Theme switching is smooth and instant
-- Code is cleaner and more maintainable
-- Foundation is set for easy theme customization in the future
+Once Phase 3 is complete and verified, proceed to **[Phase 4: Component Testing](./Phase-4.md)** to test UI components.

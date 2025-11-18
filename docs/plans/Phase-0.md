@@ -1,603 +1,368 @@
-# Phase 0: Foundation - Architecture Decisions & Conventions
+# Phase 0: Foundation - Architecture & Testing Strategy
 
-**This is a reference document for all phases. Read this before starting any implementation.**
+## Overview
 
-## Architecture Decisions
+This phase establishes the foundational architecture decisions, testing strategy, and shared conventions that will guide all subsequent phases. Phase 0 is a **reference document** rather than an implementation phase - no code changes occur here. Implementation engineers should read this thoroughly before beginning Phase 1.
 
-### ADR-001: Component Naming Convention
+**Estimated tokens**: ~8,000
 
-**Decision**: Use PascalCase for all `.svelte` component files
+## Architecture Decisions (ADRs)
 
-**Rationale**:
-- Clear visual distinction between components and utility files
-- Matches conventions from React, Vue, and other modern frameworks
-- Makes imports more readable: `import ProjectCard from '$lib/components/ui/ProjectCard.svelte'`
-- Consistent with TypeScript interface naming (which are already PascalCase)
+### ADR-001: Vitest as Test Runner
 
-**Examples**:
-- ✅ `ProjectCard.svelte`
-- ✅ `ImageGrid.svelte`
-- ✅ `GooeyButton.svelte`
-- ❌ `project-card.svelte`
-- ❌ `imageGrid.svelte`
-
-**Exceptions**: Route page components like `+page.svelte`, `+layout.svelte`, `+error.svelte` remain as-is (SvelteKit convention)
-
----
-
-### ADR-002: Directory Organization
-
-**Decision**: Type-based organization with refined structure
+**Decision**: Use Vitest as the primary test runner for this SvelteKit project.
 
 **Rationale**:
-- Easier to find files when you know what type you're looking for
-- Aligns with how developers typically think ("I need a component" vs "I need blog stuff")
-- Simpler import paths
-- Works well for portfolio/showcase sites that aren't complex enough to need feature-based organization
+- Native Vite integration - shares the same config, plugins, and transformations
+- Significantly faster than Jest for Vite-based projects
+- Modern API with excellent TypeScript support
+- Built-in watch mode, UI, and coverage reporting
+- Compatible with `@testing-library/svelte` ecosystem
+- Growing ecosystem and active development
+
+**Alternatives Considered**:
+- Jest: Industry standard but slower with Vite, requires additional configuration
+- Playwright Component Testing: Better for visual testing but heavier for unit tests
+
+### ADR-002: Unit-Focused Testing Approach
+
+**Decision**: Prioritize isolated unit tests with mocked dependencies over integration/E2E tests.
+
+**Rationale**:
+- Deployment confidence is the primary goal - need fast, reliable regression detection
+- Unit tests execute faster, enabling rapid CI/CD feedback
+- Easier to pinpoint failures and debug issues
+- More maintainable with clear boundaries and minimal setup
+- Better suited for testing edge cases and error conditions
+
+**Testing Pyramid Target**:
+- **80%** Unit tests (components, functions, stores, hooks)
+- **15%** Integration tests (route loaders with real data)
+- **5%** Manual testing (visual verification, accessibility)
+
+### ADR-003: Colocated Test Files
+
+**Decision**: Place test files next to the source files they test using `*.test.ts` naming convention.
+
+**Rationale**:
+- Easier to find related tests when modifying code
+- Encourages writing tests as part of development workflow
+- Reduces friction for maintaining test coverage
+- Clear ownership and responsibility
+
+**Pattern**:
+```
+src/lib/stores/
+  app.svelte.ts
+  app.svelte.test.ts
+```
+
+### ADR-004: Centralized Test Utilities
+
+**Decision**: Create shared test utilities in `src/lib/test-utils/` for common setup and mocks.
+
+**Rationale**:
+- DRY principle - avoid duplicating mock factories and setup code
+- Consistent testing patterns across the codebase
+- Single source of truth for test fixtures
+- Easier to update test infrastructure
 
 **Structure**:
 ```
-/lib/
-  /components/
-    /ui/          # Reusable UI components (ProjectCard, ImageGrid, etc.)
-    /icons/       # SVG icon components
-    /layouts/     # Layout wrapper components (if any)
-  /stores/        # All state management stores
-  /data/          # Static data files (projects, navigation, etc.)
-  /hooks/         # Custom Svelte utilities and hooks
-  /utils/         # Helper functions and utilities
-  /types/         # TypeScript type definitions
-  /styles/        # Global styles, variables, mixins
-  /images/        # Image assets
-  /sounds/        # Audio files
+src/lib/test-utils/
+  setup.ts          # Global test setup
+  render-helpers.ts # Svelte component rendering utilities
+  mock-factories.ts # Factory functions for creating test data
+  fixtures/         # Static test data matching production structures
 ```
 
-**Rationale for `/ui/` subfolder**: Separates reusable UI components from specialized components like icons
+### ADR-005: jsdom as Browser Environment
 
----
-
-### ADR-003: Svelte 5 Runes Adoption Strategy
-
-**Decision**: Pragmatic runes - use where beneficial, not everywhere
+**Decision**: Use jsdom for browser API simulation in tests.
 
 **Rationale**:
-- Svelte 5 runes provide better performance and type safety for complex state
-- Simple components don't benefit from runes and become more verbose
-- Balance modern patterns with code clarity
+- Lightweight and fast for unit tests
+- Sufficient for testing DOM manipulation, localStorage, etc.
+- Well-supported by testing-library ecosystem
+- Lower resource usage than real browsers
 
-**Guidelines**:
+**When Not Sufficient**: If visual rendering bugs are detected, consider adding Playwright for visual regression testing in a future phase.
 
-**Use runes for**:
-- All stores (use `$state()` for reactive store properties)
-- Components with complex local state
-- Components with derived/computed values
-- Components with side effects that need fine-grained control
+### ADR-006: Coverage Thresholds
 
-**Example - Complex component (USE runes)**:
-```svelte
-<script lang="ts">
-  import type { Project } from '$lib/types';
+**Decision**: Set initial coverage thresholds at 80% with plans to increase iteratively.
 
-  interface Props {
-    project: Project;
-    expanded?: boolean;
-  }
-
-  let { project, expanded = false }: Props = $props();
-  let isHovered = $state(false);
-  let imageLoaded = $state(false);
-
-  let displayTitle = $derived(
-    project.title.length > 50
-      ? project.title.slice(0, 50) + '...'
-      : project.title
-  );
-
-  $effect(() => {
-    if (expanded) {
-      // Track analytics
-    }
-  });
-</script>
-```
-
-**Keep simple for**:
-- Components that just receive props and display them
-- Components with no local state
-- Static presentational components
-
-**Example - Simple component (KEEP simple)**:
-```svelte
-<script lang="ts">
-  import type { Project } from '$lib/types';
-
-  export let project: Project;
-  export let size: 'small' | 'medium' | 'large' = 'medium';
-</script>
-
-<div class="card {size}">
-  <h3>{project.title}</h3>
-  <p>{project.description}</p>
-</div>
-```
-
-**Key Point**: Prefer clarity over dogma. If `export let` is clearer than `$props()`, use it.
-
----
-
-### ADR-004: Styling Architecture
-
-**Decision**: CSS Custom Properties first, SCSS fallback if needed
+**Coverage Targets**:
+- **Statements**: 80%
+- **Branches**: 75%
+- **Functions**: 80%
+- **Lines**: 80%
 
 **Rationale**:
-- CSS custom properties enable runtime theming (light/dark mode)
-- Better browser DevTools support
-- Modern standard that works everywhere
-- Reduces reliance on build-time SCSS variables
-- SCSS remains available for complex logic/mixins if CSS custom properties become problematic
-
-**Migration Strategy**:
-1. Create comprehensive CSS custom properties for design tokens
-2. Replace SCSS variables with CSS custom properties
-3. Keep SCSS only for:
-   - Mixins that can't be CSS (complex calculations)
-   - Nested selectors (if beneficial)
-   - Build-time constants (if any)
-
-**Design Token Structure**:
-```css
-:root {
-  /* Colors - Primitives */
-  --color-primary-50: #...;
-  --color-primary-100: #...;
-  /* ... */
-
-  /* Colors - Semantic */
-  --color-text-primary: var(--color-gray-900);
-  --color-text-secondary: var(--color-gray-600);
-  --color-bg-primary: var(--color-white);
-  --color-bg-secondary: var(--color-gray-50);
-
-  /* Spacing */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  /* ... */
-
-  /* Typography */
-  --font-sans: ...;
-  --font-mono: 'Fira Mono', monospace;
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  /* ... */
-
-  /* Effects */
-  --shadow-sm: ...;
-  --shadow-md: ...;
-  --radius-sm: 4px;
-  --radius-md: 8px;
-}
-
-[data-theme="dark"] {
-  --color-text-primary: var(--color-gray-50);
-  --color-text-secondary: var(--color-gray-400);
-  --color-bg-primary: var(--color-gray-900);
-  --color-bg-secondary: var(--color-gray-800);
-}
-```
-
-**Fallback Plan**: If CSS custom properties cause issues (performance, specificity battles, browser bugs), switch to hybrid:
-- CSS custom properties for theme values that change at runtime
-- SCSS variables for everything else
-- Decision point: Phase 3, Task 4
-
----
-
-### ADR-005: TypeScript Type Organization
-
-**Decision**: Centralized type definitions in `/lib/types/index.ts`
-
-**Rationale**:
-- Single source of truth for shared types
-- Easier to refactor types across the codebase
-- Clear import path: `import type { Project } from '$lib/types'`
-- Prevents type duplication and drift
-
-**Organization**:
-```typescript
-// /lib/types/index.ts
-
-// Domain types
-export interface Project {
-  id: string;
-  title: string;
-  description: string;
-  url: string;
-  image: string;
-  tags: string[];
-}
-
-export interface BlogPost {
-  slug: string;
-  title: string;
-  date: string;
-  excerpt: string;
-  content: string;
-}
-
-// Component prop types
-export interface ProjectCardProps {
-  project: Project;
-  variant?: 'default' | 'compact';
-}
-
-// Store types
-export interface AppState {
-  navigation: NavigationState;
-  preferences: PreferencesState;
-  isLoading: boolean;
-}
-
-// Utility types
-export type Theme = 'light' | 'dark' | 'auto';
-export type BreakPoint = 'mobile' | 'tablet' | 'desktop';
-```
-
-**Exception**: Component-specific types that won't be reused can stay colocated in the component file.
-
----
-
-### ADR-006: Performance Optimization Strategy
-
-**Decision**: Balanced optimization - standard best practices without over-engineering
-
-**Rationale**:
-- Portfolio site doesn't need aggressive optimization
-- Premature optimization adds complexity
-- Focus on low-hanging fruit with high impact
-
-**Optimizations to include**:
-1. **Code splitting**: Dynamic imports for heavy routes (Android, Web showcases)
-2. **Image optimization**: Lazy loading for images below the fold
-3. **Asset preloading**: Preload critical fonts and hero images
-4. **Tree shaking**: Ensure unused code is eliminated (verify build output)
-
-**Optimizations to skip**:
-- Virtual scrolling (lists aren't long enough)
-- Complex memoization strategies (components are fast enough)
-- Service worker/offline support (not required for portfolio)
-- Advanced bundle analysis (unless bundle size becomes an issue)
-
----
-
-### ADR-007: Navigation System Approach
-
-**Decision**: Conservative, incremental updates with extensive testing
-
-**Rationale**:
-- User reported navigation has been problematic
-- Breaking navigation breaks the entire site
-- Better to be cautious than introduce regressions
-
-**Approach**:
-1. Make minimal changes to Header.svelte
-2. Test thoroughly after each small change
-3. Keep existing patterns if they work
-4. Only modernize what's clearly outdated
-5. Phase 6 is dedicated entirely to navigation (separate from other component work)
-
-**Testing checklist for navigation**:
-- [ ] Menu opens and closes correctly
-- [ ] Navigation links work on all routes
-- [ ] Mobile menu works (if applicable)
-- [ ] Active route highlighting works
-- [ ] Keyboard navigation works
-- [ ] No console errors
-- [ ] Smooth animations (if any)
-
----
-
-## Design Decisions & Rationale
-
-### Why Aggressive Refactoring (Except Navigation)?
-
-The codebase is already on Svelte 5 and SvelteKit 2, so the migration risk is lower than a major version upgrade. The biggest risks are:
-- Breaking functionality through refactoring
-- Introducing bugs in the navigation
-- CSS changes causing visual regressions
-
-We mitigate these with:
-- Frequent manual testing after each change
-- Atomic commits (easy to rollback)
-- Conservative approach on navigation
-- Fallback plan for CSS custom properties
-
-### Why PascalCase Over kebab-case?
-
-While kebab-case is more "web native" and matches URL conventions, PascalCase has won in the component ecosystem. The mental overhead of switching between conventions (kebab for routes, Pascal for components) is less than the benefit of consistency with the broader JavaScript/TypeScript ecosystem. Additionally, PascalCase makes component imports visually distinct from utility imports.
-
-### Why Type-Based Over Feature-Based Organization?
-
-Feature-based organization shines in large applications with many domain areas. This portfolio has:
-- ~14 Svelte components
-- 4 main routes (home, about, Android, Web, blog)
-- Simple data flow
-
-Type-based organization is clearer for this scale. A developer looking for "the ProjectCard component" immediately knows to check `/lib/components/ui/`, not to search through feature folders.
-
-### Why Pragmatic Runes Over "All Runes"?
-
-Svelte 5's runes are powerful but add syntax overhead. A simple component that receives `project` and renders it doesn't benefit from:
-```svelte
-let { project }: { project: Project } = $props();
-```
-
-When this is clearer:
-```svelte
-export let project: Project;
-```
-
-Use runes when they solve a problem (complex reactivity, fine-grained control). Don't use them to "be modern."
-
----
+- 80% provides strong confidence without diminishing returns
+- Allows pragmatic exclusions (e.g., type definitions, config files)
+- Room for improvement in future iterations
+- Enforced in CI/CD to prevent regression
 
 ## Testing Strategy
 
-### Current State
+### Component Testing Strategy
 
-The codebase has minimal automated tests. Testing will primarily be manual.
+**Goal**: Verify component behavior, not implementation details.
 
-### Testing Approach
+**Patterns**:
+1. **Render with realistic props** - Use fixtures that match production data
+2. **Test user interactions** - Click buttons, type in inputs, navigate
+3. **Assert visible output** - Check what users see, not internal state
+4. **Mock external dependencies** - Stores, API calls, browser APIs
 
-**After each task**:
-1. Run `pnpm dev` and manually test the changes
-2. Check browser console for errors
-3. Test on multiple screen sizes (mobile, tablet, desktop)
-4. Verify no functionality broken
-
-**After each phase**:
-1. Full manual regression test of all routes
-2. Test light/dark theme switching
-3. Test all interactive elements
-4. Verify navigation works completely
-5. Check build output: `pnpm build && pnpm preview`
-
-**Phase 6 (Navigation) requires**:
-- Test on multiple browsers (Chrome, Firefox, Safari)
-- Test all navigation interactions extensively
-- Test edge cases (deep links, back button, etc.)
-
-### Test Automation (Future)
-
-If time permits in Phase 7, add:
-- Playwright tests for critical user flows
-- Visual regression tests for major pages
-- Unit tests for utility functions
-
-But manual testing is acceptable for this refactoring given the project scope.
-
----
-
-## Common Patterns
-
-### Import Conventions
-
+**Example Pattern**:
 ```typescript
-// Types (always use "type" keyword)
-import type { Project, BlogPost } from '$lib/types';
+// Test what users see and do, not how it works internally
+test('ProjectCard displays project information', () => {
+  const project = createMockProject();
+  const { getByText, getByRole } = render(ProjectCard, { props: { project } });
 
-// Components
-import ProjectCard from '$lib/components/ui/ProjectCard.svelte';
-import LinkedInIcon from '$lib/components/icons/LinkedIn.svelte';
-
-// Stores
-import { appStore } from '$lib/stores/app.svelte';
-
-// Data
-import { projects } from '$lib/data/projects';
-
-// Utils
-import { formatDate } from '$lib/utils/date';
+  expect(getByText(project.title)).toBeInTheDocument();
+  expect(getByRole('link')).toHaveAttribute('href', project.link);
+});
 ```
 
-### Component File Structure
+### Store Testing Strategy
 
-```svelte
-<!-- 1. Script tag with types -->
-<script lang="ts">
-  import type { ComponentProps } from '$lib/types';
-  import OtherComponent from './OtherComponent.svelte';
+**Goal**: Verify state management logic, persistence, and side effects.
 
-  // Props
-  export let propName: string;
+**Patterns**:
+1. **Test state initialization** - Verify default values
+2. **Test state mutations** - Call methods, assert state changes
+3. **Test persistence** - Mock localStorage, verify save/load
+4. **Test side effects** - DOM mutations, event listeners
 
-  // Local state (use $state if complex)
-  let localVar = 'value';
+**Isolation**: Each test should create a fresh store instance to avoid shared state.
 
-  // Derived values (use $derived if complex)
-  const computed = propName + localVar;
+### Hook Testing Strategy
 
-  // Functions
-  function handleClick() {
-    // ...
-  }
-</script>
+**Goal**: Verify custom hooks return correct reactive state and handle lifecycle properly.
 
-<!-- 2. Template -->
-<div class="component">
-  <OtherComponent />
-  <button on:click={handleClick}>
-    {computed}
-  </button>
-</div>
+**Patterns**:
+1. **Test initialization** - Verify initial state
+2. **Test reactivity** - Assert state updates trigger re-renders
+3. **Test cleanup** - Verify event listeners and resources are cleaned up
+4. **Mock browser APIs** - Audio, matchMedia, etc.
 
-<!-- 3. Styles (scoped by default) -->
-<style lang="scss">
-  .component {
-    /* Use CSS custom properties */
-    color: var(--color-text-primary);
-    padding: var(--space-4);
-  }
-</style>
-```
+### Route Testing Strategy
 
-### Store Pattern
+**Goal**: Verify data loading, error handling, and parameter parsing.
 
+**Patterns**:
+1. **Test load functions** - Mock fetch, test data transformation
+2. **Test error states** - Simulate failures, verify error handling
+3. **Test dynamic routes** - Verify parameter extraction
+4. **Use real data structures** - Test with production-like fixtures
+
+### Data Testing Strategy
+
+**Goal**: Validate data integrity and type safety.
+
+**Patterns**:
+1. **Type validation** - Ensure data matches TypeScript interfaces
+2. **Required fields** - Verify no missing data
+3. **Data consistency** - Check relationships between data structures
+
+## Shared Conventions
+
+### File Naming
+- Test files: `*.test.ts` or `*.test.svelte.ts`
+- Test utilities: `kebab-case.ts`
+- Fixtures: `kebab-case.ts` in `fixtures/` subdirectory
+
+### Test Structure
+Use descriptive test names following this pattern:
 ```typescript
-// /lib/stores/example.svelte.ts
-import { browser } from '$app/environment';
+describe('ComponentName', () => {
+  describe('featureOrBehavior', () => {
+    test('should do something specific when condition', () => {
+      // Arrange
+      const props = createMockProps();
 
-interface ExampleState {
-  value: string;
-  count: number;
-}
+      // Act
+      const { getByRole } = render(Component, { props });
+      fireEvent.click(getByRole('button'));
 
-function createExampleStore() {
-  let state = $state<ExampleState>({
-    value: '',
-    count: 0
+      // Assert
+      expect(getByRole('alert')).toHaveTextContent('Expected message');
+    });
   });
-
-  return {
-    get value() { return state.value; },
-    get count() { return state.count; },
-
-    increment() {
-      state.count++;
-    },
-
-    setValue(newValue: string) {
-      state.value = newValue;
-    }
-  };
-}
-
-export const exampleStore = createExampleStore();
+});
 ```
 
----
+### Mock Naming
+- Mock functions: `mockFunctionName`
+- Mock data: `createMockEntityName()` (factory function)
+- Fixtures: `entityNameFixture` (static data)
+
+### Assertions
+- Prefer semantic queries: `getByRole`, `getByLabelText`, `getByText`
+- Avoid implementation details: No `container.querySelector('.class')`
+- Use jest-dom matchers: `toBeInTheDocument()`, `toHaveTextContent()`, etc.
 
 ## Common Pitfalls to Avoid
 
-### 1. Breaking Imports During Renames
-
-When renaming files, update all imports immediately. Use your editor's "Find All References" feature.
-
-**Process**:
-1. Find all imports of the file (grep/search)
-2. Rename the file
-3. Update all imports
-4. Test the app
-5. Commit
-
-### 2. Forgetting Route Components
-
-Don't rename `+page.svelte` or `+layout.svelte` files - these are SvelteKit conventions that must stay as-is.
-
-### 3. Over-Using Runes
-
-Don't convert every `export let` to `$props()`. Simple is better.
-
-### 4. CSS Custom Property Specificity Issues
-
-CSS custom properties don't increase specificity. If you have issues, you might need to restructure selectors or use fallback SCSS.
-
-### 5. Breaking Navigation
-
-Test navigation after EVERY change in Phase 6. Even small CSS changes can break layout.
-
-### 6. Forgetting TypeScript Imports
-
-Always use `import type` for types:
+### 1. Testing Implementation Details
+L **Don't**: Test internal state, private methods, or CSS classes
 ```typescript
-// ✅ Good
-import type { Project } from '$lib/types';
-
-// ❌ Bad - bundles type in runtime
-import { Project } from '$lib/types';
+// Bad
+expect(component.instance().state.count).toBe(5);
 ```
 
-### 7. Mixing Old and New Patterns
-
-Don't leave half-migrated code. Finish each component fully before moving on.
-
----
-
-## Git Commit Conventions
-
-Use conventional commits format:
-
-```
-<type>(<scope>): <subject>
-
-<body>
+ **Do**: Test observable behavior
+```typescript
+// Good
+expect(getByText('Count: 5')).toBeInTheDocument();
 ```
 
-**Types**:
-- `feat`: New feature
-- `refactor`: Code refactoring
-- `style`: Style/formatting changes
-- `perf`: Performance improvements
-- `chore`: Build/config changes
-- `docs`: Documentation
-- `test`: Tests
-
-**Examples**:
-```
-refactor(components): rename ProjectCard component to PascalCase
-
-- Rename project-card.svelte to ProjectCard.svelte
-- Update all imports
-- Verify app still works
+### 2. Overmocking
+L **Don't**: Mock everything, including trivial utilities
+```typescript
+// Bad - unnecessarily complex
+vi.mock('$lib/utils/format', () => ({ formatDate: vi.fn() }));
 ```
 
-```
-style(theme): migrate color variables to CSS custom properties
-
-- Create color design tokens in app.css
-- Replace SCSS $color-* with --color-*
-- Test light and dark themes
+ **Do**: Mock only external dependencies (API calls, browser APIs, stores)
+```typescript
+// Good - mock real external dependency
+vi.mock('$app/environment', () => ({ browser: true }));
 ```
 
-```
-perf(images): add lazy loading to ImageGrid component
-
-- Add loading="lazy" to images below fold
-- Preload hero image
-- Test loading behavior
-```
-
-**Git Author Configuration**:
-```bash
-git config --global user.email "82614182+HatmanStack@users.noreply.github.com"
-git config --global user.name "HatmanStack"
+### 3. Shared State Between Tests
+L **Don't**: Reuse stores or global state across tests
+```typescript
+// Bad
+const store = createStore();
+test('test1', () => { store.set('value1') });
+test('test2', () => { /* store still has value1! */ });
 ```
 
-Do NOT use "Claude Code" or AI tool names in commits. Always use the HatmanStack identity.
+ **Do**: Create fresh instances in beforeEach or per-test
+```typescript
+// Good
+beforeEach(() => {
+  store = createStore();
+});
+```
 
----
+### 4. Brittle Selectors
+L **Don't**: Query by CSS classes or element types
+```typescript
+// Bad
+container.querySelector('.btn-primary');
+```
 
-## Phase Completion Criteria
+ **Do**: Use accessible queries
+```typescript
+// Good
+getByRole('button', { name: 'Submit' });
+```
 
-Before marking a phase complete, verify:
+### 5. Not Testing Error States
+L **Don't**: Only test happy paths
+```typescript
+// Bad - no error handling tested
+test('loads data', async () => {
+  const data = await load({ params: { id: '1' } });
+  expect(data.post).toBeDefined();
+});
+```
 
-- [ ] All tasks in the phase are completed
-- [ ] All verification checklists are satisfied
-- [ ] Manual testing shows no regressions
-- [ ] All changes are committed with proper commit messages
-- [ ] `pnpm dev` runs without errors
-- [ ] `pnpm build` succeeds
-- [ ] Built app (`pnpm preview`) works correctly
+ **Do**: Test error conditions explicitly
+```typescript
+// Good
+test('handles missing post gracefully', async () => {
+  const result = await load({ params: { id: 'nonexistent' } });
+  expect(result.error).toBeDefined();
+});
+```
 
-If any item fails, debug and fix before proceeding to the next phase.
+## Testing Patterns Reference
 
----
+### Pattern: Mocking Stores
+```typescript
+import { vi } from 'vitest';
 
-## Questions or Issues?
+vi.mock('$lib/stores/app.svelte', () => ({
+  appStore: {
+    state: {
+      preferences: { soundEnabled: true }
+    },
+    toggleSound: vi.fn()
+  }
+}));
+```
 
-If you encounter:
-- **Unclear requirements**: Refer to the task description in the phase file
-- **Technical blockers**: Check this Phase-0 document for patterns
-- **Breaking changes**: Commit current work, document the issue, ask for guidance
-- **Test failures**: Debug immediately, don't proceed until resolved
+### Pattern: Mocking SvelteKit Modules
+```typescript
+vi.mock('$app/environment', () => ({
+  browser: true,
+  dev: false
+}));
 
-This is an aggressive refactoring, but each phase is designed to be completable. Take your time, test thoroughly, commit frequently.
+vi.mock('$app/navigation', () => ({
+  goto: vi.fn()
+}));
+```
+
+### Pattern: Testing localStorage
+```typescript
+beforeEach(() => {
+  const localStorageMock = {
+    getItem: vi.fn(),
+    setItem: vi.fn(),
+    clear: vi.fn()
+  };
+  global.localStorage = localStorageMock as any;
+});
+```
+
+### Pattern: Testing Async Components
+```typescript
+test('loads data asynchronously', async () => {
+  const { findByText } = render(AsyncComponent);
+
+  // Wait for element to appear
+  const element = await findByText('Loaded content');
+  expect(element).toBeInTheDocument();
+});
+```
+
+### Pattern: Testing User Interactions
+```typescript
+import { fireEvent } from '@testing-library/svelte';
+
+test('toggles menu on button click', async () => {
+  const { getByRole, getByText } = render(Navigation);
+
+  const button = getByRole('button', { name: 'Toggle menu' });
+  await fireEvent.click(button);
+
+  expect(getByText('Menu Item')).toBeVisible();
+});
+```
+
+## TDD Workflow Recommendation
+
+While not required, Test-Driven Development can be beneficial:
+
+1. **Red**: Write a failing test that defines desired behavior
+2. **Green**: Write minimal code to make the test pass
+3. **Refactor**: Improve code while keeping tests green
+4. **Commit**: Atomic commit with both test and implementation
+
+For this project, we're retrofitting tests to existing code, so:
+1. Write tests for current behavior first
+2. Ensure tests pass (confirms understanding)
+3. Refactor with confidence
+4. Add new tests for edge cases
+
+## Next Steps
+
+Once you've read and understood Phase 0, proceed to **[Phase 1: Test Infrastructure & Setup](./Phase-1.md)** to begin implementation.

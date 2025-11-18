@@ -1,95 +1,100 @@
-# Svelte Portfolio Modernization - Implementation Plan
+# Comprehensive Test Suite Implementation Plan
 
 ## Feature Overview
 
-This is a comprehensive refactoring project to modernize an existing Svelte 5 portfolio application to align with current best practices, naming conventions, and optimization patterns. The project is already using Svelte 5.0.0 and SvelteKit 2.0.0, but contains mixed patterns from the migration period, inconsistent naming conventions, legacy SCSS variable usage, and opportunities for better organization and performance.
+This plan outlines the implementation of a comprehensive, unit-focused test suite for the SvelteKit portfolio application. The primary goal is to provide **confidence in deployments** by catching regressions before production across all critical functionality: blog/content system, project showcases, visual/interactive elements, and navigation/core UX.
 
-The refactoring will aggressively modernize all aspects of the codebase while maintaining 100% functionality. We'll standardize on PascalCase component naming, type-based directory organization, pragmatic Svelte 5 runes adoption, CSS custom properties for theming, centralized type definitions, and balanced performance optimizations. The only conservative area is the navigation system, which has been problematic and requires careful, incremental updates with thorough testing.
+The test suite uses **Vitest** as the test runner with **@testing-library/svelte** for component testing, providing fast execution, excellent SvelteKit integration, and a modern testing API. Tests are colocated with source files, following the `*.test.ts` naming convention, with shared utilities and fixtures centralized for reusability.
 
-This plan breaks the work into digestible phases, each designed to fit within a single context window (~100k tokens) and build upon previous phases. The implementation should follow test-driven development principles, make frequent atomic commits, and maintain a working application at the end of each phase.
+This implementation prioritizes isolated unit tests with mocked dependencies, ensuring fast CI/CD feedback loops and reliable regression detection. The suite includes comprehensive coverage of data models, stores, hooks, UI components, routes, and blog rendering functionality, with an initial coverage threshold target of 80%.
 
 ## Prerequisites
 
-### Development Environment
-- Node.js 18+ and pnpm package manager
-- Git configured with user credentials:
-  ```bash
-  git config --global user.email "82614182+HatmanStack@users.noreply.github.com"
-  git config --global user.name "HatmanStack"
-  ```
-- TypeScript-capable editor (VS Code recommended with Svelte extension)
-- Modern browser for testing (Chrome/Firefox/Safari)
+### Required Tools & Environment
+- **Node.js**: v18+ (verify with `node --version`)
+- **pnpm**: Latest version (verify with `pnpm --version`)
+- **Git**: For version control and commits
+  - Configure credentials before starting:
+    ```bash
+    git config user.name "HatmanStack"
+    git config user.email "82614182+HatmanStack@users.noreply.github.com"
+    ```
+- **IDE**: VS Code recommended with Svelte extensions
 
-### Technical Knowledge
-- Svelte 5 runes API (`$state()`, `$props()`, `$derived()`, `$effect()`)
-- SvelteKit 2.0 file-based routing and data loading
-- TypeScript interfaces and type safety
-- CSS custom properties and modern CSS
-- SCSS preprocessing (for fallback scenarios)
-- Git conventional commits format
+### Dependencies to Install
+All testing dependencies will be installed in Phase 1:
+- `vitest` - Test runner
+- `@testing-library/svelte` - Component testing utilities
+- `@testing-library/jest-dom` - Extended DOM matchers
+- `jsdom` - Browser environment simulation
+- `@vitest/ui` - Interactive test UI
+- `@vitest/coverage-v8` - Code coverage reporting
 
-### Existing Codebase
-- Current working branch: `claude/refactor-svelte-modernize-01LsR5kgWUuPzQD8SZQteBbw`
-- All changes will be developed and committed to this branch
-- Application must remain functional after each phase
+### Environment Setup
+- Ensure the project builds successfully: `pnpm build`
+- Verify type checking passes: `pnpm check`
+- Confirm you're on the correct git branch: `claude/design-test-suite-01WFo7NCaD3Mu3DAxuTmXn1o`
 
 ## Phase Summary
 
-| Phase | Goal | Token Estimate |
-|-------|------|----------------|
-| **Phase 0** | Foundation & Architecture Decisions | N/A (Reference) |
-| **Phase 1** | File Structure & Naming Conventions | ~95,000 |
-| **Phase 2** | Component Modernization (Non-Navigation) | ~95,000 |
-| **Phase 3** | Styling Architecture Migration | ~90,000 |
-| **Phase 4** | Type System Organization | ~70,000 |
-| **Phase 5** | Performance Optimizations | ~80,000 |
-| **Phase 6** | Navigation System (Conservative) | ~75,000 |
-| **Phase 7** | Final Testing & Documentation | ~60,000 |
-| **TOTAL** | | ~565,000 |
+| Phase | Goal | Estimated Tokens | Status |
+|-------|------|------------------|--------|
+| [Phase 0](./Phase-0.md) | Foundation - Architecture & Testing Strategy | ~8,000 | Pending |
+| [Phase 1](./Phase-1.md) | Test Infrastructure & Setup | ~18,000 | Pending |
+| [Phase 2](./Phase-2.md) | Data Layer & Type Testing | ~22,000 | Pending |
+| [Phase 3](./Phase-3.md) | Stores & Hooks Testing | ~28,000 | Pending |
+| [Phase 4](./Phase-4.md) | Component Testing | ~35,000 | Pending |
+| [Phase 5](./Phase-5.md) | Route & Page Testing | ~25,000 | Pending |
+| [Phase 6](./Phase-6.md) | CI/CD Integration & Documentation | ~18,000 | Pending |
+
+**Total Estimated Tokens**: ~154,000
 
 ## Navigation
 
-- **[Phase 0: Foundation](./Phase-0.md)** - Architecture decisions, conventions, patterns, and testing strategy
-- **[Phase 1: File Structure & Naming](./Phase-1.md)** - Update dependencies, fix vulnerabilities, rename components to PascalCase, reorganize directories
-- **[Phase 2: Component Modernization](./Phase-2.md)** - Convert components to Svelte 5 runes patterns
-- **[Phase 3: Styling Architecture](./Phase-3.md)** - Migrate SCSS variables to CSS custom properties
-- **[Phase 4: Type System](./Phase-4.md)** - Refine and organize TypeScript definitions
-- **[Phase 5: Performance](./Phase-5.md)** - Balanced performance improvements across bundle, runtime, and load time
-- **[Phase 6: Navigation System](./Phase-6.md)** - Conservative refactoring of Header component
-- **[Phase 7: Final Testing](./Phase-7.md)** - Comprehensive testing, verification, and documentation
+- **[Phase 0: Foundation](./Phase-0.md)** - Core architecture decisions, testing strategy, and shared conventions
+- **[Phase 1: Test Infrastructure](./Phase-1.md)** - Vitest configuration, test utilities, and mock factories
+- **[Phase 2: Data Layer Testing](./Phase-2.md)** - Type validation, data model testing, and fixture creation
+- **[Phase 3: Stores & Hooks Testing](./Phase-3.md)** - State management, localStorage persistence, and sound hooks
+- **[Phase 4: Component Testing](./Phase-4.md)** - UI component testing including ProjectCard, ImageGrid, GooeyButton, etc.
+- **[Phase 5: Route Testing](./Phase-5.md)** - Page load functions, blog post rendering, and routing logic
+- **[Phase 6: CI/CD Integration](./Phase-6.md)** - GitHub Actions, coverage reporting, and documentation
 
 ## Development Workflow
 
-Each phase should follow this workflow:
+Each phase follows this pattern:
+1. **Read the phase file** - Understand goals and prerequisites
+2. **Complete tasks sequentially** - Follow the task order as dependencies exist
+3. **Run tests frequently** - Execute `pnpm test` after each task
+4. **Commit atomically** - Use conventional commit format after each completed task
+5. **Verify phase completion** - Check off all verification criteria before moving to next phase
 
-1. **Read Phase-0.md** - Review architecture decisions and conventions
-2. **Read Phase-N.md** - Understand the phase goal and prerequisites
-3. **Complete tasks sequentially** - Follow the task order in each phase
-4. **Test continuously** - Run tests after each task
-5. **Commit atomically** - Use conventional commit format after each task
-6. **Verify phase completion** - Complete all verification checklists
-7. **Proceed to next phase** - Only after current phase is fully verified
+## Commit Message Format
+
+Follow conventional commits throughout:
+```
+type(scope): brief description
+
+- Detail 1
+- Detail 2
+- Detail 3
+```
+
+**Types**: `feat`, `fix`, `test`, `refactor`, `docs`, `chore`, `style`, `perf`
+**Scopes**: `tests`, `config`, `data`, `stores`, `components`, `routes`, `ci`, `docs`
 
 ## Success Criteria
 
-The refactoring is complete when:
+This test suite implementation is complete when:
+- [ ] All 6 phases are implemented and verified
+- [ ] Test coverage meets 80% threshold across all categories
+- [ ] All tests pass in CI/CD pipeline
+- [ ] Test execution completes in under 30 seconds
+- [ ] Zero regressions detected in existing functionality
+- [ ] Documentation is complete and accessible to team
 
-- ✅ All components use PascalCase naming convention
-- ✅ Directory structure follows type-based organization
-- ✅ Stateful components use Svelte 5 runes appropriately
-- ✅ Theming uses CSS custom properties (or SCSS if fallback needed)
-- ✅ All types are centralized in `/lib/types/`
-- ✅ Performance meets or exceeds current benchmarks
-- ✅ Navigation system is functional and tested
-- ✅ All tests pass
-- ✅ Application functionality is 100% maintained
-- ✅ Code is consistent, well-organized, and maintainable
+## Support & Questions
 
-## Notes for Implementation Engineer
-
-- **Branch**: All work happens on `claude/refactor-svelte-modernize-01LsR5kgWUuPzQD8SZQteBbw`
-- **Git author**: Use HatmanStack credentials (see Prerequisites)
-- **Testing**: Test manually after each significant change (automated tests are minimal in current codebase)
-- **Navigation**: Be extra careful with Header.svelte and navigation-related code - test thoroughly before committing
-- **Fallback plan**: If CSS custom properties cause issues in Phase 3, fall back to hybrid approach (Phase 3 includes guidance)
-- **Questions**: If anything is unclear, refer to Phase-0.md for architecture decisions and patterns
+If you encounter issues or need clarification:
+- Review the [Phase 0 Foundation](./Phase-0.md) for architectural context
+- Check the testing strategy section for patterns and conventions
+- Refer to specific phase files for detailed task instructions

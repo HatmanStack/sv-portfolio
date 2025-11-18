@@ -1,1124 +1,854 @@
-# Phase 4: Type System Organization
+# Phase 4: Component Testing
 
 ## Phase Goal
 
-Refine and organize the TypeScript type system to follow a centralized, well-documented structure. All shared types will live in `/lib/types/index.ts` as a single source of truth, with clear organization, comprehensive JSDoc comments, and strict type safety across the codebase. This makes the type system easier to maintain and prevents type drift.
+Test all UI components to ensure they render correctly, handle props appropriately, respond to user interactions, and maintain visual behavior. This phase covers all components in src/lib/components/, focusing on testing observable behavior rather than implementation details.
 
-**Success Criteria**:
-- All shared types centralized in `/lib/types/index.ts`
-- Types are well-organized with clear categories
-- Comprehensive JSDoc documentation for all types
-- No duplicate type definitions across codebase
-- All imports use `import type { }` syntax
-- TypeScript strict mode passes (`pnpm run check`)
+**Success criteria**:
+- All components have test coverage
+- Props are validated for correct rendering
+- User interactions trigger expected behavior
+- Component integration with stores and hooks is tested
+- Visual behavior is validated through DOM assertions
 
-**Estimated tokens**: ~70,000
-
----
+**Estimated tokens**: ~35,000
 
 ## Prerequisites
 
-- Phase 0 read (especially ADR-005 on type organization)
-- Phases 1-3 complete (structure, components, styles modernized)
-- TypeScript fundamentals understood
-- Application builds and runs successfully
-
----
+- Phase 0, 1, 2, and 3 completed and verified
+- Understanding of @testing-library/svelte patterns
+- Familiarity with all components in src/lib/components/
+- render-helpers.ts available from Phase 1
+- mock-factories.ts available from Phase 1
 
 ## Tasks
 
-### Task 1: Audit Current Type System
+### Task 1: Test ProjectCard Component - Rendering
 
-**Goal**: Identify all TypeScript types, interfaces, and type definitions across the codebase, understanding current organization and identifying opportunities for consolidation.
+**Goal**: Test that ProjectCard renders project data correctly with different prop combinations.
 
-**Files to Review**:
-- `/src/lib/types/index.ts` - Current centralized types
-- All `.svelte` files - Component prop types
-- All `.ts`/`.js` files - Utility function types
-- `/src/lib/stores/*.svelte.ts` - Store types
-- Route files with PageData types
+**Files to Modify/Create**:
+- `src/lib/components/ui/ProjectCard.test.ts` - ProjectCard tests
 
 **Prerequisites**:
-- None
+- Phase 1-3 completed
+- Review src/lib/components/ui/ProjectCard.svelte
+- createMockProject factory available
 
 **Implementation Steps**:
+1. Create ProjectCard.test.ts next to ProjectCard.svelte
+2. Import render from test utilities
+3. Import createMockProject factory
+4. Mock the sound store to avoid Audio API issues
+5. Test rendering with default props
+6. Test rendering with custom lazy loading
+7. Test all project data is displayed
+8. Verify images have correct attributes
 
-1. Read `/src/lib/types/index.ts`:
-   - Catalog all existing types
-   - Note organization (or lack thereof)
-   - Identify any documentation
-   - Check for export patterns
+**Mocking Strategy**:
+```typescript
+vi.mock('$lib/hooks/useSound.svelte', () => ({
+  createSoundStore: vi.fn(() => ({
+    play: vi.fn(),
+    pause: vi.fn(),
+    stop: vi.fn(),
+    isLoaded: true,
+    error: null,
+    audio: null
+  }))
+}));
+```
 
-2. Search for type definitions in components:
-   - Look for `interface Props` in components
-   - Note which are reusable vs component-specific
-   - Identify duplicate types (same shape, different names)
+**Test Cases to Include**:
+```typescript
+describe('ProjectCard - Rendering', () => {
+  test('renders project title', () => {
+    const project = createMockProject({ title: 'Test Project' });
+    const { getByText } = render(ProjectCard, { props: { project } });
 
-3. Search for types in other files:
-   - Stores: What types do they export?
-   - Utils: Any function parameter/return types?
-   - Data files: Are data shapes typed?
+    expect(getByText('Test Project')).toBeInTheDocument();
+  });
 
-4. Review SvelteKit generated types:
-   - Check `$types` imports in route files
-   - Understand PageData, LayoutData patterns
-   - Note which are auto-generated vs manual
+  test('renders project category', () => {
+    const project = createMockProject({ category: 'Web' });
+    const { getByText } = render(ProjectCard, { props: { project } });
 
-5. Identify issues:
-   - Duplicate types
-   - Inconsistent naming
-   - Missing types (any usage of `any`)
-   - Poor organization
-   - Lack of documentation
+    expect(getByText('Web')).toBeInTheDocument();
+  });
 
-6. Create consolidation plan:
-   - Which types should be centralized
-   - Which types should stay colocated
-   - How to organize into categories
-   - Documentation standards to apply
+  test('renders project description', () => {
+    const project = createMockProject({ description: 'Test description' });
+    const { getByText } = render(ProjectCard, { props: { project } });
+
+    expect(getByText('Test description')).toBeInTheDocument();
+  });
+
+  test('renders profession and profile images', () => {
+    const project = createMockProject({
+      images: { profession: '/prof.jpg', profile: '/profile.jpg' }
+    });
+    const { container } = render(ProjectCard, { props: { project } });
+
+    const images = container.querySelectorAll('img');
+    expect(images).toHaveLength(2);
+    expect(images[0]).toHaveAttribute('src', '/prof.jpg');
+    expect(images[1]).toHaveAttribute('src', '/profile.jpg');
+  });
+
+  test('images have lazy loading by default', () => {
+    const project = createMockProject();
+    const { container } = render(ProjectCard, { props: { project } });
+
+    const images = container.querySelectorAll('img');
+    images.forEach(img => {
+      expect(img).toHaveAttribute('loading', 'lazy');
+    });
+  });
+
+  test('images load eagerly when lazy=false', () => {
+    const project = createMockProject();
+    const { container } = render(ProjectCard, { props: { project, lazy: false } });
+
+    const images = container.querySelectorAll('img');
+    images.forEach(img => {
+      expect(img).toHaveAttribute('loading', 'eager');
+    });
+  });
+
+  test('renders link with correct href', () => {
+    const project = createMockProject({ link: 'https://example.com' });
+    const { getByRole } = render(ProjectCard, { props: { project } });
+
+    const link = getByRole('link');
+    expect(link).toHaveAttribute('href', 'https://example.com');
+  });
+
+  test('renders button with correct text', () => {
+    const project = createMockProject({ buttonText: 'Click Me' });
+    const { getByRole } = render(ProjectCard, { props: { project } });
+
+    const button = getByRole('button', { name: 'Click Me' });
+    expect(button).toBeInTheDocument();
+  });
+});
+```
 
 **Verification Checklist**:
-- [ ] All type definitions cataloged
-- [ ] Current organization understood
-- [ ] Duplicates identified
-- [ ] SvelteKit type patterns understood
-- [ ] Consolidation plan clear
+- [ ] Test file created for ProjectCard
+- [ ] All project fields rendered and tested
+- [ ] Image attributes validated
+- [ ] Lazy loading prop tested
+- [ ] Link and button tested
+- [ ] Sound hook mocked
+- [ ] All tests pass
 
 **Testing Instructions**:
-- No testing for audit
-- Document findings as notes
+- Run `pnpm test ProjectCard`
+- Verify all rendering tests pass
+- Check coverage includes ProjectCard.svelte
 
 **Commit Message Template**:
 ```
-docs(types): audit TypeScript type system
+test(components): test ProjectCard rendering
 
-- Catalog all type definitions across codebase
-- Identify duplicates and inconsistencies
-- Plan type consolidation and organization
-- Document current state
+- Test project data rendering
+- Test images with lazy/eager loading
+- Test link and button rendering
+- Mock sound hook
+- Validate all props
 ```
 
-**Estimated tokens**: ~8,000
+**Estimated tokens**: ~6,000
 
 ---
 
-### Task 2: Define Type Organization Structure
+### Task 2: Test ProjectCard Component - Interactions
 
-**Goal**: Create a clear organizational structure for `/lib/types/index.ts` with distinct categories, making types easy to find and maintain.
+**Goal**: Test user interactions with ProjectCard including button clicks and sound playback.
 
-**Files to Modify**:
-- `/src/lib/types/index.ts` - Reorganize with clear sections
+**Files to Modify/Create**:
+- `src/lib/components/ui/ProjectCard.test.ts` - Add interaction tests
 
 **Prerequisites**:
-- Task 1 complete (audit done)
+- Task 1 completed (rendering tests exist)
 
 **Implementation Steps**:
+1. Add describe block for interactions in existing test file
+2. Set up mocks to capture sound playback calls
+3. Test button click triggers sound
+4. Test GooeyButton integration
+5. Verify onclick handler is called
 
-1. Plan type categories:
-   - **Domain Types**: Core business/content types (Project, BlogPost, etc.)
-   - **Component Types**: Shared component prop interfaces
-   - **Store Types**: State management types
-   - **Utility Types**: Helper types, generic utilities
-   - **Config Types**: App configuration, settings
-   - **Navigation Types**: Menu, route types
-   - **Theme Types**: Theme, color scheme types
+**Test Cases to Include**:
+```typescript
+import { fireEvent } from '@testing-library/svelte';
 
-2. Create structure template:
-   ```typescript
-   // /src/lib/types/index.ts
+describe('ProjectCard - Interactions', () => {
+  test('clicking button plays sound', async () => {
+    const mockPlay = vi.fn();
+    vi.mocked(createSoundStore).mockReturnValue({
+      play: mockPlay,
+      pause: vi.fn(),
+      stop: vi.fn(),
+      setVolume: vi.fn(),
+      isLoaded: true,
+      error: null,
+      audio: null
+    });
 
-   /**
-    * Type Definitions
-    *
-    * Centralized type system for the portfolio application.
-    * All shared types should be defined here and imported as:
-    *
-    * import type { TypeName } from '$lib/types';
-    */
+    const project = createMockProject();
+    const { getByRole } = render(ProjectCard, { props: { project } });
 
-   /* ============================================
-    * Domain Types
-    * ============================================ */
+    const button = getByRole('button');
+    await fireEvent.click(button);
 
-   /* ============================================
-    * Component Prop Types
-    * ============================================ */
+    expect(mockPlay).toHaveBeenCalled();
+  });
 
-   /* ============================================
-    * Store Types
-    * ============================================ */
+  test('integrates with GooeyButton component', () => {
+    const project = createMockProject();
+    const { getByRole } = render(ProjectCard, { props: { project } });
 
-   /* ============================================
-    * Utility Types
-    * ============================================ */
-
-   /* ============================================
-    * Configuration Types
-    * ============================================ */
-
-   /* ============================================
-    * Theme Types
-    * ============================================ */
-   ```
-
-3. Define naming conventions:
-   - Interfaces for object shapes: `Project`, `BlogPost`
-   - Types for unions/aliases: `Theme`, `SortOrder`
-   - Props interfaces: `ProjectCardProps`, `ImageGridProps`
-   - Suffix `Props` for component prop types
-   - Suffix `State` for store state types
-   - Clear, descriptive names
-
-4. Set up documentation standards:
-   - Every type must have JSDoc comment
-   - Explain purpose and usage
-   - Document all properties
-   - Include examples for complex types
-
-5. Reorganize existing types into this structure:
-   - Move types into appropriate categories
-   - Add JSDoc comments to existing types
-   - Ensure consistent formatting
-
-6. Verify organization:
-   - Related types are grouped together
-   - Easy to scan and find types
-   - Clear category boundaries
+    const button = getByRole('button');
+    expect(button).toHaveClass('gooey-button');
+  });
+});
+```
 
 **Verification Checklist**:
-- [ ] Clear category structure defined
-- [ ] Naming conventions established
-- [ ] Documentation standards set
-- [ ] Existing types reorganized
-- [ ] File is well-formatted and scannable
+- [ ] Button click tested
+- [ ] Sound playback verified
+- [ ] GooeyButton integration tested
+- [ ] All interaction tests pass
 
 **Testing Instructions**:
-- Read: Review types file for clarity
-- Check: Run `pnpm run check` - should pass
+- Run `pnpm test ProjectCard`
+- Verify interactions work correctly
+- Check mocks capture calls
 
 **Commit Message Template**:
 ```
-refactor(types): organize type system into clear categories
+test(components): test ProjectCard interactions
 
-- Create structured sections in types/index.ts
-- Establish naming conventions
-- Set documentation standards
-- Reorganize existing types
+- Test button click triggers sound
+- Verify sound playback is called
+- Test GooeyButton integration
+- Validate user interaction flow
 ```
 
-**Estimated tokens**: ~10,000
+**Estimated tokens**: ~4,000
 
 ---
 
-### Task 3: Define Domain Types
+### Task 3: Test GooeyButton Component
 
-**Goal**: Create comprehensive, well-documented types for all domain entities (projects, blog posts, images, etc.).
+**Goal**: Test the GooeyButton component's rendering, props, and pointer interactions.
 
-**Files to Modify**:
-- `/src/lib/types/index.ts` - Add/refine domain types
+**Files to Modify/Create**:
+- `src/lib/components/ui/GooeyButton.test.ts` - GooeyButton tests
 
 **Prerequisites**:
-- Task 2 complete (structure defined)
+- Task 2 completed (ProjectCard fully tested)
+- Review src/lib/components/ui/GooeyButton.svelte
 
 **Implementation Steps**:
+1. Create GooeyButton.test.ts
+2. Test rendering with children
+3. Test onclick handler is called
+4. Test pointer move updates CSS variables
+5. Test pointer over clears animation
+6. Test intro animation lifecycle
+7. Mock setInterval/clearInterval for animation tests
 
-1. Review data files to understand domain entities:
-   - `/src/lib/data/projects.ts` (or similar) - What is a Project?
-   - Blog post files - What is a BlogPost?
-   - Image data - What is an Image?
-   - Navigation data - What are navigation items?
+**Mocking Strategy**:
+```typescript
+beforeEach(() => {
+  vi.useFakeTimers();
+});
 
-2. Define Project type:
-   ```typescript
-   /**
-    * Represents a portfolio project (CodePen favorite).
-    *
-    * Used to display project cards on the home page,
-    * Android showcase, and Web showcase pages.
-    */
-   export interface Project {
-     /** Unique identifier for the project */
-     id: string;
+afterEach(() => {
+  vi.useRealTimers();
+});
+```
 
-     /** Project title/name */
-     title: string;
+**Test Cases to Include**:
+```typescript
+describe('GooeyButton - Rendering', () => {
+  test('renders children content', () => {
+    const { getByRole } = render(GooeyButton, {
+      props: {
+        children: () => 'Click Me'
+      }
+    });
 
-     /** Short description of the project */
-     description: string;
+    const button = getByRole('button');
+    expect(button).toHaveTextContent('Click Me');
+  });
 
-     /** URL to the live project (CodePen, external site, etc.) */
-     url: string;
+  test('renders as button element', () => {
+    const { getByRole } = render(GooeyButton, {
+      props: { children: () => 'Test' }
+    });
 
-     /** Path or URL to project thumbnail image */
-     image: string;
+    expect(getByRole('button')).toBeInTheDocument();
+  });
 
-     /** Technology tags (e.g., "svelte", "css", "animation") */
-     tags: string[];
+  test('has gooey-button class', () => {
+    const { getByRole } = render(GooeyButton, {
+      props: { children: () => 'Test' }
+    });
 
-     /** Category: which showcase page to display on */
-     category?: 'android' | 'web' | 'general';
+    expect(getByRole('button')).toHaveClass('gooey-button');
+  });
+});
 
-     /** Optional date created/published */
-     date?: string;
-   }
-   ```
+describe('GooeyButton - Interactions', () => {
+  test('calls onclick when clicked', async () => {
+    const onclick = vi.fn();
+    const { getByRole } = render(GooeyButton, {
+      props: {
+        children: () => 'Test',
+        onclick
+      }
+    });
 
-3. Define BlogPost type:
-   ```typescript
-   /**
-    * Represents a blog post.
-    *
-    * Blog posts are written in Markdown with frontmatter
-    * and loaded via MDSvex.
-    */
-   export interface BlogPost {
-     /** URL-friendly slug (used in route /read/post/[slug]) */
-     slug: string;
+    const button = getByRole('button');
+    await fireEvent.click(button);
 
-     /** Post title */
-     title: string;
+    expect(onclick).toHaveBeenCalled();
+  });
 
-     /** Publication date (YYYY-MM-DD format) */
-     date: string;
+  test('updates CSS variables on pointer move', async () => {
+    const { getByRole } = render(GooeyButton, {
+      props: { children: () => 'Test' }
+    });
 
-     /** Short excerpt/summary for listing pages */
-     excerpt: string;
+    const button = getByRole('button') as HTMLElement;
+    const mockEvent = new PointerEvent('pointermove', {
+      clientX: 100,
+      clientY: 50
+    });
 
-     /** Full post content (HTML from Markdown) */
-     content?: string;
+    // Spy on setProperty
+    const setPropertySpy = vi.spyOn(button.style, 'setProperty');
 
-     /** Optional featured image */
-     image?: string;
+    await fireEvent(button, mockEvent);
 
-     /** Optional tags/categories */
-     tags?: string[];
-   }
+    expect(setPropertySpy).toHaveBeenCalled();
+  });
+});
 
-   /**
-    * Blog post metadata (frontmatter from Markdown files).
-    */
-   export interface BlogPostMetadata {
-     title: string;
-     date: string;
-     excerpt: string;
-     image?: string;
-     tags?: string[];
-   }
-   ```
+describe('GooeyButton - Animation', () => {
+  test('runs intro animation on mount', () => {
+    vi.useFakeTimers();
+    const setIntervalSpy = vi.spyOn(global, 'setInterval');
 
-4. Define Image type (if used):
-   ```typescript
-   /**
-    * Represents an image asset.
-    */
-   export interface ImageAsset {
-     /** Image source path or URL */
-     src: string;
+    render(GooeyButton, {
+      props: { children: () => 'Test' }
+    });
 
-     /** Alt text for accessibility */
-     alt: string;
+    expect(setIntervalSpy).toHaveBeenCalled();
+    vi.useRealTimers();
+  });
 
-     /** Optional width in pixels */
-     width?: number;
+  test('clears animation on pointer over', async () => {
+    vi.useFakeTimers();
+    const clearIntervalSpy = vi.spyOn(global, 'clearInterval');
 
-     /** Optional height in pixels */
-     height?: number;
+    const { getByRole } = render(GooeyButton, {
+      props: { children: () => 'Test' }
+    });
 
-     /** Optional title/caption */
-     title?: string;
-   }
-   ```
+    const button = getByRole('button');
+    await fireEvent.pointerOver(button);
 
-5. Define any other domain types based on your data
-
-6. Ensure consistency with actual data:
-   - Compare types with actual data files
-   - Make properties optional where data might not have them
-   - Use unions for fields with limited values
-
-7. Update data files to use these types:
-   ```typescript
-   // /src/lib/data/projects.ts
-   import type { Project } from '$lib/types';
-
-   export const projects: Project[] = [
-     // ...
-   ];
-   ```
+    expect(clearIntervalSpy).toHaveBeenCalled();
+    vi.useRealTimers();
+  });
+});
+```
 
 **Verification Checklist**:
-- [ ] All domain entities have type definitions
-- [ ] Types match actual data structure
-- [ ] All properties documented with JSDoc
-- [ ] Optional vs required properties correct
-- [ ] Data files import and use these types
-- [ ] TypeScript check passes
+- [ ] Rendering tests pass
+- [ ] onclick handler tested
+- [ ] Pointer interactions tested
+- [ ] Animation lifecycle tested
+- [ ] CSS variable updates verified
+- [ ] All tests pass
 
 **Testing Instructions**:
-- TypeScript: `pnpm run check` should pass
-- Data: Verify data files type-check correctly
-- Editor: Check IntelliSense shows type info
+- Run `pnpm test GooeyButton`
+- Verify timer mocks work correctly
+- Check coverage includes GooeyButton.svelte
 
 **Commit Message Template**:
 ```
-feat(types): define comprehensive domain types
+test(components): test GooeyButton component
 
-- Add Project interface with full documentation
-- Add BlogPost and BlogPostMetadata interfaces
-- Add ImageAsset and other domain types
-- Update data files to use typed exports
-- Ensure type safety for all domain data
+- Test children rendering
+- Test onclick handler
+- Test pointer move and over events
+- Test intro animation lifecycle
+- Mock timers for animation tests
 ```
 
-**Estimated tokens**: ~12,000
+**Estimated tokens**: ~6,000
 
 ---
 
-### Task 4: Define Component Prop Types
+### Task 4: Test ImageGrid Component
 
-**Goal**: Create TypeScript interfaces for all component props, centralizing shared prop types and ensuring type safety across components.
+**Goal**: Test ImageGrid component renders images correctly and handles special items.
 
-**Files to Modify**:
-- `/src/lib/types/index.ts` - Add component prop types
-- Component files - Update to import centralized types
+**Files to Modify/Create**:
+- `src/lib/components/ui/ImageGrid.test.ts` - ImageGrid tests
 
 **Prerequisites**:
-- Task 3 complete (domain types defined)
+- Task 3 completed (GooeyButton tested)
+- Review src/lib/components/ui/ImageGrid.svelte
+- Create mock ImageGridItem factory if needed
 
 **Implementation Steps**:
+1. Create ImageGrid.test.ts
+2. Create mock ImageGridItem factory in mock-factories.ts if needed
+3. Test rendering with array of images
+4. Test special items render content instead of images
+5. Test className prop
+6. Test animation-range CSS variable
+7. Validate grid structure
 
-1. Identify components that should have centralized prop types:
-   - ProjectCard - displays a project
-   - ImageGrid - displays grid of images
-   - GooeyButton - button with effects
-   - Any other reusable components
+**Mock Factory Addition** (add to mock-factories.ts):
+```typescript
+export function createMockImageGridItem(overrides: Partial<ImageGridItem> = {}): ImageGridItem {
+  return {
+    id: 'test-image-1',
+    src: '/test-image.jpg',
+    alt: 'Test image',
+    special: false,
+    animationRange: '0% 100%',
+    ...overrides
+  };
+}
+```
 
-2. Define component prop interfaces:
-   ```typescript
-   /* ============================================
-    * Component Prop Types
-    * ============================================ */
+**Test Cases to Include**:
+```typescript
+describe('ImageGrid - Rendering', () => {
+  test('renders all images', () => {
+    const images = [
+      createMockImageGridItem({ id: '1', alt: 'Image 1' }),
+      createMockImageGridItem({ id: '2', alt: 'Image 2' }),
+      createMockImageGridItem({ id: '3', alt: 'Image 3' })
+    ];
 
-   /**
-    * Props for ProjectCard component.
-    *
-    * Displays a single project as a card with image,
-    * title, description, and tags.
-    */
-   export interface ProjectCardProps {
-     /** The project to display */
-     project: Project;
+    const { getAllByRole } = render(ImageGrid, { props: { images } });
 
-     /** Visual variant of the card */
-     variant?: 'default' | 'compact' | 'featured';
+    const imgs = getAllByRole('img');
+    expect(imgs).toHaveLength(3);
+  });
 
-     /** Whether to show tags */
-     showTags?: boolean;
+  test('renders special items as text', () => {
+    const images = [
+      createMockImageGridItem({ id: '1' }),
+      createMockImageGridItem({
+        id: '2',
+        special: true,
+        content: 'Special Content',
+        src: undefined,
+        alt: undefined
+      } as any)
+    ];
 
-     /** Additional CSS classes */
-     class?: string;
-   }
+    const { getByText, getAllByRole } = render(ImageGrid, { props: { images } });
 
-   /**
-    * Props for ImageGrid component.
-    *
-    * Displays a responsive grid of images with optional
-    * lazy loading and animations.
-    */
-   export interface ImageGridProps {
-     /** Array of images to display */
-     images: ImageAsset[];
+    expect(getByText('Special Content')).toBeInTheDocument();
+    expect(getAllByRole('img')).toHaveLength(1); // Only non-special item
+  });
 
-     /** Number of columns (responsive) */
-     columns?: number | { mobile: number; tablet: number; desktop: number };
+  test('applies custom className', () => {
+    const images = [createMockImageGridItem()];
+    const { container } = render(ImageGrid, {
+      props: { images, className: 'custom-class' }
+    });
 
-     /** Gap between images (in spacing scale units) */
-     gap?: number;
+    const grid = container.querySelector('.stuck-grid');
+    expect(grid).toHaveClass('custom-class');
+  });
 
-     /** Enable lazy loading */
-     lazy?: boolean;
+  test('applies animation-range CSS variable', () => {
+    const images = [
+      createMockImageGridItem({ id: '1', animationRange: '10% 20%' })
+    ];
 
-     /** Animation style for image entrance */
-     animation?: 'fade' | 'slide' | 'none';
-   }
+    const { container } = render(ImageGrid, { props: { images } });
 
-   /**
-    * Props for GooeyButton component.
-    */
-   export interface GooeyButtonProps {
-     /** Button variant/style */
-     variant?: 'primary' | 'secondary' | 'ghost';
+    const gridItem = container.querySelector('.grid-item') as HTMLElement;
+    expect(gridItem.style.getPropertyValue('--animation-range')).toBe('10% 20%');
+  });
 
-     /** Button size */
-     size?: 'sm' | 'md' | 'lg';
+  test('images have lazy loading', () => {
+    const images = [createMockImageGridItem()];
+    const { getByRole } = render(ImageGrid, { props: { images } });
 
-     /** Disabled state */
-     disabled?: boolean;
+    const img = getByRole('img');
+    expect(img).toHaveAttribute('loading', 'lazy');
+  });
 
-     /** Click handler */
-     onclick?: () => void;
+  test('special items have special class', () => {
+    const images = [
+      createMockImageGridItem({
+        id: '1',
+        special: true,
+        content: 'Special'
+      } as any)
+    ];
 
-     /** Additional CSS classes */
-     class?: string;
-   }
-   ```
+    const { container } = render(ImageGrid, { props: { images } });
 
-3. Update components to use these types:
-   ```svelte
-   <!-- ProjectCard.svelte -->
-   <script lang="ts">
-     import type { ProjectCardProps } from '$lib/types';
-
-     let {
-       project,
-       variant = 'default',
-       showTags = true,
-       class: className = ''
-     }: ProjectCardProps = $props();
-   </script>
-   ```
-
-4. For simple components, consider keeping types colocated:
-   - If a component's props are unique and not reused, can keep inline
-   - Only centralize truly shared or complex types
-   - Use judgment
-
-5. Ensure prop types match actual usage:
-   - Check all places component is used
-   - Verify all props are typed
-   - Make sure optional/required is correct
+    const specialItem = container.querySelector('.grid-item');
+    expect(specialItem).toHaveClass('special');
+  });
+});
+```
 
 **Verification Checklist**:
-- [ ] All reusable components have prop types
-- [ ] Prop types documented with JSDoc
-- [ ] Components import and use centralized types
-- [ ] Type safety enforced in component usage
-- [ ] Optional vs required props correct
-- [ ] TypeScript check passes
+- [ ] Image rendering tested
+- [ ] Special items tested
+- [ ] className prop tested
+- [ ] CSS variables tested
+- [ ] Grid structure validated
+- [ ] All tests pass
 
 **Testing Instructions**:
-- TypeScript: `pnpm run check` should pass
-- Editor: IntelliSense shows prop types when using components
-- Usage: Verify components are used with correct prop types
+- Run `pnpm test ImageGrid`
+- Verify grid rendering works
+- Check special item handling
 
 **Commit Message Template**:
 ```
-feat(types): define component prop type interfaces
+test(components): test ImageGrid component
 
-- Add ProjectCardProps, ImageGridProps, GooeyButtonProps
-- Document all component prop interfaces
-- Update components to use centralized types
-- Ensure type safety for component usage
+- Test image rendering
+- Test special items with text content
+- Test className prop
+- Test animation-range CSS variables
+- Validate grid structure
 ```
 
-**Estimated tokens**: ~12,000
+**Estimated tokens**: ~5,000
 
 ---
 
-### Task 5: Define Store Types
+### Task 5: Test SVG Filter Components
 
-**Goal**: Create comprehensive types for all store state, ensuring type safety in state management.
+**Goal**: Test SVGFilters and AndroidFilters components render correct SVG filter definitions.
 
-**Files to Modify**:
-- `/src/lib/types/index.ts` - Add store types
-- `/src/lib/stores/*.svelte.ts` - Update to use centralized types
+**Files to Modify/Create**:
+- `src/lib/components/ui/SVGFilters.test.ts` - SVGFilters tests
+- `src/lib/components/ui/AndroidFilters.test.ts` - AndroidFilters tests (if exists)
 
 **Prerequisites**:
-- Task 4 complete (component types defined)
+- Task 4 completed (ImageGrid tested)
+- Review filter components
 
 **Implementation Steps**:
+1. Create test files for filter components
+2. Test that SVG elements are rendered
+3. Test that filter IDs are correct
+4. Validate filter definitions exist
+5. Check for required filter elements (feGaussianBlur, feColorMatrix, etc.)
 
-1. Review current app store structure:
-   ```typescript
-   // Review /src/lib/stores/app.svelte.ts
-   // Understand current state shape
-   ```
+**Test Cases to Include**:
+```typescript
+describe('SVGFilters', () => {
+  test('renders SVG element', () => {
+    const { container } = render(SVGFilters);
 
-2. Define store types in `/lib/types/index.ts`:
-   ```typescript
-   /* ============================================
-    * Store Types
-    * ============================================ */
+    const svg = container.querySelector('svg');
+    expect(svg).toBeInTheDocument();
+  });
 
-   /**
-    * User preferences state.
-    *
-    * Stored in localStorage and applied app-wide.
-    */
-   export interface PreferencesState {
-     /** Theme preference: light, dark, or auto (system) */
-     theme: Theme;
+  test('renders filter definitions', () => {
+    const { container } = render(SVGFilters);
 
-     /** Whether sound effects are enabled */
-     soundEnabled: boolean;
+    const defs = container.querySelector('defs');
+    expect(defs).toBeInTheDocument();
+  });
 
-     /** Whether to respect prefers-reduced-motion */
-     reducedMotion: boolean;
-   }
+  test('filter has correct ID', () => {
+    const { container } = render(SVGFilters);
 
-   /**
-    * Navigation state.
-    *
-    * Tracks current route, menu state, etc.
-    */
-   export interface NavigationState {
-     /** Current section/route */
-     currentSection: string;
+    // Check for specific filter IDs based on actual component
+    const filter = container.querySelector('filter');
+    expect(filter).toHaveAttribute('id');
+  });
 
-     /** Whether mobile menu is open */
-     isMenuOpen: boolean;
-   }
+  test('renders hidden SVG (position absolute)', () => {
+    const { container } = render(SVGFilters);
 
-   /**
-    * App-wide state.
-    *
-    * Global application state managed by app store.
-    */
-   export interface AppState {
-     /** Navigation state */
-     navigation: NavigationState;
+    const svg = container.querySelector('svg');
+    expect(svg).toHaveStyle({ position: 'absolute' });
+  });
+});
+```
 
-     /** User preferences */
-     preferences: PreferencesState;
-
-     /** Global loading state */
-     isLoading: boolean;
-   }
-   ```
-
-3. Define theme-related types:
-   ```typescript
-   /**
-    * Theme options.
-    *
-    * - `light`: Light mode
-    * - `dark`: Dark mode
-    * - `auto`: Follow system preference
-    */
-   export type Theme = 'light' | 'dark' | 'auto';
-
-   /**
-    * Applied theme (after resolving 'auto').
-    */
-   export type AppliedTheme = 'light' | 'dark';
-   ```
-
-4. Update app store to use these types:
-   ```typescript
-   // /src/lib/stores/app.svelte.ts
-   import type { AppState, PreferencesState, NavigationState } from '$lib/types';
-
-   function createAppStore() {
-     let state = $state<AppState>({
-       navigation: {
-         currentSection: '/',
-         isMenuOpen: false
-       },
-       preferences: {
-         theme: 'auto',
-         soundEnabled: true,
-         reducedMotion: false
-       },
-       isLoading: false
-     });
-
-     // ... rest of store
-   }
-   ```
-
-5. If there are other stores (sound, etc.), type them too:
-   ```typescript
-   /**
-    * Sound state.
-    */
-   export interface SoundState {
-     /** Whether sound is loaded */
-     loaded: boolean;
-
-     /** Whether sound is currently playing */
-     playing: boolean;
-
-     /** Current playback position */
-     currentTime: number;
-
-     /** Total duration */
-     duration: number;
-   }
-   ```
-
-6. Ensure type safety:
-   - All store state is typed
-   - No implicit `any`
-   - Store methods return correct types
+**Note**: Adapt tests based on actual filter component implementation. If AndroidFilters doesn't exist, skip and document in commit.
 
 **Verification Checklist**:
-- [ ] All store state types defined
-- [ ] Theme types defined
-- [ ] Store state interfaces documented
-- [ ] Stores import and use centralized types
-- [ ] Type safety enforced in store usage
-- [ ] TypeScript check passes
+- [ ] SVGFilters test file created
+- [ ] SVG rendering tested
+- [ ] Filter definitions validated
+- [ ] All tests pass
 
 **Testing Instructions**:
-- TypeScript: `pnpm run check` should pass
-- Store: Verify app store state is fully typed
-- Usage: Check store usage across components has correct types
-- Editor: IntelliSense shows store state types
+- Run `pnpm test SVGFilters`
+- Verify SVG structure is correct
 
 **Commit Message Template**:
 ```
-feat(types): define store state type interfaces
+test(components): test SVG filter components
 
-- Add AppState, PreferencesState, NavigationState
-- Define Theme and SoundState types
-- Update stores to use centralized types
-- Ensure type safety for state management
+- Test SVGFilters SVG rendering
+- Validate filter definitions exist
+- Check filter IDs
+- Test hidden SVG positioning
 ```
 
-**Estimated tokens**: ~10,000
+**Estimated tokens**: ~4,000
 
 ---
 
-### Task 6: Define Utility and Helper Types
+### Task 6: Test Icon Components
 
-**Goal**: Create utility types for common patterns, helpers for type transformations, and any other generic types needed across the codebase.
+**Goal**: Test icon components render correct SVG paths and attributes.
 
-**Files to Modify**:
-- `/src/lib/types/index.ts` - Add utility types
+**Files to Modify/Create**:
+- `src/lib/components/icons/LinkedIn.test.ts` - LinkedIn icon test
+- Additional icon tests if other icons exist
 
 **Prerequisites**:
-- Task 5 complete (store types defined)
+- Task 5 completed (filter components tested)
+- Review src/lib/components/icons/
 
 **Implementation Steps**:
+1. Find all icon components in icons directory
+2. Create test file for each icon
+3. Test SVG rendering
+4. Test viewBox attribute
+5. Test path elements exist
+6. Test aria labels if present
 
-1. Identify common utility types needed:
-   - Sort orders
-   - Filter options
-   - Breakpoints
-   - API response shapes
-   - Function parameter/return types
+**Test Cases to Include**:
+```typescript
+describe('LinkedIn Icon', () => {
+  test('renders SVG element', () => {
+    const { container } = render(LinkedIn);
 
-2. Define utility types:
-   ```typescript
-   /* ============================================
-    * Utility Types
-    * ============================================ */
+    const svg = container.querySelector('svg');
+    expect(svg).toBeInTheDocument();
+  });
 
-   /**
-    * Sort order for lists.
-    */
-   export type SortOrder = 'asc' | 'desc';
+  test('has viewBox attribute', () => {
+    const { container } = render(LinkedIn);
 
-   /**
-    * Breakpoint names matching design system.
-    */
-   export type Breakpoint = 'mobile' | 'tablet' | 'desktop';
+    const svg = container.querySelector('svg');
+    expect(svg).toHaveAttribute('viewBox');
+  });
 
-   /**
-    * Loading states for async operations.
-    */
-   export type LoadingState = 'idle' | 'loading' | 'success' | 'error';
+  test('renders path elements', () => {
+    const { container } = render(LinkedIn);
 
-   /**
-    * Generic async data wrapper.
-    */
-   export interface AsyncData<T> {
-     data: T | null;
-     state: LoadingState;
-     error: Error | null;
-   }
+    const paths = container.querySelectorAll('path');
+    expect(paths.length).toBeGreaterThan(0);
+  });
 
-   /**
-    * Pagination info.
-    */
-   export interface Pagination {
-     currentPage: number;
-     totalPages: number;
-     itemsPerPage: number;
-     totalItems: number;
-   }
-   ```
+  test('has accessible role', () => {
+    const { container } = render(LinkedIn);
 
-3. Add helper types for common transformations:
-   ```typescript
-   /**
-    * Make all properties optional deeply.
-    */
-   export type DeepPartial<T> = {
-     [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
-   };
-
-   /**
-    * Make specific keys required.
-    */
-   export type RequireKeys<T, K extends keyof T> = T & Required<Pick<T, K>>;
-
-   /**
-    * Extract props from Svelte component.
-    */
-   export type ComponentProps<T> = T extends new (...args: any[]) => { $set: (props: infer P) => void } ? P : never;
-   ```
-
-4. Only add utility types that are actually used:
-   - Don't create types "just in case"
-   - Wait until you need them
-   - YAGNI principle
-
-5. Document usage examples:
-   ```typescript
-   /**
-    * Async data wrapper for API calls.
-    *
-    * @example
-    * ```typescript
-    * let projectsData = $state<AsyncData<Project[]>>({
-    *   data: null,
-    *   state: 'idle',
-    *   error: null
-    * });
-    * ```
-    */
-   export interface AsyncData<T> {
-     // ...
-   }
-   ```
+    const svg = container.querySelector('svg');
+    expect(svg).toHaveAttribute('role', 'img');
+  });
+});
+```
 
 **Verification Checklist**:
-- [ ] Utility types defined for common patterns
-- [ ] Helper types added if needed
-- [ ] All utility types documented with examples
-- [ ] Only necessary types included (YAGNI)
-- [ ] TypeScript check passes
+- [ ] Icon tests created for all icons
+- [ ] SVG rendering validated
+- [ ] Paths verified
+- [ ] Accessibility checked
+- [ ] All tests pass
 
 **Testing Instructions**:
-- TypeScript: `pnpm run check` should pass
-- Usage: Verify utility types work where used
-- Examples: Test example code snippets in JSDoc
+- Run `pnpm test icons/`
+- Verify all icon components tested
 
 **Commit Message Template**:
 ```
-feat(types): add utility and helper types
+test(components): test icon components
 
-- Define SortOrder, Breakpoint, LoadingState
-- Add AsyncData and Pagination interfaces
-- Include TypeScript helper types
-- Document with usage examples
+- Test LinkedIn icon SVG rendering
+- Test [other icons] if present
+- Validate viewBox and paths
+- Check accessibility attributes
 ```
 
-**Estimated tokens**: ~8,000
+**Estimated tokens**: ~3,000
 
 ---
 
-### Task 7: Ensure Strict Type Imports
+### Task 7: Component Integration Tests
 
-**Goal**: Verify that all type imports across the codebase use the `import type` syntax, ensuring types are not bundled in runtime JavaScript.
+**Goal**: Test how components work together in realistic scenarios.
 
-**Files to Modify**:
-- All files importing types
+**Files to Modify/Create**:
+- `src/lib/components/component-integration.test.ts` - Integration tests
 
 **Prerequisites**:
-- Tasks 1-6 complete (all types defined)
+- All previous component tasks completed
+- Understanding of how components are used together
 
 **Implementation Steps**:
+1. Create integration test file
+2. Test ProjectCard with real GooeyButton
+3. Test multiple ProjectCards rendering together
+4. Test ImageGrid with mixed normal and special items
+5. Verify no conflicts between components
 
-1. Search for type imports without `import type`:
-   ```bash
-   # Look for imports from $lib/types that don't use "import type"
-   grep -r "from '\$lib/types'" src/
-   grep -r 'from "$lib/types"' src/
-   ```
+**Test Cases to Include**:
+```typescript
+describe('Component Integration', () => {
+  test('multiple ProjectCards render without conflicts', () => {
+    const projects = [
+      createMockProject({ id: '1', title: 'Project 1' }),
+      createMockProject({ id: '2', title: 'Project 2' }),
+      createMockProject({ id: '3', title: 'Project 3' })
+    ];
 
-2. For each file with type imports:
-   - Verify using `import type { ... }`
-   - Not `import { ... }`
-   - Types should not be in runtime imports
+    const { getByText } = render({
+      Component: class TestComponent {
+        // Render multiple ProjectCards
+      }
+    });
 
-3. Correct pattern:
-   ```typescript
-   // ✅ Correct
-   import type { Project, BlogPost } from '$lib/types';
-   import { writable } from 'svelte/store';
+    expect(getByText('Project 1')).toBeInTheDocument();
+    expect(getByText('Project 2')).toBeInTheDocument();
+    expect(getByText('Project 3')).toBeInTheDocument();
+  });
 
-   // ❌ Wrong
-   import { Project, BlogPost } from '$lib/types';
-   ```
+  test('ProjectCard integrates correctly with GooeyButton', () => {
+    const project = createMockProject();
+    const { getByRole } = render(ProjectCard, { props: { project } });
 
-4. Check Svelte component imports:
-   ```svelte
-   <script lang="ts">
-     // ✅ Correct
-     import type { ProjectCardProps } from '$lib/types';
+    const button = getByRole('button');
+    expect(button).toHaveClass('gooey-button');
+  });
 
-     // ❌ Wrong
-     import { ProjectCardProps } from '$lib/types';
-   </script>
-   ```
+  test('ImageGrid handles mix of special and regular items', () => {
+    const images = [
+      createMockImageGridItem({ id: '1' }),
+      createMockImageGridItem({ id: '2', special: true, content: 'Special' } as any),
+      createMockImageGridItem({ id: '3' })
+    ];
 
-5. SvelteKit generated types should also use `import type`:
-   ```typescript
-   // ✅ Correct
-   import type { PageData } from './$types';
+    const { getAllByRole, getByText } = render(ImageGrid, { props: { images } });
 
-   // ❌ Wrong
-   import { PageData } from './$types';
-   ```
-
-6. Configure TypeScript to enforce this:
-   - Check `tsconfig.json` has `"verbatimModuleSyntax": true` (if using modern TS)
-   - This enforces explicit `import type`
-
-7. Search and fix all violations:
-   - Use editor find/replace if many files
-   - Test after each batch of changes
-   - Ensure app still works
+    expect(getAllByRole('img')).toHaveLength(2);
+    expect(getByText('Special')).toBeInTheDocument();
+  });
+});
+```
 
 **Verification Checklist**:
-- [ ] All type imports use `import type` syntax
-- [ ] No runtime imports of types
-- [ ] SvelteKit $types imports use `import type`
-- [ ] TypeScript config enforces this (if possible)
-- [ ] No TypeScript errors
-- [ ] Application runs successfully
+- [ ] Integration test file created
+- [ ] Multiple component scenarios tested
+- [ ] Component interactions validated
+- [ ] All tests pass
 
 **Testing Instructions**:
-- Search: Grep for type imports without `import type`
-- TypeScript: `pnpm run check` should pass
-- Build: `pnpm build` should not include types in bundle
-- Runtime: App works identically
+- Run `pnpm test component-integration`
+- Verify components work together
 
 **Commit Message Template**:
 ```
-refactor(types): ensure all type imports use import type syntax
+test(components): add component integration tests
 
-- Convert type imports to use import type
-- Prevent types from bundling in runtime JavaScript
-- Verify TypeScript config enforces explicit type imports
-- Test application functionality
+- Test multiple ProjectCards together
+- Test ProjectCard + GooeyButton integration
+- Test ImageGrid with mixed items
+- Validate component interactions
 ```
 
-**Estimated tokens**: ~8,000
-
----
-
-### Task 8: Add JSDoc Documentation to All Types
-
-**Goal**: Ensure every type, interface, and property has comprehensive JSDoc documentation, making the type system self-explanatory.
-
-**Files to Modify**:
-- `/src/lib/types/index.ts` - Add/improve JSDoc comments
-
-**Prerequisites**:
-- All previous tasks complete
-
-**Implementation Steps**:
-
-1. Review each type in `/lib/types/index.ts`:
-   - Does it have a JSDoc comment?
-   - Is the comment comprehensive?
-   - Are all properties documented?
-
-2. JSDoc documentation standards:
-   ```typescript
-   /**
-    * Brief one-line description of the type.
-    *
-    * More detailed explanation if needed (optional).
-    * Can span multiple lines and include additional context.
-    *
-    * @example
-    * ```typescript
-    * const project: Project = {
-    *   id: 'abc123',
-    *   title: 'Cool Animation',
-    *   description: 'A neat CSS animation',
-    *   url: 'https://codepen.io/...',
-    *   image: '/images/project.png',
-    *   tags: ['css', 'animation']
-    * };
-    * ```
-    */
-   export interface Project {
-     /** Unique identifier for the project */
-     id: string;
-
-     /** Project title/name */
-     title: string;
-
-     /** Short description of the project */
-     description: string;
-
-     /** URL to the live project */
-     url: string;
-
-     /** Path or URL to project thumbnail */
-     image: string;
-
-     /** Technology tags */
-     tags: string[];
-
-     /** Category for filtering (optional) */
-     category?: 'android' | 'web' | 'general';
-   }
-   ```
-
-3. Documentation checklist for each type:
-   - [ ] Type has description comment
-   - [ ] Purpose is explained
-   - [ ] Usage context provided
-   - [ ] Example included (for complex types)
-   - [ ] All properties have inline comments
-   - [ ] Optional vs required is clear
-
-4. For union types:
-   ```typescript
-   /**
-    * Theme options.
-    *
-    * - `light`: Light mode with light background
-    * - `dark`: Dark mode with dark background
-    * - `auto`: Follow system preference (prefers-color-scheme)
-    */
-   export type Theme = 'light' | 'dark' | 'auto';
-   ```
-
-5. For complex types, add usage examples:
-   ```typescript
-   /**
-    * Async data wrapper for managing loading states.
-    *
-    * Useful for components that fetch data and need to
-    * show loading, error, and success states.
-    *
-    * @example
-    * ```typescript
-    * let projects = $state<AsyncData<Project[]>>({
-    *   data: null,
-    *   state: 'idle',
-    *   error: null
-    * });
-    *
-    * async function loadProjects() {
-    *   projects.state = 'loading';
-    *   try {
-    *     const response = await fetch('/api/projects');
-    *     projects.data = await response.json();
-    *     projects.state = 'success';
-    *   } catch (err) {
-    *     projects.error = err;
-    *     projects.state = 'error';
-    *   }
-    * }
-    * ```
-    */
-   export interface AsyncData<T> {
-     // ...
-   }
-   ```
-
-6. Ensure consistent style:
-   - Use full sentences
-   - Be concise but clear
-   - Explain "why" not just "what"
-   - Include context
-
-7. Review the entire file:
-   - Read through as if you were a new developer
-   - Is everything clear?
-   - Are there any ambiguities?
-   - Would you understand how to use each type?
-
-**Verification Checklist**:
-- [ ] All types have JSDoc comments
-- [ ] All properties documented inline
-- [ ] Complex types have examples
-- [ ] Documentation is clear and helpful
-- [ ] Consistent documentation style
-- [ ] File is easy to read and understand
-
-**Testing Instructions**:
-- Read: Review types file as if you're new to the codebase
-- Editor: Hover over types in IDE, verify JSDoc appears
-- Clarity: Ensure all types are self-explanatory
-- Examples: Verify example code is correct
-
-**Commit Message Template**:
-```
-docs(types): add comprehensive JSDoc documentation
-
-- Add JSDoc comments to all types and interfaces
-- Document all properties with inline comments
-- Include usage examples for complex types
-- Ensure consistent documentation style
-- Make type system self-explanatory
-```
-
-**Estimated tokens**: ~10,000
+**Estimated tokens**: ~4,000
 
 ---
 
 ## Phase Verification
 
-Before proceeding to Phase 5, ensure:
+Before moving to Phase 5, verify:
 
-### Type Organization
-- [ ] `/lib/types/index.ts` is well-organized with clear categories
-- [ ] All shared types centralized
-- [ ] Naming conventions consistent
-- [ ] Related types grouped together
+### Test Coverage
+- [ ] All components in src/lib/components/ have tests
+- [ ] ProjectCard fully tested (rendering + interactions)
+- [ ] GooeyButton fully tested
+- [ ] ImageGrid fully tested
+- [ ] SVG filters tested
+- [ ] Icons tested
+- [ ] Integration tests pass
+- [ ] Coverage >80% for components
 
-### Type Coverage
-- [ ] All domain types defined (Project, BlogPost, etc.)
-- [ ] All component prop types defined
-- [ ] All store state types defined
-- [ ] Utility types defined where needed
-- [ ] No missing types (no usage of `any` except where necessary)
+### Component Validation
+- [ ] All components render correctly
+- [ ] Props are validated
+- [ ] User interactions work
+- [ ] CSS classes and styles applied
+- [ ] Accessibility attributes present
+- [ ] No actual sound playback in tests
 
-### Type Safety
-- [ ] All type imports use `import type` syntax
-- [ ] TypeScript strict mode passes (`pnpm run check`)
-- [ ] Components use typed props
-- [ ] Stores use typed state
-- [ ] Data files export typed data
+### Mocking Validation
+- [ ] Sound hooks properly mocked
+- [ ] No Audio API calls in tests
+- [ ] Timers mocked for animations
+- [ ] No side effects leak between tests
 
-### Documentation
-- [ ] Every type has JSDoc comment
-- [ ] Every property documented
-- [ ] Complex types have examples
-- [ ] Documentation is clear and helpful
-- [ ] File header explains purpose
+### File Structure
+```
+src/lib/components/
+  ui/
+    ProjectCard.svelte
+    ProjectCard.test.ts
+    GooeyButton.svelte
+    GooeyButton.test.ts
+    ImageGrid.svelte
+    ImageGrid.test.ts
+    SVGFilters.svelte
+    SVGFilters.test.ts
+    AndroidFilters.svelte
+    AndroidFilters.test.ts (if exists)
+  icons/
+    LinkedIn.svelte
+    LinkedIn.test.ts
+  component-integration.test.ts
+```
 
-### Functionality
-- [ ] Application builds successfully
-- [ ] No TypeScript errors
-- [ ] IntelliSense works correctly
-- [ ] Type checking provides useful feedback
+### Test Execution
+- [ ] `pnpm test components` passes all tests
+- [ ] Tests run quickly (<10 seconds)
+- [ ] No console errors or warnings
+- [ ] Coverage report shows component coverage
 
-### Git
-- [ ] All changes committed atomically
-- [ ] Conventional commits format
-- [ ] Git author is HatmanStack
-
-## Integration Points
-
-This phase enables:
-- **Phase 5**: Performance optimization with type-safe code
-- **Phase 6**: Navigation with proper type safety
-- **Phase 7**: Better testing with well-typed components
-- **Future**: Easier refactoring with comprehensive types
+### Git Validation
+- [ ] All tasks committed separately
+- [ ] Commit author is HatmanStack
+- [ ] Conventional commit format used
+- [ ] Working on correct branch
 
 ## Known Limitations
 
-- Some types may remain colocated in components (component-specific types)
-- SvelteKit generates types in `$types` (not in our control)
-- Some third-party library types can't be improved (external dependencies)
+- Visual appearance not tested (CSS rendering)
+- Animation timing not precisely tested
+- Hover states simulated, not actually triggered
+- Some complex CSS interactions may not be fully validated
 
-## Success Metrics
+## Next Phase
 
-Phase 4 is successful when:
-- Type system is centralized and well-organized
-- All shared types have single source of truth
-- TypeScript provides excellent IntelliSense
-- Refactoring is safer with type checking
-- New developers can understand types easily
-- Documentation makes type system self-explanatory
-- Zero TypeScript errors in strict mode
+Once Phase 4 is complete and verified, proceed to **[Phase 5: Route & Page Testing](./Phase-5.md)** to test routing and page load functions.
