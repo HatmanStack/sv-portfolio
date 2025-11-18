@@ -9,7 +9,6 @@
 
 	function navigateToContainer(event: MouseEvent) {
 		event.preventDefault();
-		console.log('header');
 		const currentPath = window.location.pathname;
 		if (currentPath !== '/') {
 			goto('/').then(() => {

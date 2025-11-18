@@ -14,7 +14,7 @@ export function useSound(soundFile, options) {
 
       // Ensure the audio is loaded
       audio.addEventListener('canplaythrough', () => {
-        console.log('Audio loaded successfully');
+        // Audio ready for playback
       }, false);
 
       audio.addEventListener('error', (e) => {

@@ -10,11 +10,9 @@
 	let mounted = $state(false);
 
 	$effect(() => {
-		console.log('page mounted');
 		appStore.init(); // Initializes theme, preferences, and listeners
 
 		const timeoutId = setTimeout(() => {
-			console.log('showing content now');
 			mounted = true;
 		}, 1000);
 
