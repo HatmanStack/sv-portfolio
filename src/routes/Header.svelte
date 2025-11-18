@@ -39,7 +39,7 @@
 	<nav class="tab-bar">
 	
 	<ul class="tab-bar__tabs">
-		<li class="tab-bar__tab">
+		<li class="tab-bar__tab" use:click_sound>
 			<a class="tab-bar__tab-link" href="/" onclick={navigateToContainer} aria-current={page.url.pathname === '/' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--home" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
 					<g class="tab-bar__tab-icon-1" fill="var(--color-nav-focus-alt)" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
@@ -49,7 +49,7 @@
 				<span class="tab-bar__tab-name">Home</span>
 			</a>
 		</li>
-		<li class="tab-bar__tab">
+		<li class="tab-bar__tab" use:click_sound>
 			<a class="tab-bar__tab-link" href="/web" aria-current={page.url.pathname === '/web' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--videos" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
 					<g fill="var(--color-nav-focus-alt)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -65,7 +65,7 @@
 				<span class="tab-bar__tab-name">Web</span>
 			</a>
 		</li>
-		<li class="tab-bar__tab">
+		<li class="tab-bar__tab" use:click_sound>
 			<a class="tab-bar__tab-link" href="/android" aria-current={page.url.pathname === '/android' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--android" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
 					<g class="tab-bar__tab-icon-1" fill="var(--color-nav-focus-alt)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -79,7 +79,7 @@
 				<span class="tab-bar__tab-name">Android</span>
 			</a>
 		</li>
-		<li class="tab-bar__tab">
+		<li class="tab-bar__tab" use:click_sound>
 			<a class="tab-bar__tab-link" href="/read" aria-current={page.url.pathname === '/read' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--read" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
 					<g class="tab-bar__tab-icon-1" fill="var(--color-nav-focus-alt)" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -92,7 +92,7 @@
 			</a>
 		</li>
 
-		<li class="tab-bar__tab">
+		<li class="tab-bar__tab" use:click_sound>
 			<a class="tab-bar__tab-link" href="/about" aria-current={page.url.pathname === '/about' ? 'page' : undefined}>
 				<svg class="tab-bar__tab-icon tab-bar__tab-icon--profile" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
 					<g fill="var(--color-nav-focus-alt)" stroke="currentColor" stroke-width="2">
