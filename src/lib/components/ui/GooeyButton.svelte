@@ -62,13 +62,13 @@
   </svg>
 </svelte:head>
 
-<button 
+<button
   bind:this={buttonElement}
-  type="button" 
+  type="button"
   class="gooey-button"
-  on:click={onclick}
-  on:pointermove={moveBg}
-  on:pointerover={handlePointerOver}
+  onclick={onclick}
+  onpointermove={moveBg}
+  onpointerover={handlePointerOver}
 >
   {@render children?.()}
 </button>

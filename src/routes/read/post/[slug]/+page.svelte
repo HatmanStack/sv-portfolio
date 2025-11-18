@@ -22,14 +22,14 @@
 <article>
 <Header />
 {#if needsSplit}
-    <h1 class="header-text glow-filter" style="margin-top:.3em;" data-text={firstHalf}/>
-    <h1 class="header-text glow-filter" style="margin-top:1.3em;" data-text={secondHalf}/>
+    <h1 class="header-text glow-filter" style="margin-top:.3em;" data-text={firstHalf}></h1>
+    <h1 class="header-text glow-filter" style="margin-top:1.3em;" data-text={secondHalf}></h1>
   {:else}
-    <h1 class="header-text glow-filter" style="margin-top:.3em;" data-text={data.title}/>
+    <h1 class="header-text glow-filter" style="margin-top:.3em;" data-text={data.title}></h1>
   {/if}
 <div class="post-layout" use:applyClickSound><br>
-   <svelte:component this={data.content} />
-  <p text-align="center"><a href={data.link} target="_blank" rel="noopener noreferrer">Read on Medium</a></p>
+   <data.content />
+  <p style="text-align: center;"><a href={data.link} target="_blank" rel="noopener noreferrer">Read on Medium</a></p>
   </div>
 </article>
 

@@ -29,7 +29,7 @@
 
   $effect(() => {
     if (browser && navigator.userAgent.includes("Firefox")) {
-      const scrollContainer = document.querySelector('.scroll-container');
+      const scrollContainer = document.querySelector('.scroll-container') as HTMLElement | null;
       if (scrollContainer) {
         scrollContainer.style.display = 'none';
       }
