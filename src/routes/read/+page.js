@@ -16,16 +16,20 @@ export const load = async () => {
         // Explicitly cast metadata to include all properties
         const metadata = /** @type {any} */ (post.metadata);
 
+        // Spread metadata first, then slug to ensure extracted slug always wins
         return {
-          slug,
-          ...metadata
+          ...metadata,
+          slug
         };
       })
       .filter(/** @param {any} post */ (post) => post !== null) // Remove any invalid posts
       .sort(/** @param {any} a */ /** @param {any} b */ (a, b) => {
+        // Parse dates and validate to prevent NaN in comparison
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
-        return dateB.getTime() - dateA.getTime();
+        const timeA = isNaN(dateA.getTime()) ? 0 : dateA.getTime();
+        const timeB = isNaN(dateB.getTime()) ? 0 : dateB.getTime();
+        return timeB - timeA;
       });
 
 
