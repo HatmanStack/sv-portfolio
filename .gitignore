@@ -9,6 +9,9 @@ node_modules
 /build
 package-lock.json
 
+# Test coverage
+coverage
+
 # OS
 .DS_Store
 Thumbs.db
