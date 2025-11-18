@@ -1,832 +1,481 @@
-# Phase 2: Component Modernization (Non-Navigation)
+# Phase 2: Data Layer & Type Testing
 
 ## Phase Goal
 
-Modernize all components (except navigation) to leverage Svelte 5's runes API where beneficial. This includes migrating complex stateful components to use `$state()`, `$props()`, `$derived()`, and `$effect()`, while keeping simple components simple. We'll also standardize component patterns, improve TypeScript typing, and enhance code clarity.
+Test all data models, validate type safety, and ensure data integrity across the application. This phase focuses on the foundation of your application data: projects, navigation items, and type definitions. By the end, you'll have confidence that all data structures are valid and type-safe.
 
-**Success Criteria**:
-- All stateful components use Svelte 5 runes appropriately
-- Simple components remain simple (don't over-engineer)
-- All components have proper TypeScript types
-- Component patterns are consistent across codebase
-- Navigation components (Header.svelte) are NOT touched (Phase 6)
+**Success criteria**:
+- All data files have corresponding test coverage
+- Type validation tests ensure data matches TypeScript interfaces
+- Data integrity tests catch missing or malformed data
+- Tests verify data consistency and relationships
 
-**Estimated tokens**: ~95,000
-
----
+**Estimated tokens**: ~22,000
 
 ## Prerequisites
 
-- Phase 0 read and understood (especially ADR-003 on runes adoption)
-- Phase 1 complete (all files renamed and reorganized)
-- Application builds and runs successfully
-- Git configured with HatmanStack credentials
-
----
+- Phase 0 read and understood
+- Phase 1 completed and verified
+- Test infrastructure working (`pnpm test` passes)
+- Understanding of application data structures in src/lib/data/
+- Understanding of type definitions in src/lib/types/
 
 ## Tasks
 
-### Task 1: Audit Components for Runes Migration
+### Task 1: Test Type Definitions
 
-**Goal**: Analyze each component to determine whether it should be migrated to runes or kept simple, creating a migration plan based on component complexity.
+**Goal**: Create tests that validate TypeScript type definitions are correct and complete.
 
-**Files to Review**:
-- `/src/lib/components/ui/*.svelte` (ProjectCard, ImageGrid, GooeyButton, SVGFilters, AndroidFilters)
-- `/src/lib/components/icons/*.svelte` (icon components)
-- `/src/routes/*.svelte` (route page components, but NOT Header.svelte)
-- `/src/lib/hooks/*.svelte.ts` (Svelte runes-based utilities)
+**Files to Modify/Create**:
+- `src/lib/types/index.test.ts` - Type definition tests
 
 **Prerequisites**:
-- None
+- Phase 1 completed
+- Review src/lib/types/index.ts to understand all type definitions
 
 **Implementation Steps**:
+1. Read src/lib/types/index.ts to see all exported types
+2. Create index.test.ts in the same directory
+3. Write tests that validate type completeness
+4. Test that type guards work correctly if any exist
+5. Ensure types are exported properly
 
-1. For each component, assess:
-   - Does it have local reactive state? (candidate for `$state()`)
-   - Does it receive props? (candidate for `$props()` with TypeScript)
-   - Does it have computed values? (candidate for `$derived()`)
-   - Does it have side effects? (candidate for `$effect()`)
-   - Or is it simple/presentational? (keep as-is)
+**Type Validation Patterns**:
+```typescript
+import { describe, test, expect } from 'vitest';
+import type { Project, AppState, NavigationState } from './index';
 
-2. Create mental categories:
-   - **Migrate to runes**: Complex state, reactivity, or side effects
-   - **Keep simple**: Just displays props, minimal logic
-   - **Needs TypeScript improvement**: Correct structure but missing types
-   - **Already modern**: Using runes correctly
+describe('Type Definitions', () => {
+  test('Project type has required fields', () => {
+    const project: Project = {
+      id: 'test',
+      title: 'Test',
+      description: 'Description',
+      category: 'Web',
+      images: { profession: 'a.jpg', profile: 'b.jpg' },
+      link: 'https://test.com',
+      buttonText: 'Click'
+    };
 
-3. Consider existing patterns:
-   - `/src/lib/stores/app.svelte.ts` already uses runes - good pattern to follow
-   - `/src/lib/hooks/useSound.svelte.ts` already uses runes - analyze pattern
-
-4. Document migration priority:
-   - High: Components with complex state/reactivity
-   - Medium: Components with props that need better TypeScript
-   - Low: Simple components working fine
-
-5. Special notes:
-   - **SKIP**: `/src/routes/Header.svelte` (Phase 6 only)
-   - **SKIP**: Any navigation-related components
+    expect(project).toHaveProperty('id');
+    expect(project).toHaveProperty('title');
+    // ... validate all required fields exist
+  });
+});
+```
 
 **Verification Checklist**:
-- [ ] All non-navigation components reviewed
-- [ ] Migration priority determined for each
-- [ ] Understand which components benefit from runes
-- [ ] Have migration strategy clear
-- [ ] Header.svelte confirmed as out-of-scope
+- [ ] Test file created for type definitions
+- [ ] Tests validate all major type interfaces
+- [ ] TypeScript compiles without errors
+- [ ] All type tests pass
+- [ ] Coverage includes type definition file
 
 **Testing Instructions**:
-- No testing needed for audit
-- Document findings as comments or notes
+- Run `pnpm test types` to run type-related tests
+- Verify TypeScript compilation succeeds
+- Check that all type interfaces are validated
 
 **Commit Message Template**:
 ```
-docs(components): audit components for Svelte 5 runes migration
+test(types): validate type definitions
 
-- Analyze component complexity and state management
-- Categorize components by migration priority
-- Document runes adoption strategy
+- Add tests for Project type structure
+- Add tests for AppState type structure
+- Add tests for NavigationState type structure
+- Add tests for UserPreferences type structure
+- Validate all required fields are present
 ```
 
-**Estimated tokens**: ~8,000
+**Estimated tokens**: ~3,500
 
 ---
 
-### Task 2: Modernize ProjectCard Component
+### Task 2: Test Projects Data
 
-**Goal**: Update ProjectCard component to use Svelte 5 runes for props and any internal state, improving type safety and following modern patterns.
+**Goal**: Validate that all project data in src/lib/data/projects.ts is well-formed and matches the Project type.
 
-**Files to Modify**:
-- `/src/lib/components/ui/ProjectCard.svelte`
+**Files to Modify/Create**:
+- `src/lib/data/projects.test.ts` - Project data validation tests
 
 **Prerequisites**:
-- Task 1 complete (audit done)
+- Task 1 completed (type tests exist)
+- Review src/lib/data/projects.ts structure
 
 **Implementation Steps**:
+1. Import the projects array from projects.ts
+2. Test that the array is not empty
+3. Validate each project has all required fields
+4. Test that field values are correct types (strings, objects, etc.)
+5. Validate URLs are well-formed
+6. Ensure image paths exist or are valid
+7. Test data consistency (no duplicate IDs, etc.)
 
-1. Read the current ProjectCard implementation:
-   - Understand current props
-   - Identify any local state
-   - Check for reactive statements or computed values
-   - Note any lifecycle hooks
-
-2. Analyze requirements:
-   - What data does ProjectCard receive? (likely `project` object)
-   - Does it have hover states or other internal reactivity?
-   - Are there any animations or side effects?
-
-3. Migrate to runes pattern:
-   - If it receives props: Convert `export let` to `$props()` with TypeScript interface
-   - If it has local state: Convert to `$state()`
-   - If it has computed values: Convert reactive statements to `$derived()`
-   - If it has side effects: Convert to `$effect()` (though likely not needed)
-
-4. Example pattern (adapt to actual component):
-   ```svelte
-   <script lang="ts">
-     import type { Project } from '$lib/types';
-
-     interface Props {
-       project: Project;
-       variant?: 'default' | 'compact';
-     }
-
-     let { project, variant = 'default' }: Props = $props();
-
-     // If there's hover state
-     let isHovered = $state(false);
-
-     // If there's a computed value
-     let truncatedTitle = $derived(
-       project.title.length > 50
-         ? project.title.slice(0, 50) + '...'
-         : project.title
-     );
-   </script>
-   ```
-
-5. Ensure TypeScript types are imported from `$lib/types`
-
-6. Test the component:
-   - Run `pnpm dev`
-   - Navigate to pages using ProjectCard
-   - Verify component renders correctly
-   - Check console for errors
-   - Test any interactive features
+**Test Cases to Include**:
+- Projects array is not empty
+- Each project has a unique ID
+- Each project has all required fields (title, description, etc.)
+- All links are valid URLs
+- All categories are from a known set
+- All button texts are non-empty strings
+- Image objects have both profession and profile properties
 
 **Verification Checklist**:
-- [ ] ProjectCard uses `$props()` with TypeScript interface
-- [ ] Any local state uses `$state()`
-- [ ] Any computed values use `$derived()` if appropriate
-- [ ] Types imported from `$lib/types`
-- [ ] Component renders correctly on all pages
-- [ ] No console errors
-- [ ] Interactive features work (hover, click, etc.)
+- [ ] Test file exists for projects.ts
+- [ ] Tests validate array is not empty
+- [ ] Tests check all required fields per project
+- [ ] Tests validate data types are correct
+- [ ] Tests check for duplicate IDs
+- [ ] All tests pass
+- [ ] Coverage includes projects.ts
 
 **Testing Instructions**:
-- Manual: Visit home, Android, and Web pages
-- Visual: Verify card styling and layout intact
-- Interaction: Test hover effects, links, etc.
-- Console: Check for no errors
+- Run `pnpm test projects` to run project data tests
+- Verify all validations pass
+- Check coverage report shows projects.ts is covered
 
 **Commit Message Template**:
 ```
-refactor(components): modernize ProjectCard with Svelte 5 runes
+test(data): validate projects data integrity
 
-- Convert props to $props() with TypeScript interface
-- Add local state with $state() if needed
-- Improve type safety with centralized types
-- Verify component functionality
+- Test projects array is not empty
+- Validate all required fields present
+- Check for unique project IDs
+- Validate URL formats
+- Ensure data consistency
 ```
 
-**Estimated tokens**: ~12,000
+**Estimated tokens**: ~4,000
 
 ---
 
-### Task 3: Modernize ImageGrid Component
+### Task 3: Test Android Apps Data
 
-**Goal**: Update ImageGrid component to use Svelte 5 runes, focusing on any animation state, visibility tracking, or complex reactivity.
+**Goal**: Validate android apps data structure and integrity (if androidApps.ts exists in your codebase).
 
-**Files to Modify**:
-- `/src/lib/components/ui/ImageGrid.svelte`
+**Files to Modify/Create**:
+- `src/lib/data/androidApps.test.ts` - Android apps data tests
 
 **Prerequisites**:
-- Task 2 complete (ProjectCard modernized)
+- Task 2 completed (projects data tested)
+- Check if src/lib/data/androidApps.ts exists
 
 **Implementation Steps**:
+1. Verify androidApps.ts exists (if not, skip this task and note in commit)
+2. Import the data structure from androidApps.ts
+3. Write similar validation tests as projects data
+4. Validate Android-specific fields (package names, versions, etc.)
+5. Ensure consistency with related data structures
 
-1. Read current ImageGrid implementation:
-   - Identify props (likely images array, grid configuration)
-   - Check for intersection observer usage (lazy loading)
-   - Look for animation state
-   - Note any complex reactive logic
+**Note**: If androidApps.ts doesn't exist or is empty, create a minimal test that validates this is intentional and commit noting "no Android apps data to test currently".
 
-2. Plan runes migration:
-   - Props: Convert to `$props()` with interface
-   - State: Image loading states, visibility states → `$state()`
-   - Effects: Intersection observer setup → `$effect()`
-   - Computed: Grid calculations or filtering → `$derived()`
-
-3. Handle intersection observer pattern:
-   - If using IntersectionObserver, it's a side effect
-   - Migrate `onMount` or reactive statements to `$effect()`
-   - Ensure cleanup is handled properly
-
-4. Example pattern for effects:
-   ```svelte
-   <script lang="ts">
-     let imageRefs = $state<HTMLElement[]>([]);
-
-     $effect(() => {
-       const observer = new IntersectionObserver((entries) => {
-         // Handle visibility
-       });
-
-       imageRefs.forEach(el => observer.observe(el));
-
-       return () => observer.disconnect(); // Cleanup
-     });
-   </script>
-   ```
-
-5. Maintain animation behavior:
-   - Ensure fade-in, stagger animations still work
-   - Test scroll-triggered animations
-   - Preserve timing and easing
-
-6. Test thoroughly:
-   - Image loading behavior
-   - Lazy loading if implemented
-   - Grid responsiveness
-   - Animations
+**Test Cases to Include** (if data exists):
+- Data array is well-formed
+- All required fields present
+- Android package names are valid format
+- Version numbers are valid
+- Image paths are correct
+- No duplicate entries
 
 **Verification Checklist**:
-- [ ] ImageGrid uses `$props()` for configuration
-- [ ] Visibility/loading state uses `$state()`
-- [ ] Intersection observer or similar effects use `$effect()`
-- [ ] Animations work correctly
-- [ ] Lazy loading functional (if implemented)
-- [ ] Grid layout responsive
-- [ ] No console errors
-- [ ] Performance is maintained or improved
+- [ ] Test file exists (even if minimal)
+- [ ] If data exists, all fields are validated
+- [ ] Tests pass
+- [ ] Coverage includes androidApps.ts
 
 **Testing Instructions**:
-- Manual: Visit home page with image grid
-- Scroll: Test lazy loading behavior
-- Resize: Verify responsive grid
-- Visual: Check animations and transitions
-- Performance: Ensure no jank or slowness
+- Run `pnpm test androidApps`
+- Verify appropriate tests pass based on data presence
 
 **Commit Message Template**:
 ```
-refactor(components): modernize ImageGrid with Svelte 5 runes
+test(data): validate android apps data integrity
 
-- Convert props to $props() with types
-- Migrate state to $state()
-- Use $effect() for intersection observer
-- Preserve animation behavior
-- Test lazy loading and responsiveness
+- Test android apps data structure
+- Validate required fields
+- Check data consistency
+- [or: Note no Android apps data currently present]
 ```
 
-**Estimated tokens**: ~15,000
+**Estimated tokens**: ~3,500
 
 ---
 
-### Task 4: Modernize GooeyButton Component
+### Task 4: Test Web Projects Data
 
-**Goal**: Update GooeyButton component to use runes for any internal state (hover, active, animation states) and props.
+**Goal**: Validate web projects data (if webProjects.ts exists and differs from projects.ts).
 
-**Files to Modify**:
-- `/src/lib/components/ui/GooeyButton.svelte`
+**Files to Modify/Create**:
+- `src/lib/data/webProjects.test.ts` - Web projects data tests
 
 **Prerequisites**:
-- Task 3 complete (ImageGrid modernized)
+- Task 3 completed
+- Determine if webProjects.ts exists and is distinct from projects.ts
 
 **Implementation Steps**:
+1. Check if src/lib/data/webProjects.ts exists
+2. Determine if it's different from projects.ts
+3. If duplicate, note this in comments and create minimal test
+4. If unique, write full validation tests
+5. Validate web-specific fields if any
 
-1. Read current GooeyButton implementation:
-   - Identify props (variant, size, disabled, etc.)
-   - Check for hover/active/focus states
-   - Look for animation triggers
-   - Note SVG filter usage
-
-2. Migrate to runes:
-   - Props: Use `$props()` with interface
-   - State: Hover, active, pressed states → `$state()`
-   - Events: Keep event handlers unless they need reactive behavior
-
-3. Consider interaction states:
-   ```svelte
-   <script lang="ts">
-     interface Props {
-       variant?: 'primary' | 'secondary';
-       disabled?: boolean;
-       onclick?: () => void;
-     }
-
-     let { variant = 'primary', disabled = false, onclick }: Props = $props();
-
-     let isHovered = $state(false);
-     let isPressed = $state(false);
-   </script>
-
-   <button
-     class="gooey-button {variant}"
-     class:disabled
-     on:mouseenter={() => isHovered = true}
-     on:mouseleave={() => isHovered = false}
-     on:mousedown={() => isPressed = true}
-     on:mouseup={() => isPressed = false}
-     {onclick}
-     {disabled}
-   >
-     <slot />
-   </button>
-   ```
-
-4. Maintain gooey filter effect:
-   - SVG filters should continue working
-   - Animation timings preserved
-   - Visual effect identical
-
-5. Test interactions:
-   - Hover effects
-   - Click/press states
-   - Disabled state
-   - Animation smoothness
+**Note**: Your codebase may use projects.ts for all projects. If webProjects.ts doesn't exist or is redundant, document this and create a note in the test file.
 
 **Verification Checklist**:
-- [ ] GooeyButton uses `$props()` for configuration
-- [ ] Interaction states use `$state()`
-- [ ] Button behavior unchanged
-- [ ] Gooey filter effect works
-- [ ] Animations smooth
-- [ ] Disabled state functional
-- [ ] No console errors
+- [ ] Test file created
+- [ ] Data structure validated if exists
+- [ ] Documentation added if data doesn't exist
+- [ ] Tests pass
+- [ ] No redundant test code
 
 **Testing Instructions**:
-- Manual: Find pages using GooeyButton
-- Hover: Test hover animations
-- Click: Verify press/release states
-- Disabled: Test disabled prop
-- Visual: Verify gooey SVG effect renders
+- Run `pnpm test webProjects`
+- Verify tests match data structure reality
 
 **Commit Message Template**:
 ```
-refactor(components): modernize GooeyButton with Svelte 5 runes
+test(data): validate web projects data
 
-- Convert props to $props() with interface
-- Add interaction states with $state()
-- Preserve gooey filter effect
-- Test all button interactions
+- Test web projects data structure
+- Validate required fields
+- [or: Note web projects consolidated in projects.ts]
 ```
 
-**Estimated tokens**: ~12,000
+**Estimated tokens**: ~3,000
 
 ---
 
-### Task 5: Review and Standardize Filter Components
+### Task 5: Test Navigation Data
 
-**Goal**: Review SVGFilters and AndroidFilters components. These are likely presentational components that define SVG filter definitions - keep them simple unless they have complex logic.
+**Goal**: Validate navigation data structure and consistency.
 
-**Files to Review**:
-- `/src/lib/components/ui/SVGFilters.svelte`
-- `/src/lib/components/ui/AndroidFilters.svelte`
+**Files to Modify/Create**:
+- `src/lib/data/navigation.test.ts` - Navigation data tests
 
 **Prerequisites**:
-- Task 4 complete (GooeyButton modernized)
+- Task 4 completed
+- Review src/lib/data/navigation.ts structure
 
 **Implementation Steps**:
+1. Import navigation data from navigation.ts
+2. Validate navigation items array structure
+3. Test that all navigation items have required fields
+4. Validate routes/paths are well-formed
+5. Check for duplicate paths
+6. Ensure labels are non-empty
+7. Test navigation hierarchy if nested
 
-1. Read both filter components:
-   - Are they purely presentational? (just SVG definitions)
-   - Do they receive props? (filter colors, parameters)
-   - Do they have any logic or state?
-
-2. Decision tree:
-   - **If purely static**: Keep as-is (no runes needed)
-   - **If they receive props**: Add `$props()` with TypeScript
-   - **If they have state**: Unlikely, but migrate to `$state()` if so
-
-3. Most likely scenario (static filters):
-   - These components probably just output `<svg>` with `<filter>` definitions
-   - No migration needed - simple is better
-   - Just ensure they're clean and well-commented
-
-4. If they do need props (e.g., configurable colors):
-   ```svelte
-   <script lang="ts">
-     interface Props {
-       primaryColor?: string;
-       intensity?: number;
-     }
-
-     let { primaryColor = '#ff0000', intensity = 1 }: Props = $props();
-   </script>
-
-   <svg style="position: absolute; width: 0; height: 0;">
-     <defs>
-       <filter id="gooey-filter">
-         <!-- filter using primaryColor and intensity -->
-       </filter>
-     </defs>
-   </svg>
-   ```
-
-5. Verify filter effects still work:
-   - Gooey button effects
-   - Android-specific effects
-   - SVG rendering
+**Test Cases to Include**:
+- Navigation array is not empty
+- Each item has label and path
+- Paths start with '/' or are valid routes
+- No duplicate paths
+- Labels are user-friendly strings
+- Icon references are valid if present
 
 **Verification Checklist**:
-- [ ] SVGFilters component reviewed
-- [ ] AndroidFilters component reviewed
-- [ ] Migration decision made (likely keep simple)
-- [ ] If props added, TypeScript interfaces defined
-- [ ] Filter effects render correctly
-- [ ] No visual regressions
+- [ ] Test file exists for navigation.ts
+- [ ] All navigation items validated
+- [ ] Path formats checked
+- [ ] No duplicates detected
+- [ ] Tests pass
+- [ ] Coverage includes navigation.ts
 
 **Testing Instructions**:
-- Visual: Check all pages for filter effects
-- Gooey: Verify gooey button effects work
-- Android: Verify Android page effects work
-- Console: No errors
+- Run `pnpm test navigation`
+- Verify all navigation items are valid
+- Check coverage report
 
 **Commit Message Template**:
 ```
-refactor(components): review filter components
+test(data): validate navigation data
 
-- Analyze SVGFilters and AndroidFilters
-- Keep components simple (presentational)
-- Add TypeScript props if needed
-- Verify filter effects functional
+- Test navigation items structure
+- Validate paths are well-formed
+- Check for duplicate routes
+- Ensure labels are present
+- Validate navigation consistency
 ```
 
-**Estimated tokens**: ~10,000
+**Estimated tokens**: ~3,500
 
 ---
 
-### Task 6: Modernize Icon Components
+### Task 6: Test Images Data
 
-**Goal**: Review icon components and add TypeScript props if they accept configuration, but keep them simple since icons are typically presentational.
+**Goal**: Validate image imports and image data structure (if images.ts exists).
 
-**Files to Review**:
-- `/src/lib/components/icons/*.svelte` (all icon components)
+**Files to Modify/Create**:
+- `src/lib/data/images.test.ts` - Image data tests
 
 **Prerequisites**:
-- Task 5 complete (filter components reviewed)
+- Task 5 completed
+- Check if src/lib/data/images.ts exists
 
 **Implementation Steps**:
+1. Determine if images.ts centralizes image imports
+2. If it exists, validate all imports are defined
+3. Test that image objects are non-null
+4. Validate image data structure if it includes metadata
+5. If images are imported directly in projects.ts instead, note this
 
-1. Review each icon component:
-   - Are they static SVG exports?
-   - Do they accept props (size, color, class)?
-   - Is there any dynamic behavior?
+**Note**: Image handling varies by project structure. Adapt tests to match your actual implementation.
 
-2. Common icon patterns:
-   - **Static SVG**: Keep as-is, no runes needed
-   - **Configurable props**: Add `$props()` with TypeScript
-   - **Interactive**: Unlikely, but add state if needed
-
-3. If icons accept props (common pattern):
-   ```svelte
-   <script lang="ts">
-     interface Props {
-       size?: number | string;
-       class?: string;
-       color?: string;
-     }
-
-     let {
-       size = 24,
-       class: className = '',
-       color = 'currentColor'
-     }: Props = $props();
-
-     let sizeValue = $derived(typeof size === 'number' ? `${size}px` : size);
-   </script>
-
-   <svg
-     class="icon {className}"
-     width={sizeValue}
-     height={sizeValue}
-     viewBox="0 0 24 24"
-     fill={color}
-   >
-     <!-- SVG path -->
-   </svg>
-   ```
-
-4. Standardize icon API:
-   - All icons accept same props (size, class, color)
-   - Consistent default values
-   - TypeScript interface can be shared
-
-5. Test icons across the app:
-   - Verify they render
-   - Check sizing is correct
-   - Ensure colors work
+**Test Cases to Include** (if centralized images.ts exists):
+- All image imports are defined
+- No null or undefined images
+- Image metadata is valid if present
+- Paths are consistent
 
 **Verification Checklist**:
-- [ ] All icon components reviewed
-- [ ] Consistent prop interface (if accepting props)
-- [ ] TypeScript types added where appropriate
-- [ ] Icons render correctly across app
-- [ ] No visual regressions
-- [ ] No console errors
+- [ ] Test file created
+- [ ] Image handling strategy is tested
+- [ ] Tests match actual implementation
+- [ ] Tests pass
 
 **Testing Instructions**:
-- Manual: Visit pages with icons
-- Visual: Verify icon appearance
-- Sizing: Check icons are correct size
-- Color: Verify color inheritance works
+- Run `pnpm test images`
+- Verify image data validation
 
 **Commit Message Template**:
 ```
-refactor(icons): standardize icon component props with TypeScript
+test(data): validate image data structure
 
-- Review all icon components
-- Add consistent prop interface for size, class, color
-- Use $props() with TypeScript where needed
-- Keep simple icons simple
-- Verify icon rendering
+- Test image imports are defined
+- Validate image metadata if present
+- [or: Note images imported directly in components]
 ```
 
-**Estimated tokens**: ~10,000
+**Estimated tokens**: ~2,500
 
 ---
 
-### Task 7: Modernize Route Page Components (Except Navigation)
+### Task 7: Cross-Data Validation Tests
 
-**Goal**: Update route page components (`+page.svelte` files) to use runes where beneficial, improving data handling and reactivity while keeping presentation simple.
+**Goal**: Create tests that validate relationships and consistency across different data files.
 
-**Files to Modify**:
-- `/src/routes/+page.svelte` (home)
-- `/src/routes/about/+page.svelte`
-- `/src/routes/android/+page.svelte`
-- `/src/routes/web/+page.svelte`
-- `/src/routes/read/+page.svelte`
-- `/src/routes/read/post/[slug]/+page.svelte`
-
-**Files to SKIP**:
-- `/src/routes/Header.svelte` ❌ (Phase 6 only)
-- `/src/routes/+layout.svelte` (handle separately if needed)
+**Files to Modify/Create**:
+- `src/lib/data/data-integrity.test.ts` - Cross-data validation tests
 
 **Prerequisites**:
-- Tasks 1-6 complete (components modernized)
+- All previous tasks in this phase completed
+- Understanding of relationships between data structures
 
 **Implementation Steps**:
+1. Create a new test file for cross-data validation
+2. Import all data structures (projects, navigation, etc.)
+3. Test relationships between data
+4. Validate consistency (e.g., project categories match navigation items)
+5. Check for orphaned references
+6. Ensure data totals make sense
 
-1. For each route page component:
-   - Read current implementation
-   - Identify data from `+page.ts` or `+page.js` (accessed via `export let data`)
-   - Check for local state (filters, sorting, UI state)
-   - Note any computed values or effects
+**Test Cases to Include**:
+- Project categories align with available filters/navigation
+- All navigation paths correspond to actual routes
+- Image references in projects exist in image data
+- No orphaned data (references to non-existent items)
+- Data counts are reasonable and expected
 
-2. Migration pattern for route pages:
-   ```svelte
-   <script lang="ts">
-     import type { PageData } from './$types';
+**Example Test Pattern**:
+```typescript
+test('all project categories are valid', () => {
+  const validCategories = ['Web', 'Cross-Platform', 'Mobile'];
+  projects.forEach(project => {
+    expect(validCategories).toContain(project.category);
+  });
+});
 
-     // SvelteKit page data prop
-     let { data }: { data: PageData } = $props();
-
-     // Local UI state
-     let filter = $state('all');
-     let sortOrder = $state<'asc' | 'desc'>('asc');
-
-     // Computed from data + local state
-     let filteredProjects = $derived(
-       data.projects
-         .filter(p => filter === 'all' || p.category === filter)
-         .sort((a, b) => sortOrder === 'asc' ? a.id - b.id : b.id - a.id)
-     );
-   </script>
-   ```
-
-3. Handle each page:
-   - **Home** (`/`): Might have image grid state, Firefox redirect logic
-   - **About**: Likely simple, minimal state
-   - **Android**: Project filtering/sorting if implemented
-   - **Web**: Project filtering/sorting if implemented
-   - **Read**: Blog post list, might have filtering
-   - **Read/post/[slug]**: Single post display, likely simple
-
-4. Special consideration for home page Firefox redirect:
-   - Review the redirect logic carefully
-   - Ensure any `onMount` or reactive statements are migrated to `$effect()` properly
-   - Test redirect behavior thoroughly
-
-5. Test each route:
-   - Navigate to route
-   - Verify data displays correctly
-   - Test any interactive features (filters, sorting)
-   - Check console for errors
+test('navigation paths match available routes', () => {
+  const expectedPaths = ['/', '/web', '/android', '/about', '/read'];
+  navigation.forEach(item => {
+    expect(expectedPaths).toContain(item.path);
+  });
+});
+```
 
 **Verification Checklist**:
-- [ ] All route pages (except Header) reviewed
-- [ ] Page data props use `$props()` with PageData type
-- [ ] Local UI state uses `$state()`
-- [ ] Computed values use `$derived()` where appropriate
-- [ ] Effects use `$effect()` (Firefox redirect, etc.)
-- [ ] Header.svelte NOT modified
-- [ ] All routes load and display correctly
-- [ ] Interactive features work
-- [ ] No console errors
+- [ ] Cross-data validation test file created
+- [ ] Tests validate relationships between data structures
+- [ ] Tests check consistency across files
+- [ ] No orphaned references detected
+- [ ] All tests pass
 
 **Testing Instructions**:
-- Manual: Visit every route
-  - `/` - Test image grid, any interactions
-  - `/about` - Verify content displays
-  - `/android` - Test project display
-  - `/web` - Test project display
-  - `/read` - Test blog list
-  - `/read/post/[slug]` - Test individual post
-- Firefox: Test redirect behavior on home page
-- Data: Verify all data from loaders displays correctly
-- Console: Check for no errors on each route
+- Run `pnpm test data-integrity`
+- Verify all cross-data validations pass
+- Check that relationships are correctly validated
 
 **Commit Message Template**:
 ```
-refactor(routes): modernize route page components with Svelte 5 runes
+test(data): add cross-data validation tests
 
-- Convert page data props to $props() with PageData type
-- Migrate local UI state to $state()
-- Use $derived() for computed values
-- Migrate effects to $effect()
-- Exclude Header.svelte (Phase 6)
-- Test all routes thoroughly
+- Validate project categories are consistent
+- Check navigation paths match routes
+- Ensure image references are valid
+- Detect orphaned data references
+- Verify data relationships
 ```
 
-**Estimated tokens**: ~18,000
-
----
-
-### Task 8: Review and Update Root Layout
-
-**Goal**: Review `/src/routes/+layout.svelte` and update to use runes if needed, ensuring app-wide layout logic is modern while being careful not to break anything.
-
-**Files to Modify**:
-- `/src/routes/+layout.svelte`
-
-**Prerequisites**:
-- Task 7 complete (route pages modernized)
-
-**Implementation Steps**:
-
-1. Read current `+layout.svelte` implementation:
-   - What does it currently do? (likely renders Header, slot for pages, maybe footer)
-   - Does it use app store?
-   - Are there any effects (theme initialization, etc.)?
-   - Does it import global styles?
-
-2. Based on Phase 0 exploration, layout might:
-   - Initialize app store
-   - Apply theme
-   - Render Header component
-   - Provide page slot
-   - Handle fade-in animation
-
-3. Modernize carefully:
-   - If it has props from `+layout.ts`, use `$props()`
-   - If it has initialization logic, use `$effect()`
-   - Keep it simple - layout should be stable
-
-4. Example pattern (adapt to actual code):
-   ```svelte
-   <script lang="ts">
-     import { appStore } from '$lib/stores/app.svelte';
-     import Header from './Header.svelte';
-     import '../app.css';
-
-     // If layout receives data
-     // let { data } = $props();
-
-     // Theme initialization effect
-     $effect(() => {
-       // Initialize theme, reducedMotion, etc.
-       document.documentElement.setAttribute(
-         'data-theme',
-         appStore.preferences.theme
-       );
-     });
-   </script>
-
-   <div class="app">
-     <Header />
-     <main>
-       <slot />
-     </main>
-   </div>
-   ```
-
-5. Be conservative:
-   - If current layout works well, minimal changes
-   - Focus on runes for any new patterns, not forced migration
-   - Test extensively
-
-6. Test thoroughly:
-   - Visit all routes
-   - Verify header appears everywhere
-   - Check theme application
-   - Ensure page transitions work
-   - Test any fade-in animations
-
-**Verification Checklist**:
-- [ ] Root layout reviewed and updated if needed
-- [ ] Any initialization logic uses `$effect()`
-- [ ] Layout renders correctly across all routes
-- [ ] Header component appears on all pages
-- [ ] Theme/preferences applied correctly
-- [ ] Page transitions/animations work
-- [ ] No console errors
-- [ ] No visual regressions
-
-**Testing Instructions**:
-- Manual: Navigate through all routes multiple times
-- Theme: Test theme switching if implemented
-- Layout: Verify consistent header/footer across pages
-- Animations: Check any mount animations
-- Console: No errors
-
-**Commit Message Template**:
-```
-refactor(layout): modernize root layout with Svelte 5 patterns
-
-- Review and update +layout.svelte
-- Use $effect() for initialization logic
-- Ensure consistent layout across routes
-- Test theme and app-wide features
-```
-
-**Estimated tokens**: ~10,000
+**Estimated tokens**: ~4,000
 
 ---
 
 ## Phase Verification
 
-Before proceeding to Phase 3, ensure:
+Before moving to Phase 3, verify:
 
-### Component Modernization
-- [ ] ProjectCard uses runes appropriately
-- [ ] ImageGrid uses runes for state and effects
-- [ ] GooeyButton uses runes for interaction states
-- [ ] Filter components (SVG, Android) kept simple or use typed props
-- [ ] Icon components standardized with TypeScript
-- [ ] All route pages (except Header) modernized
-- [ ] Root layout updated and functional
+### Test Coverage
+- [ ] All data files have corresponding test files
+- [ ] Type definitions are tested
+- [ ] Data integrity tests pass
+- [ ] Cross-data validation tests pass
+- [ ] Coverage report shows all data files covered
 
-### Code Quality
-- [ ] All stateful components use `$state()`
-- [ ] All components with props use `$props()` with TypeScript
-- [ ] Computed values use `$derived()` where appropriate
-- [ ] Side effects use `$effect()` instead of `onMount` or reactive statements
-- [ ] Simple components kept simple (no forced migration)
+### Data Validation
+- [ ] Projects data is fully validated
+- [ ] Navigation data is validated
+- [ ] All data types match TypeScript interfaces
+- [ ] No duplicate IDs or keys detected
+- [ ] All URLs and paths are well-formed
 
-### TypeScript
-- [ ] All component props have TypeScript interfaces
-- [ ] Types imported from `$lib/types` where shared
-- [ ] No TypeScript errors (`pnpm run check` passes)
+### File Structure
+```
+src/lib/
+  data/
+    projects.ts
+    projects.test.ts
+    androidApps.ts
+    androidApps.test.ts (if applicable)
+    webProjects.ts
+    webProjects.test.ts (if applicable)
+    navigation.ts
+    navigation.test.ts
+    images.ts
+    images.test.ts (if applicable)
+    data-integrity.test.ts
+  types/
+    index.ts
+    index.test.ts
+```
 
-### Functionality
-- [ ] All components render correctly
-- [ ] All routes load and display properly
-- [ ] Interactive features work (hover, click, animations)
-- [ ] Image loading and lazy loading work
-- [ ] Filters and sorting work (if implemented)
-- [ ] Theme/preferences apply correctly
+### Test Execution
+- [ ] `pnpm test` runs all data tests successfully
+- [ ] `pnpm test:coverage` shows data layer coverage >80%
+- [ ] No TypeScript errors in test files
+- [ ] All tests are meaningful and catch real issues
 
-### Testing
-- [ ] Manual testing on all routes complete
-- [ ] All component interactions tested
-- [ ] No console errors
-- [ ] No visual regressions
-- [ ] Animations and transitions work
-- [ ] `pnpm dev` runs successfully
-- [ ] `pnpm build` succeeds
-- [ ] `pnpm preview` works
-
-### Git
-- [ ] All changes committed atomically
-- [ ] Conventional commit format used
-- [ ] Git author is HatmanStack
+### Git Validation
+- [ ] All tasks committed separately with conventional commits
+- [ ] Commit author is HatmanStack
 - [ ] Working on correct branch
-
-### Exclusions Verified
-- [ ] **Header.svelte NOT modified** (reserved for Phase 6)
-- [ ] Navigation components untouched
-
-## Review Feedback (Iteration 1)
-
-### Task 4: GooeyButton Component
-
-> **Consider:** Looking at `/src/lib/components/ui/GooeyButton.svelte` lines 69-71, what event handler syntax is being used?
->
-> **Think about:** When you run `pnpm run check`, you see warnings about deprecated event directives. What does Svelte 5's documentation say about the `on:click` directive versus the `onclick` attribute?
->
-> **Reflect:** You've successfully migrated to `$effect()` and `$props()` for this component. Are the event handlers also using Svelte 5's modern syntax, or are they still using the deprecated `on:` directive syntax?
->
-> **Hint:** Check lines 69-71. Should `on:click={onclick}` be `onclick={onclick}`? Should `on:pointermove={moveBg}` be `onpointermove={moveBg}`?
-
-## Integration Points
-
-This phase prepares for:
-- **Phase 3**: Styling with CSS custom properties (components have clear structure)
-- **Phase 4**: Type system refinement (components use centralized types)
-- **Phase 5**: Performance optimization (modern reactivity patterns)
-- **Phase 6**: Navigation modernization (other components done, can focus on Header)
+- [ ] Commit messages are descriptive and follow format
 
 ## Known Limitations
 
-- Header.svelte not modernized yet (Phase 6)
-- Automated tests still minimal (manual testing required)
-- Some simple components may not use runes (intentional - pragmatic approach)
+- Tests validate structure but not business logic (that comes later)
+- Image file existence is not validated (would require filesystem access)
+- External URL availability is not tested (would require network calls)
 
-## Success Metrics
+## Next Phase
 
-Phase 2 is successful when:
-- Components use modern Svelte 5 patterns consistently
-- TypeScript provides better type safety
-- Code is more maintainable and readable
-- Application functionality is 100% preserved
-- No performance regressions
-- Foundation is set for styling and performance work
+Once Phase 2 is complete and verified, proceed to **[Phase 3: Stores & Hooks Testing](./Phase-3.md)** to test state management and custom hooks.
