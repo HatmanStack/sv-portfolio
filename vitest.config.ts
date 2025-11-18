@@ -20,17 +20,20 @@ export default defineConfig({
 		// Coverage configuration
 		coverage: {
 			provider: 'v8',
-			reporter: ['text', 'json', 'html'],
+			reporter: ['text', 'json', 'html', 'lcov'],
 			exclude: [
 				'node_modules/',
 				'src/**/*.test.ts',
+				'src/**/*.test.js',
 				'src/**/*.test.svelte.ts',
 				'src/**/*.spec.ts',
 				'src/lib/test-utils/**',
 				'*.config.*',
 				'**/types/**',
 				'build/',
-				'.svelte-kit/'
+				'.svelte-kit/',
+				'**/*.d.ts',
+				'src/app.html'
 			],
 			thresholds: {
 				statements: 80,
