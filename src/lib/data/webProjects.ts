@@ -22,7 +22,7 @@ export const webProjects: WebProject[] = [
   {
     id: 'pixel-prompt',
     title: 'Pixel Prompt',
-    link: 'https://production.d2iujulgl0aoba.amplifyapp.com/',
+    link: 'https://pixel-prompt.hatstack.fun/',
     description: 'AI image generation with React Native and AWS. Switch between diffusion models, apply style/layout modifications via IP Adapter, and explore prompt effects with the built-in generator.',
     initialImg: one,
     activeImg: pixelPrompta
@@ -30,7 +30,7 @@ export const webProjects: WebProject[] = [
   {
     id: 'twa',
     title: 'The Writers Almanac',
-    link: 'https://d6d8ny9p8jhyg.cloudfront.net/',
+    link: 'https://writer.hatstack.fun/',
     description: 'Digital poetry archive inspired by MPR\'s Writer\'s Almanac. Features tsparticles ink-on-paper effect, Whisper audio transcription, and upcoming Llama-powered poem analysis with RAG.',
     initialImg: two,
     activeImg: twaa
