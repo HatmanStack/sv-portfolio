@@ -35,6 +35,11 @@
         {#if androidContentMap[selectedImage].description}
         <p class="app-description">{androidContentMap[selectedImage].description}</p>
         {/if}
+        {#if androidContentMap[selectedImage].webLink}
+        <a href={androidContentMap[selectedImage].webLink} target="_blank" rel="noopener noreferrer">
+          <button class="cta-button" use:click_sound>Cross-Platform</button>
+        </a>
+        {/if}
         {#if androidContentMap[selectedImage].link}
         <a href={androidContentMap[selectedImage].link} target="_blank" rel="noopener noreferrer">
           <button class="cta-button" use:click_sound>Play Store Stuff</button>

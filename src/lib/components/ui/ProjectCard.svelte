@@ -3,6 +3,7 @@
   import { createSoundStore } from '$lib/hooks/useSound.svelte.js';
   import GooeyButton from './GooeyButton.svelte';
   import click from '$lib/sounds/click.wav';
+  import githubIcon from '$lib/images/github.svg';
 
   interface Props {
     project: Project;
@@ -33,6 +34,11 @@
     loading={lazy ? 'lazy' : 'eager'}
     decoding="async"
   />
+  {#if project.github}
+  <a href={project.github} target="_blank" rel="noopener noreferrer" class="github-link" onclick={(e) => e.stopPropagation()}>
+    <img src={githubIcon} alt="GitHub" class="github-icon" />
+  </a>
+  {/if}
   <div class="profile_detail">
     <span>{project.title}</span>
     <p>{project.category}</p>
@@ -111,9 +117,30 @@
 
   .content .profile_image {
     opacity: calc(1 - var(--active));
-    transition: 
+    transition:
       opacity 0.3s ease-in-out,
       transform 0.5s ease-in-out;
+  }
+
+  .github-link {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 20;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+
+  .github-link:hover {
+    opacity: 1;
+  }
+
+  .content img.github-icon {
+    position: static;
+    width: 24px;
+    height: 24px;
+    z-index: 20;
+    filter: invert(1);
   }
 
   .content:hover .profession_image {
