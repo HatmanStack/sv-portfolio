@@ -6,7 +6,7 @@
  */
 
 import { describe, test, expect } from 'vitest';
-import { projects } from './projects';
+import { projects, projectsRow2 } from './projects';
 import type { Project } from '$lib/types';
 
 describe('Projects Data', () => {
@@ -115,9 +115,10 @@ describe('Projects Data', () => {
 
 	describe('Category Validation', () => {
 		test('all categories are from a known set', () => {
-			const validCategories = ['Web', 'Cross-Platform', 'Mobile', 'Desktop'];
+			const validCategories = ['Web', 'Cross-Platform', 'Mobile', 'Desktop', 'AWS'];
+			const allProjects = [...projects, ...projectsRow2];
 
-			projects.forEach((project) => {
+			allProjects.forEach((project) => {
 				expect(validCategories).toContain(project.category);
 			});
 		});
@@ -131,11 +132,24 @@ describe('Projects Data', () => {
 			expect(float?.category).toBe('Cross-Platform');
 		});
 
-		test('Nova Canvas project exists and is valid', () => {
-			const novaCanvas = projects.find((p) => p.id === 'nova-canvas');
-			expect(novaCanvas).toBeDefined();
-			expect(novaCanvas?.title).toBe('Nova Canvas');
-			expect(novaCanvas?.category).toBe('Web');
+		test('Hold That Thought project exists and is valid', () => {
+			const htt = projects.find((p) => p.id === 'hold-that-thought');
+			expect(htt).toBeDefined();
+			expect(htt?.title).toBe('Hold That Thought');
+			expect(htt?.category).toBe('Web');
+		});
+
+		test('Vocabulary project exists in row 2', () => {
+			const vocab = projectsRow2.find((p) => p.id === 'vocabulary');
+			expect(vocab).toBeDefined();
+			expect(vocab?.title).toBe('Vocabulary');
+		});
+
+		test('RAGStack project exists in row 2', () => {
+			const ragstack = projectsRow2.find((p) => p.id === 'ragstack');
+			expect(ragstack).toBeDefined();
+			expect(ragstack?.title).toBe('RAGStack');
+			expect(ragstack?.category).toBe('AWS');
 		});
 
 		test('Savor Swipe project exists and is valid', () => {
