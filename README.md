@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/badge/TypeScript%205.0-blue" alt="TypeScript" />
   </a>
 </h4>
-<p>A collection of some CodePens from 2024 and their Designers.<br></br>🌎 <b>Live Site:</b> <a href="https://cg-portfolio.com">Portfolio</a></p></div>
+<p>A collection of some CodePens from 2024 and their Designers.<br></br>🌎 <b>Live Site:</b> <a href="https://portfolio.hatstack.fun">Portfolio</a></p></div>
 
 Modern portfolio showcasing CodePen favorites, built with Svelte 5 and SvelteKit 2.
 
