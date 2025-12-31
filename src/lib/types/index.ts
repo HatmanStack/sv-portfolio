@@ -41,6 +41,9 @@ export interface Project {
   /** URL to the live project or demo */
   link: string;
 
+  /** URL to the GitHub repository (optional) */
+  github?: string;
+
   /** Text for the call-to-action button */
   buttonText: string;
 }
@@ -59,6 +62,9 @@ export interface AndroidApp {
 
   /** Link to Google Play Store or demo (optional) */
   link?: string;
+
+  /** Link to cross-platform web implementation (optional) */
+  webLink?: string;
 
   /** Detailed description of the app (optional) */
   description?: string;

@@ -4,14 +4,13 @@
  */
 
 import { render as testingLibraryRender, type RenderOptions } from '@testing-library/svelte';
-import type { ComponentType, SvelteComponent } from 'svelte';
 
 /**
  * Custom render function that wraps components with common providers if needed
  * Currently just re-exports the standard render, but can be extended in the future
  */
-export function render<T extends SvelteComponent>(
-	component: ComponentType<T>,
+export function render<T extends Record<string, any>>(
+	component: any,
 	options?: RenderOptions<T>
 ) {
 	return testingLibraryRender(component, options);

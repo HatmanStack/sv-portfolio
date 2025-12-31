@@ -1,46 +1,82 @@
 import type { Project } from '$lib/types/index.js';
 import floata from '$lib/images/float.avif';
 import floatj from '$lib/images/float.jpg';
-import novaCanvasa from '$lib/images/nova-canvas.avif';
-import novaCanvasj from '$lib/images/nova-canvas.jpg';
 import savorSwipea from '$lib/images/savorswipe.avif';
 import savorSwipej from '$lib/images/savorswipe.jpg';
+import htta from '$lib/images/htt.avif';
+import httj from '$lib/images/htt.jpg';
+import vocaba from '$lib/images/vocabulary.avif';
+import vocabs from '$lib/images/vocabulary.svg';
+import ragstacka from '$lib/images/ragstack.avif';
+import ragstackj from '$lib/images/ragstack.jpg';
 
 export const projects: Project[] = [
   {
     id: 'float',
     title: 'Float',
-    description: 'Float is a cross-platform meditation app built with React Native and Expo. It uses Google Generative AI, Google TTS, and a library of sound files to create personalized meditation experiences based on user-submitted incidents that have affected them emotionally, which we refer to as "floats". Floats are categorized by emotion and intensity, featuring a timer and a color scheme that convey the duration, summary, and reasoning for the category.',
+    description: 'Cross-platform meditation app using Google Generative AI and TTS. Submit emotional incidents ("floats") to generate personalized meditations categorized by emotion and intensity.',
     category: 'Cross-Platform',
     images: {
       profession: floata,
       profile: floatj
     },
-    link: 'https://float-app.fun',
+    link: 'https://float.hatstack.fun',
+    github: 'https://github.com/HatmanStack/float',
     buttonText: 'Meditate'
   },
   {
-    id: 'nova-canvas',
-    title: 'Nova Canvas',
-    description: 'The AWS Nova Canvas foundation model presented in a gradio app. The model enables users to generate, edit, and refine images through sophisticated tools like text-to-image generation, inpainting, outpainting, and background removal. Users can explore innovative image creation methods, including color-guided content manipulation and image conditioning, providing control over visual design and artistic expression.',
+    id: 'hold-that-thought',
+    title: 'Hold That Thought',
+    description: 'Private family platform for sharing letters, photos, and memories. AI-powered transcription, shared gallery, and RAG backend for semantic search and chat.',
     category: 'Web',
     images: {
-      profession: novaCanvasa,
-      profile: novaCanvasj
+      profession: htta,
+      profile: httj
     },
-    link: 'https://t7bmxtdc6ojbkd3zgknxe32xdm0oqxkw.lambda-url.us-west-2.on.aws/',
-    buttonText: 'Infer'
+    link: 'https://showcase-htt.hatstack.fun',
+    github: 'https://github.com/HatmanStack/hold-that-thought',
+    buttonText: 'Link'
   },
   {
     id: 'savor-swipe',
     title: 'Savor Swipe',
-    description: 'SavorSwipe is a recipe discovery app that lets you swipe through dishes to decide what to make. When adding a recipe, simply take a picture of either the ingredients or the directions. The app uses OpenAI\'s OCR technology to automatically extract the relevant information, then leverages Google\'s Custom Search API to find matching food images. This creates a visual collection of dishes that you can easily swipe through.',
+    description: 'Recipe discovery app with swipe interface. Photograph ingredients or directions—OpenAI OCR extracts the info, Google Search finds matching food images.',
     category: 'Cross-Platform',
     images: {
       profession: savorSwipea,
       profile: savorSwipej
     },
-    link: 'https://main.d21v5ak15nf4k9.amplifyapp.com/',
+    link: 'https://savorswipe.hatstack.fun',
+    github: 'https://github.com/HatmanStack/savorswipe',
     buttonText: 'Eat'
+  }
+];
+
+export const projectsRow2: Project[] = [
+  {
+    id: 'vocabulary',
+    title: 'Vocabulary',
+    description: '300+ word vocabulary builder. Multiple choice and fill-in-the-blank formats with per-list progress tracking and persistent high scores.',
+    category: 'Cross-Platform',
+    images: {
+      profession: vocaba,
+      profile: vocabs
+    },
+    link: 'https://vocabulary.hatstack.fun',
+    github: 'https://github.com/HatmanStack/react-vocabulary',
+    buttonText: 'Learn'
+  },
+  {
+    id: 'ragstack',
+    title: 'RAGStack',
+    description: 'Serverless document processing with AI chat. Upload docs, OCR extraction, query via Amazon Bedrock. One-click AWS deploy. Login: guest@hatstack.fun / Guest@123',
+    category: 'AWS',
+    images: {
+      profession: ragstacka,
+      profile: ragstackj
+    },
+    link: 'https://dhrmkxyt1t9pb.cloudfront.net/login',
+    github: 'https://github.com/HatmanStack/RAGStack-Lambda',
+    buttonText: 'RAG'
   }
 ];

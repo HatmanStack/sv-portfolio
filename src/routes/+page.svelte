@@ -22,7 +22,7 @@
   import ImageGrid from '$lib/components/ui/ImageGrid.svelte';
   import ProjectCard from '$lib/components/ui/ProjectCard.svelte';
   import { gridImages } from '$lib/data/images.js';
-  import { projects } from '$lib/data/projects.js';
+  import { projects, projectsRow2 } from '$lib/data/projects.js';
   import sloth from '$lib/images/sloth_stuff.jpg';
 
   const REDIRECT_FLAG = 'firefoxRedirected';
@@ -56,6 +56,11 @@
       <ProjectCard {project} lazy={index > 0} />
     {/each}
   </div>
+  <div class="category-container row-2">
+    {#each projectsRow2 as project}
+      <ProjectCard {project} lazy={true} />
+    {/each}
+  </div>
 </section>
 
 <!-- SVG filter for gooey buttons -->
@@ -79,13 +84,15 @@
   }
 
   .portfolio-container {
-    overflow: hidden; 
+    overflow: hidden;
     position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 1rem;
     width: 100%;
-    height: 89vh;
+    min-height: 89vh;
     background-image: var(--bg-color);
     background: transparent;
   }
@@ -93,11 +100,16 @@
   .category-container {
     display: flex;
     justify-content: space-between;
-    align-items: stretch; 
+    align-items: stretch;
     flex-wrap: nowrap;
     gap: calc(var(--gap) * 2);
     width: 100%;
-    height: 80%;
+    height: 45%;
     background: transparent;
+  }
+
+  .category-container.row-2 {
+    justify-content: center;
+    height: 40%;
   }
 </style>

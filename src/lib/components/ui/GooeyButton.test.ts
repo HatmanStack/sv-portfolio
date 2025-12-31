@@ -103,7 +103,7 @@ describe('GooeyButton - Animation', () => {
 	});
 
 	test('runs intro animation on mount', () => {
-		const setIntervalSpy = vi.spyOn(global, 'setInterval');
+		const setIntervalSpy = vi.spyOn(globalThis, 'setInterval');
 
 		render(GooeyButton, {
 			props: {}
@@ -113,7 +113,7 @@ describe('GooeyButton - Animation', () => {
 	});
 
 	test('clears interval on unmount', () => {
-		const clearIntervalSpy = vi.spyOn(global, 'clearInterval');
+		const clearIntervalSpy = vi.spyOn(globalThis, 'clearInterval');
 
 		const { unmount } = render(GooeyButton, {
 			props: {}
