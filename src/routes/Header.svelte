@@ -31,7 +31,7 @@
 
 <header>
 	<div class="corner">
-		<a href="https://gemenielabs.com">
+		<a href="https://gemenielabs.hatstack.fun">
 			<img src={logo} alt="logo for gemenie labs" />
 		</a>
 	</div>
