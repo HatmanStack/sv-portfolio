@@ -120,30 +120,25 @@ The trade-off is operational responsibility. You manage the stack, apply updates
 
 <br>
 
-Text search is well-established. RAGStack extends into multimodal territory using Amazon Nova's embedding model, which creates vectors in a unified space where text and images coexist.
+Text search is well-established. RAGStack extends into multimodal territory using Amazon Nova's embedding model, which creates vectors in a unified space where text, images, and video frames coexist.
 
 **How it works:**
-* Upload an image (financial chart, product photo, diagram)
+* Upload an image (financial chart, product photo, diagram) or video
 * Nova encodes the visual content directly into vector space
 * Search using natural language queries
-* Retrieve relevant images based on semantic similarity
+* Retrieve relevant images or video segments based on semantic similarity
 
 <br>
 
-For image uploads, the system provides both visual embeddings (find similar images) and AI-generated captions (find images by description). Captions can be auto-generated using a customizable prompt, manually provided, or both.
-
-```html
-<ragstack-chat
-  conversation-id="my-app"
-  header-text="Ask About Documents"
-></ragstack-chat>
-```
+For image uploads, the system provides both visual embeddings (find similar images) and AI-generated captions (find images by description). Captions can be auto-generated using a customizable prompt, manually provided, or both. Video uploads get the same treatment — visual embeddings plus transcription — so you can search by sight or sound.
 
 ### Video & Audio: Timestamp-Linked Source Citations
 
 <br>
 
 RAGStack's media processing creates a notably useful experience for searching recordings. Upload a video or audio file, and AWS Transcribe converts speech to text, identifies speakers (up to 10), and segments the transcript into 30-second chunks. Each chunk is embedded with timestamp metadata.
+
+**For video, it goes further:** frames are also processed through Amazon Nova to create visual embeddings. This means you can search by what's said or what's shown — query "whiteboard diagram" and retrieve the segment where someone drew on a whiteboard, even if no one mentioned it aloud.
 
 When you query "What was discussed about Q4 targets?", the response includes source citations like `team-meeting.mp4 [1:30-2:00]`. Clicking that link opens an inline media player positioned at that exact segment.
 
