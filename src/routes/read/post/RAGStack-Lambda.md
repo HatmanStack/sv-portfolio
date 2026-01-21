@@ -12,7 +12,7 @@ While enterprise solutions require $300+/month vector database fees just to main
 
 Beyond cost efficiency, RAGStack delivers genuinely innovative capabilities:
 
-* **Multimodal intelligence** powered by Amazon Nova embeddings means images are semantically understood, not just stored. Upload a photo, search with natural language, and retrieve visually relevant results without manual tagging.
+* **Multimodal intelligence** powered by Amazon Nova embeddings means images and videos are semantically understood, not just stored. Upload a photo/video, search with natural language, and retrieve visually relevant results without manual tagging.
 
 * **Video and audio processing** through AWS Transcribe integration transforms recordings into searchable archives. Source citations include timestamp links—click one and the player jumps to the exact 30-second segment containing that information.
 
