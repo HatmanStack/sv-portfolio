@@ -107,32 +107,18 @@
   }
 
   :global(.post-layout a) {
-    color: #86868b;
+    color: #bdc2c9;
+    -webkit-text-fill-color: #bdc2c9;
     text-decoration: none;
-    background: linear-gradient(0deg,#67676b 0%, #bdc2c9 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    position: relative;
+    background: rgba(75, 50, 35, 0.35);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
     font-weight: 600;
+    transition: background 0.3s ease;
   }
 
-  :global(.post-layout a::after) {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    bottom: -2px;
-    left: 0;
-    background: linear-gradient(90deg,#67676b 0%, #bdc2c9 100%);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.3s ease;
-  }
-
-  :global(.post-layout a:hover::after) {
-    transform: scaleX(1);
-    transform-origin: left;
+  :global(.post-layout a:hover) {
+    background: rgba(95, 65, 45, 0.5);
   }
 
    :global(.post-layout p) {
