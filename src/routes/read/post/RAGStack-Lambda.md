@@ -281,9 +281,9 @@ For customization or development workflows:
 ```bash
 git clone https://github.com/HatmanStack/RAGStack-Lambda.git
 cd RAGStack-Lambda
-python -m venv venv && source venv/bin/activate
+python -m venv venv && source .venv/bin/activate
 pip install -r requirements.txt
-python publish.py --project-name my-docs --admin-email admin@example.com
+python publish.py --stack-name my-docs --admin-email admin@example.com
 ```
 
 Both deployment methods create identical infrastructure in your account:
@@ -327,7 +327,7 @@ Large PDFs (20+ pages) automatically batch into 10-page chunks processed in para
 
 <br>
 
-Text-native PDFs skip OCR entirely. Haiku costs 20x less than Opus. Quota systems prevent runaway costs—when limits are reached, the system switches to a cheaper fallback model rather than failing.
+Text-native PDFs skip OCR entirely. Haiku costs 20x less than Opus. Quota systems for chat prevent runaway costs—when limits are reached, the system switches to a cheaper fallback model for chat rather than failing.
 
 ### Target Use Cases
 
