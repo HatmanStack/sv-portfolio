@@ -1,6 +1,34 @@
 <svelte:head>
-	<title>Android</title>
-	<meta name="description" content="stuff from google play" />
+	<title>Android Apps | Christopher Galliart</title>
+	<meta name="description" content="Android applications built by Christopher Galliart. Browse mobile apps available on Google Play Store featuring AI, productivity, and utility tools." />
+
+	<!-- Open Graph -->
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="CG Portfolio" />
+	<meta property="og:title" content="Android Apps | Christopher Galliart" />
+	<meta property="og:description" content="Android applications built by Christopher Galliart. Browse mobile apps available on Google Play Store." />
+	<meta property="og:url" content="https://portfolio.hatstack.fun/android" />
+	<meta property="og:image" content="https://portfolio.hatstack.fun/og-image.jpg" />
+
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:site" content="@HatmanStack" />
+	<meta name="twitter:title" content="Android Apps | Christopher Galliart" />
+	<meta name="twitter:description" content="Android applications built by Christopher Galliart. Browse mobile apps on Google Play Store." />
+	<meta name="twitter:image" content="https://portfolio.hatstack.fun/og-image.jpg" />
+
+	<!-- JSON-LD -->
+	{@html `<script type="application/ld+json">${JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "CollectionPage",
+		"name": "Android Apps",
+		"description": "Android applications built by Christopher Galliart",
+		"url": "https://portfolio.hatstack.fun/android",
+		"author": {
+			"@type": "Person",
+			"name": "Christopher Galliart"
+		}
+	})}</script>`}
 </svelte:head>
 
 <script lang="ts">

@@ -1,6 +1,34 @@
 <svelte:head>
-	<title>Read</title>
-	<meta name="description" content="stuff to Read" />
+	<title>Blog | Christopher Galliart</title>
+	<meta name="description" content="Technical blog posts on AWS, AI/ML, cloud development, and modern web technologies. Tutorials, insights, and project deep-dives by Christopher Galliart." />
+
+	<!-- Open Graph -->
+	<meta property="og:type" content="blog" />
+	<meta property="og:site_name" content="CG Portfolio" />
+	<meta property="og:title" content="Blog | Christopher Galliart" />
+	<meta property="og:description" content="Technical blog posts on AWS, AI/ML, cloud development, and modern web technologies." />
+	<meta property="og:url" content="https://portfolio.hatstack.fun/read" />
+	<meta property="og:image" content="https://portfolio.hatstack.fun/og-image.jpg" />
+
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:site" content="@HatmanStack" />
+	<meta name="twitter:title" content="Blog | Christopher Galliart" />
+	<meta name="twitter:description" content="Technical blog posts on AWS, AI/ML, cloud development, and modern web technologies." />
+	<meta name="twitter:image" content="https://portfolio.hatstack.fun/og-image.jpg" />
+
+	<!-- JSON-LD Blog -->
+	{@html `<script type="application/ld+json">${JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "Blog",
+		"name": "Christopher Galliart Blog",
+		"description": "Technical blog posts on AWS, AI/ML, cloud development, and modern web technologies",
+		"url": "https://portfolio.hatstack.fun/read",
+		"author": {
+			"@type": "Person",
+			"name": "Christopher Galliart"
+		}
+	})}</script>`}
 </svelte:head>
 
 <script lang="ts">

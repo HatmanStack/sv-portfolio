@@ -1,17 +1,40 @@
 <svelte:head>
-  <title>Home</title>
-  <meta name="description" content="CG - Portfolio with Stuff" />
-  <meta property="og:title" content="CG - Portfolio with Stuff" />
-  <meta property="og:description" content="A portfolio made with some of my favorite Codepen.io's from 2024" />
-  <meta property="og:image" content={sloth} />
-  <meta property="og:url" content="https://www.cg-portfolio.com" />
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="CG - Portfolio with Stuff">
-  <meta name="twitter:description" content="A portfolio made with some of my favorite Codepen.io's from 2024">
-  <meta name="twitter:image" content={sloth} />
+  <title>Christopher Galliart | Developer Portfolio</title>
+  <meta name="description" content="Full-stack developer portfolio showcasing Android apps, web projects, and technical blog posts on AWS, AI/ML, and modern web development." />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="CG Portfolio" />
+  <meta property="og:title" content="Christopher Galliart | Developer Portfolio" />
+  <meta property="og:description" content="Full-stack developer portfolio showcasing Android apps, web projects, and technical blog posts on AWS, AI/ML, and modern web development." />
+  <meta property="og:image" content="https://portfolio.hatstack.fun/og-image.jpg" />
+  <meta property="og:image:width" content="1024" />
+  <meta property="og:image:height" content="1024" />
+  <meta property="og:url" content="https://portfolio.hatstack.fun" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@HatmanStack" />
+  <meta name="twitter:title" content="Christopher Galliart | Developer Portfolio" />
+  <meta name="twitter:description" content="Full-stack developer portfolio showcasing Android apps, web projects, and technical blog posts." />
+  <meta name="twitter:image" content="https://portfolio.hatstack.fun/og-image.jpg" />
 
   <!-- Preload hero image -->
   <link rel="preload" as="image" href={sloth} type="image/jpeg" />
+
+  <!-- JSON-LD Structured Data -->
+  {@html `<script type="application/ld+json">${JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Christopher Galliart Portfolio",
+    "url": "https://portfolio.hatstack.fun",
+    "author": {
+      "@type": "Person",
+      "name": "Christopher Galliart",
+      "url": "https://www.linkedin.com/in/christopher-galliart-gemenie-labs/"
+    },
+    "description": "Full-stack developer portfolio showcasing Android apps, web projects, and technical blog posts."
+  })}</script>`}
 </svelte:head>
 
 <script lang="ts">

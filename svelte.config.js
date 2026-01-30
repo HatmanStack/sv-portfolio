@@ -13,7 +13,7 @@ const config = {
       strict: false  // Relaxing the strict mode
     }),
     prerender: {
-      entries: ['*', '/read/post/*']  // Add this to handle dynamic routes
+      entries: ['*', '/read/post/*', '/sitemap.xml']
     }
   },
   extensions: ['.svelte', '.md'],

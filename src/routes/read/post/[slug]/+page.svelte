@@ -4,6 +4,7 @@
   import { applyClickSound } from "$lib/hooks/applyClickSound";
   import { useSound } from "$lib/hooks/useSound";
   import click from "$lib/sounds/click.wav";
+  import { page } from '$app/stores';
 
   interface Props {
     data: PageData;
@@ -17,7 +18,57 @@
   let needsSplit = $derived(titleWords.length > 6);
 
   const click_sound = useSound(click,["click"])
+
+  const SITE_URL = 'https://portfolio.hatstack.fun';
+  let postUrl = $derived(SITE_URL + $page.url.pathname);
+
+  let jsonLd = $derived(JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": data.title,
+    "description": data.description,
+    "datePublished": data.date,
+    "author": {
+      "@type": "Person",
+      "name": "Christopher Galliart",
+      "url": "https://www.linkedin.com/in/christopher-galliart-gemenie-labs/"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Christopher Galliart"
+    },
+    "url": postUrl,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": postUrl
+    }
+  }));
 </script>
+
+<svelte:head>
+  <title>{data.title} | Christopher Galliart</title>
+  <meta name="description" content={data.description} />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="CG Portfolio" />
+  <meta property="og:title" content={data.title} />
+  <meta property="og:description" content={data.description} />
+  <meta property="og:url" content={postUrl} />
+  <meta property="article:author" content="Christopher Galliart" />
+  <meta property="article:published_time" content={data.date} />
+  <meta property="og:image" content="https://portfolio.hatstack.fun/og-image.jpg" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@HatmanStack" />
+  <meta name="twitter:title" content={data.title} />
+  <meta name="twitter:description" content={data.description} />
+  <meta name="twitter:image" content="https://portfolio.hatstack.fun/og-image.jpg" />
+
+  <!-- JSON-LD BlogPosting -->
+  {@html `<script type="application/ld+json">${jsonLd}</script>`}
+</svelte:head>
 
 <article>
 <Header />

@@ -1,6 +1,35 @@
 <svelte:head>
-	<title>About</title>
-	<meta name="description" content="About this app" />
+	<title>About | Christopher Galliart</title>
+	<meta name="description" content="Connect with Christopher Galliart - full-stack developer specializing in Android, web development, AWS, and AI/ML. Find me on LinkedIn, Hugging Face, and X." />
+
+	<!-- Open Graph -->
+	<meta property="og:type" content="profile" />
+	<meta property="og:site_name" content="CG Portfolio" />
+	<meta property="og:title" content="About | Christopher Galliart" />
+	<meta property="og:description" content="Connect with Christopher Galliart - full-stack developer specializing in Android, web development, AWS, and AI/ML." />
+	<meta property="og:url" content="https://portfolio.hatstack.fun/about" />
+	<meta property="og:image" content="https://portfolio.hatstack.fun/og-image.jpg" />
+
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:site" content="@HatmanStack" />
+	<meta name="twitter:title" content="About | Christopher Galliart" />
+	<meta name="twitter:description" content="Connect with Christopher Galliart - full-stack developer specializing in Android, web development, AWS, and AI/ML." />
+	<meta name="twitter:image" content="https://portfolio.hatstack.fun/og-image.jpg" />
+
+	<!-- JSON-LD Person -->
+	{@html `<script type="application/ld+json">${JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "Person",
+		"name": "Christopher Galliart",
+		"url": "https://portfolio.hatstack.fun/about",
+		"sameAs": [
+			"https://www.linkedin.com/in/christopher-galliart-gemenie-labs/",
+			"https://huggingface.co/Hatman",
+			"https://twitter.com/HatmanStack"
+		],
+		"jobTitle": "Full-Stack Developer"
+	})}</script>`}
 </svelte:head>
 
 <script>

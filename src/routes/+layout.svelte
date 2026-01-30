@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { appStore } from '$lib/stores/app.svelte.js';
+	import { page } from '$app/stores';
 
 	interface Props {
 		children: any;
@@ -8,6 +9,9 @@
 
 	let { children }: Props = $props();
 	let mounted = $state(false);
+
+	const SITE_URL = 'https://portfolio.hatstack.fun';
+	let canonicalUrl = $derived(SITE_URL + $page.url.pathname);
 
 	$effect(() => {
 		appStore.init(); // Initializes theme, preferences, and listeners
@@ -19,6 +23,12 @@
 		return () => clearTimeout(timeoutId);
 	});
 </script>
+
+<svelte:head>
+	<link rel="canonical" href={canonicalUrl} />
+	<meta name="robots" content="index, follow" />
+	<meta name="author" content="Christopher Galliart" />
+</svelte:head>
 
 <div class="page-content" class:visible={mounted}>
 <div class="app">

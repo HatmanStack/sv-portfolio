@@ -1,6 +1,34 @@
 <svelte:head>
-	<title>Web</title>
-	<meta name="description" content="stuff from the web" />
+	<title>Web Projects | Christopher Galliart</title>
+	<meta name="description" content="Web development projects by Christopher Galliart. Explore interactive demos, Gradio applications, and full-stack web projects built with modern frameworks." />
+
+	<!-- Open Graph -->
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content="CG Portfolio" />
+	<meta property="og:title" content="Web Projects | Christopher Galliart" />
+	<meta property="og:description" content="Web development projects by Christopher Galliart. Explore interactive demos and full-stack web projects." />
+	<meta property="og:url" content="https://portfolio.hatstack.fun/web" />
+	<meta property="og:image" content="https://portfolio.hatstack.fun/og-image.jpg" />
+
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:site" content="@HatmanStack" />
+	<meta name="twitter:title" content="Web Projects | Christopher Galliart" />
+	<meta name="twitter:description" content="Web development projects by Christopher Galliart. Explore interactive demos and full-stack projects." />
+	<meta name="twitter:image" content="https://portfolio.hatstack.fun/og-image.jpg" />
+
+	<!-- JSON-LD -->
+	{@html `<script type="application/ld+json">${JSON.stringify({
+		"@context": "https://schema.org",
+		"@type": "CollectionPage",
+		"name": "Web Projects",
+		"description": "Web development projects by Christopher Galliart",
+		"url": "https://portfolio.hatstack.fun/web",
+		"author": {
+			"@type": "Person",
+			"name": "Christopher Galliart"
+		}
+	})}</script>`}
 </svelte:head>
 
 <script lang="ts">
