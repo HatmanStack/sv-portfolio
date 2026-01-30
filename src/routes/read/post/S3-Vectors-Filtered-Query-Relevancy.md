@@ -38,10 +38,22 @@ When you filter, you're turning off nodes. Remove 90% of vectors and you create 
 
 This is why I was getting the wrong person's photo. Visually similar, passed the traversal, but wrong.
 
-## The Fix
+## The Fix (What I Thought)
 
-**Short-term:** A 1.25 boost for filtered results normalized my scores. Crude but effective.
+Short-term: A 1.25x boost for filtered results normalized my scores. Crude but effective.
 
-**Long-term:** Re-ranking. Oversample (request 3-5x your target k), then re-rank with a cross-encoder or Bedrock's rerank API. You're using S3 Vectors for cheap retrieval and smarter compute for precision.
+Long-term: Re-ranking. Oversample (request 3-5x your target k), then re-rank with a cross-encoder or Bedrock's rerank API. Use S3 Vectors for cheap retrieval and smarter compute for precision.
 
-**Layering precision compute on top of efficient storage**
+## The Fix (What Actually Worked)
+
+I spent time implementing the "*sophisticated*" solution. Oversample filtered results at 3x, rerank with Cohere Rerank 3.5 via Bedrock, merge the slices fairly.
+
+Results got worse.
+
+**The problem**: rerankers are designed for text documents. My knowledge base is ~60% images with metadata. The reranker was evaluating synthesized text like "people: judy wilson, topic: family_photos" — not what cross-encoders are optimized for. 
+
+Meanwhile, the raw vector similarity scores from visual embeddings were actually good relevance signals. I was replacing useful information with noise.
+
+I tried reranking both filtered and unfiltered slices. I tried reranking only filtered. I tried dropping visual-only results from unfiltered. Each "*improvement*" made things worse or traded one problem for another.
+
+The 1.25x boost I dismissed as "crude"? It's still running in production.
