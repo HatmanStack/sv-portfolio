@@ -6,10 +6,8 @@ date: 'Feb 4, 2026'
 time: '5 min read'
 ---
 
-<br>
 What if you could ask your family's photo collection a question and get an answer?
-<br>
-<br>
+
 "Show me pictures of Grandma at the beach." "What did Dad write about in his letters from '92?" "Find that video where Mom talks about growing up in Texas."
 
 Family Archive turns your photos, videos, audio recordings, and documents into a searchable, conversational knowledge base. Upload your memories, and start talking to them.
@@ -67,8 +65,6 @@ Delete the CloudFormation stack, everything's gone. Export your data anytime. No
 ## Cost
 
 Everything scales to zero. When no one's using the app, you're not paying for compute—just storage. When someone uploads a photo or searches the archive, resources spin up, do the work, and shut down. You pay for what you use.
-
-A small family sharing memories doesn't use much.
 
 ## Try It
 
