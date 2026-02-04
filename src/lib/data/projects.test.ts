@@ -132,10 +132,10 @@ describe('Projects Data', () => {
 			expect(float?.category).toBe('Cross-Platform');
 		});
 
-		test('Hold That Thought project exists and is valid', () => {
+		test('Family Archive - Document AI project exists and is valid', () => {
 			const htt = projects.find((p) => p.id === 'hold-that-thought');
 			expect(htt).toBeDefined();
-			expect(htt?.title).toBe('Hold That Thought');
+			expect(htt?.title).toBe('Family Archive - Document AI');
 			expect(htt?.category).toBe('Web');
 		});
 

@@ -26,7 +26,7 @@ export const projects: Project[] = [
   },
   {
     id: 'hold-that-thought',
-    title: 'Hold That Thought',
+    title: 'Family Archive - Document AI',
     description: 'Private family platform for sharing letters, photos, and memories. AI-powered transcription, shared gallery, and RAG backend for semantic search and chat.',
     category: 'Web',
     images: {
@@ -34,7 +34,7 @@ export const projects: Project[] = [
       profile: httj
     },
     link: 'https://showcase-htt.hatstack.fun',
-    github: 'https://github.com/HatmanStack/hold-that-thought',
+    github: 'https://github.com/HatmanStack/family-archive-document-ai',
     buttonText: 'Link'
   },
   {
