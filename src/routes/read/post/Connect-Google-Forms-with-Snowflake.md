@@ -182,4 +182,4 @@ In the top right is a share button. We need to add our sheets service account so
 
 <img src="/blog/connect-google-forms-with-snowflake-6.gif" width="400" height="250" alt="Connect Google Forms with Snowflake">
 
-I have noticed a slight lag when entering form data from a cold start but within ~1–2 minutes all the data shows up. If you want to check out a working demo you can fill out this <a href="https://docs.google.com/forms/d/e/1FAIpQLSce94QihTjunjBvYzFdalz0mYGhVS6Ngy17uRrXkqLI_Da7nA/viewform?pli=1">form</a> and have the response populate <a href="https://www.gemenielabs.com/projects/#snowflake">here</a>.
+I have noticed a slight lag when entering form data from a cold start but within ~1–2 minutes all the data shows up. If you want to check out a working demo you can fill out this <a href="https://docs.google.com/forms/d/e/1FAIpQLSce94QihTjunjBvYzFdalz0mYGhVS6Ngy17uRrXkqLI_Da7nA/viewform?pli=1">form</a> and have the response populate <a href="https://github.com/HatmanStack/snow-node-sheets-gpc">here</a>.
