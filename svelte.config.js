@@ -8,7 +8,7 @@ const config = {
     adapter: adapter({
       pages: 'build',
       assets: 'build',
-      fallback: 'index.html',  // Add this for SPA fallback
+      fallback: '200.html',  // SPA fallback (must not be index.html to avoid overwriting prerendered homepage)
       precompress: true, // Enable gzip and brotli compression
       strict: false  // Relaxing the strict mode
     }),
