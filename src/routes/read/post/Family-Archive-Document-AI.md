@@ -14,7 +14,7 @@ Family Archive turns your photos, videos, audio recordings, and documents into a
 
 ## How It Works
 
-When you upload media, RAGStack creates embeddings—mathematical representations of the content. Photos get analyzed. Audio gets transcribed. Documents get parsed. Everything becomes searchable through semantic search and a chat UI.
+When you upload media, RAGStack creates embeddings—mathematical representations of the content. Photos get analyzed. Videos get processed and indexed. Audio gets transcribed. Documents get parsed. Everything becomes searchable through semantic search and a chat UI.
 
 Ask a question. Get results with context. Have an actual conversation with decades of family history.
 
@@ -44,10 +44,10 @@ Skip it if you don't need it. RAGStack still indexes everything else.
 
 ## What You Can Do
 
-- **Upload photos** - Browse a gallery. Comments and reactions. Categories and tags.
+- **Upload photos & videos** - Browse a media gallery with videos, photos, and documents. Comments and reactions. Categories and tags.
 - **Archive letters** - AI transcription. Version history. Revert bad edits.
 - **Send messages** - Private conversations between family members. File attachments.
-- **Search semantically** - "Pictures from Christmas 2019" finds what you mean, not just keyword matches.
+- **Search semantically** - "Videos from Christmas 2019" or "Photos of Grandma" finds what you mean, not just keyword matches.
 - **Chat with your archive** - Ask questions. Get answers with sources. Have a conversation.
 
 ## Your Data, Your Account
