@@ -14,7 +14,7 @@ Nova Canvas is AWS’s latest text-to-image diffusion model. With seven differen
 
 ![Canvas Gone Rogue](/blog/canvas-gone-rogue-2.gif)
 
-I wasn’t the only one excited about these new tools. The app lit up like Times Square on New Year’s and, plot twist , no rate limits. Nothing quite captures the thrill of success like watching your forecasted cloud budget implode!
+I wasn’t the only one excited about these new tools. The app lit up like Times Square on New Year’s and, plot twist, no rate limits. Nothing quite captures the thrill of success like watching your forecasted cloud budget implode!
 
 With no backend setup, I didn’t have visiblity into what users were creating. “Exceptional people creating the next impressionist movement,” I told myself, riding high on the traffic spike.
 
