@@ -43,9 +43,9 @@ That's not a website. That's a part-time job.
 
 ## The Attack Economics Favor Attackers
 
-WordPress's market share makes it the obvious target. Write one exploit, potentially hit millions of sites. Attackers don't need to find your site—they scan the entire internet for vulnerable plugin versions.
+WordPress's market share makes it the obvious target. Write one exploit, potentially hit millions of sites. Attackers don't need to find your site,they scan the entire internet for vulnerable plugin versions.
 
-This isn't theoretical. Automated scanners probe WordPress sites constantly. The comments section of this site's author was recently hit with the exact probes we're describing—SQL injection tests, template injection attempts, PHP code execution payloads. All automated. All from the same IP. All in one afternoon.
+This isn't theoretical. Automated scanners probe WordPress sites constantly. The comments section of this site's author was recently hit with the exact probes we're describing,SQL injection tests, template injection attempts, PHP code execution payloads. All automated. All from the same IP. All in one afternoon.
 
 ## The Alternative Isn't Hard
 
@@ -59,7 +59,7 @@ A static site generator eliminates this entire attack surface. No PHP, no MySQL,
 
 Same result. Zero maintenance. Nothing to exploit.
 
-The tooling has caught up. Astro, Hugo, 11ty, Next.js—these aren't experimental anymore. They're production-ready, often faster, and they deploy for free on Cloudflare Pages, Vercel, or Netlify.
+The tooling has caught up. Astro, Hugo, 11ty, Next.js,these aren't experimental anymore. They're production-ready, often faster, and they deploy for free on Cloudflare Pages, Vercel, or Netlify.
 
 ## Who Should Still Use WordPress?
 

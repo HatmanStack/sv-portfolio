@@ -14,7 +14,7 @@ Family Archive turns your photos, videos, audio recordings, and documents into a
 
 ## How It Works
 
-When you upload media, RAGStack creates embeddings—mathematical representations of the content. Photos get analyzed. Videos get processed and indexed. Audio gets transcribed. Documents get parsed. Everything becomes searchable through semantic search and a chat UI.
+When you upload media, RAGStack creates embeddings,mathematical representations of the content. Photos get analyzed. Videos get processed and indexed. Audio gets transcribed. Documents get parsed. Everything becomes searchable through semantic search and a chat UI.
 
 Ask a question. Get results with context. Have an actual conversation with decades of family history.
 
@@ -64,7 +64,7 @@ Delete the CloudFormation stack, everything's gone. Export your data anytime. No
 
 ## Cost
 
-Everything scales to zero. When no one's using the app, you're not paying for compute—just storage. When someone uploads a photo or searches the archive, resources spin up, do the work, and shut down. You pay for what you use.
+Everything scales to zero. When no one's using the app, you're not paying for compute,just storage. When someone uploads a photo or searches the archive, resources spin up, do the work, and shut down. You pay for what you use.
 
 ## Try It
 

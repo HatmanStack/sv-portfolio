@@ -12,7 +12,7 @@ time: '4 min read'
 
 I wanted to run this service continually without impacting my normal workflow. The solution, AWS Cloud9, an online Linux env based on CentOS. Memory options for Cloud9 dictate how many threads can be run at a time. The only limiting factors I encountered were from different API services used for inference.
 
-In Cloud9 I chose a t3.small instance which has 2 gigs of memory. Each thread of the service consumed ~100MB — 150MB of memory, so running 10–12 threads is possible when accessing the ec2 instance (running your Cloud9 VM) from the service port. Otherwise, if working from the Cloud9 IDE, ~7 threads start to lag the IDE. The current iteration uses sleep to limit thread count. Here is **bash_script.sh**.
+In Cloud9 I chose a t3.small instance which has 2 gigs of memory. Each thread of the service consumed ~100MB , 150MB of memory, so running 10–12 threads is possible when accessing the ec2 instance (running your Cloud9 VM) from the service port. Otherwise, if working from the Cloud9 IDE, ~7 threads start to lag the IDE. The current iteration uses sleep to limit thread count. Here is **bash_script.sh**.
 
 ```bash
 #!/bin/bash

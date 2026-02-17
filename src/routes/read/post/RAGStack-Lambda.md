@@ -8,23 +8,23 @@ time: '10 min read'
 
 RAGStack-Lambda is an open-source serverless document processing platform that fundamentally changes the RAG (Retrieval-Augmented Generation) cost model. 
 
-While enterprise solutions require $300+/month vector database fees just to maintain availability, RAGStack scales to zero when idle—you pay only for actual usage. The result is a fully-featured document intelligence system for $7-10/month handling 1,000 documents.
+While enterprise solutions require $300+/month vector database fees just to maintain availability, RAGStack scales to zero when idle,you pay only for actual usage. The result is a fully-featured document intelligence system for $7-10/month handling 1,000 documents.
 
 Beyond cost efficiency, RAGStack delivers genuinely innovative capabilities:
 
 * **Multimodal intelligence** powered by Amazon Nova embeddings means images and videos are semantically understood, not just stored. Upload a photo/video, search with natural language, and retrieve visually relevant results without manual tagging.
 
-* **Video and audio processing** through AWS Transcribe integration transforms recordings into searchable archives. Source citations include timestamp links—click one and the player jumps to the exact 30-second segment containing that information.
+* **Video and audio processing** through AWS Transcribe integration transforms recordings into searchable archives. Source citations include timestamp links,click one and the player jumps to the exact 30-second segment containing that information.
 
 * **The Metadata Analyzer** discovers patterns in your documents and generates smart filters automatically. Rather than manual tagging, AI determines your content's structure and creates query filters through few-shot learning.
 
-* **Complete ownership** with no external control plane. Every component—Lambda functions, S3 buckets, DynamoDB tables, Knowledge Base—deploys directly into your AWS account. Your data never leaves your infrastructure. There's no SaaS dependency, no third-party API calls for core functionality, and no vendor lock-in beyond AWS itself.
+* **Complete ownership** with no external control plane. Every component,Lambda functions, S3 buckets, DynamoDB tables, Knowledge Base,deploys directly into your AWS account. Your data never leaves your infrastructure. There's no SaaS dependency, no third-party API calls for core functionality, and no vendor lock-in beyond AWS itself.
 
 * **One-click AWS deployment** gets you running in 10 minutes. No Kubernetes expertise required. No containers to manage. Pure serverless architecture.
 
 * **For integration**, the embeddable web component works with React, Vue, Angular, or vanilla HTML via a single script tag.
 
-* **The MCP server** connects your knowledge base directly to Claude Desktop, Cursor, and VS Code—providing context without leaving your development environment.
+* **The MCP server** connects your knowledge base directly to Claude Desktop, Cursor, and VS Code,providing context without leaving your development environment.
 
 RAGStack isn't competing with enterprise-grade vector databases for high-frequency, latency-critical applications. It's built to democratize document AI for the majority of use cases that need affordable, capable document intelligence rather than sub-millisecond response times.
 
@@ -85,7 +85,7 @@ RAGStack is built on a core principle: infrastructure costs should reflect actua
 
 For a 10,000-page documentation site with 5,000 queries per month, traditional managed RAG costs approximately $300/month. RAGStack handles the same workload for $2-5/month.
 
-The trade-off is latency. S3 Vectors retrieval operates in hundreds of milliseconds rather than the sub-50ms of RAM-resident indices. For chat interfaces, research assistants, and document Q&A—where users expect conversational response times—this is entirely acceptable.
+The trade-off is latency. S3 Vectors retrieval operates in hundreds of milliseconds rather than the sub-50ms of RAM-resident indices. For chat interfaces, research assistants, and document Q&A,where users expect conversational response times,this is entirely acceptable.
 
 ### Your Infrastructure, Your Data: No External Control Plane
 
@@ -104,7 +104,7 @@ The CloudFormation/SAM template creates resources directly in your account:
 
 <br>
 
-There is no RAGStack control plane. No telemetry sent to external servers. No dependency on a SaaS provider's uptime or pricing decisions. Your documents, your vectors, your infrastructure—all within your AWS security boundary.
+There is no RAGStack control plane. No telemetry sent to external servers. No dependency on a SaaS provider's uptime or pricing decisions. Your documents, your vectors, your infrastructure,all within your AWS security boundary.
 
 This architecture provides:
 * **Data sovereignty:** Sensitive documents never leave your account
@@ -130,7 +130,7 @@ Text search is well-established. RAGStack extends into multimodal territory usin
 
 <br>
 
-For image uploads, the system provides both visual embeddings (find similar images) and AI-generated captions (find images by description). Captions can be auto-generated using a customizable prompt, manually provided, or both. Video uploads get the same treatment — visual embeddings plus transcription — so you can search by sight or sound.
+For image uploads, the system provides both visual embeddings (find similar images) and AI-generated captions (find images by description). Captions can be auto-generated using a customizable prompt, manually provided, or both. Video uploads get the same treatment , visual embeddings plus transcription , so you can search by sight or sound.
 
 ### Video & Audio: Timestamp-Linked Source Citations
 
@@ -138,7 +138,7 @@ For image uploads, the system provides both visual embeddings (find similar imag
 
 RAGStack's media processing creates a notably useful experience for searching recordings. Upload a video or audio file, and AWS Transcribe converts speech to text, identifies speakers (up to 10), and segments the transcript into 30-second chunks. Each chunk is embedded with timestamp metadata.
 
-**For video, it goes further:** frames are also processed through Amazon Nova to create visual embeddings. This means you can search by what's said or what's shown — query "whiteboard diagram" and retrieve the segment where someone drew on a whiteboard, even if no one mentioned it aloud.
+**For video, it goes further:** frames are also processed through Amazon Nova to create visual embeddings. This means you can search by what's said or what's shown , query "whiteboard diagram" and retrieve the segment where someone drew on a whiteboard, even if no one mentioned it aloud.
 
 When you query "What was discussed about Q4 targets?", the response includes source citations like `team-meeting.mp4 [1:30-2:00]`. Clicking that link opens an inline media player positioned at that exact segment.
 
@@ -164,7 +164,7 @@ The URL includes HTML5 media fragments (`#t=start,end`) that modern browsers han
 
 Manual document tagging is tedious, inconsistent, and scales poorly. RAGStack automates this with the Metadata Analyzer.
 
-* **During ingestion:** An LLM examines each document and extracts structured metadata—topic, document_type, date_range, location, or other relevant fields. You can run in "auto" mode (AI determines what's important) or "manual" mode (you specify which fields to extract).
+* **During ingestion:** An LLM examines each document and extracts structured metadata,topic, document_type, date_range, location, or other relevant fields. You can run in "auto" mode (AI determines what's important) or "manual" mode (you specify which fields to extract).
 * **After ingestion:** The Analyzer samples your knowledge base, counts metadata occurrences, calculates statistics, and generates filter examples automatically.
 
 <br>
@@ -184,7 +184,7 @@ These generated examples use few-shot learning. Enable effective examples, disab
 
 <br>
 
-If you uploaded documents before enabling metadata extraction, changed extraction settings, or migrated from an older version, the Reindex feature regenerates metadata for your entire knowledge base using current settings—without re-running OCR or re-uploading files. The process creates a fresh Knowledge Base, iterates through all documents, regenerates metadata, ingests to the new KB, updates the SSM parameter, and cleans up the old one. Progress displays in real-time.
+If you uploaded documents before enabling metadata extraction, changed extraction settings, or migrated from an older version, the Reindex feature regenerates metadata for your entire knowledge base using current settings,without re-running OCR or re-uploading files. The process creates a fresh Knowledge Base, iterates through all documents, regenerates metadata, ingests to the new KB, updates the SSM parameter, and cleans up the old one. Progress displays in real-time.
 
 ### MCP Server: Knowledge Base Access in Your IDE
 
@@ -212,7 +212,7 @@ The Model Context Protocol (MCP) is changing how AI assistants access external c
 }
 ```
 
-Query your knowledge base directly from your IDE with `@ragstack How does authentication work?`. No context switching required—the AI fetches relevant chunks and explains them inline. This transforms documentation from a static resource into living context that AI assistants draw from continuously during development.
+Query your knowledge base directly from your IDE with `@ragstack How does authentication work?`. No context switching required,the AI fetches relevant chunks and explains them inline. This transforms documentation from a static resource into living context that AI assistants draw from continuously during development.
 
 ### Web Component: Framework-Agnostic Integration
 
@@ -270,7 +270,7 @@ The fastest path to production:
 
 <br>
 
-**Note:** The AWS Marketplace listing has limited visibility—you must be signed in to your AWS account to view the page. This is an AWS Marketplace configuration, not a restriction on the software itself.
+**Note:** The AWS Marketplace listing has limited visibility,you must be signed in to your AWS account to view the page. This is an AWS Marketplace configuration, not a restriction on the software itself.
 
 #### Deploy from Source
 
@@ -327,7 +327,7 @@ Large PDFs (20+ pages) automatically batch into 10-page chunks processed in para
 
 <br>
 
-Text-native PDFs skip OCR entirely. Haiku costs 20x less than Opus. Quota systems for chat prevent runaway costs—when limits are reached, the system switches to a cheaper fallback model for chat rather than failing.
+Text-native PDFs skip OCR entirely. Haiku costs 20x less than Opus. Quota systems for chat prevent runaway costs,when limits are reached, the system switches to a cheaper fallback model for chat rather than failing.
 
 ### Target Use Cases
 
@@ -358,7 +358,7 @@ RAGStack serves a specific segment: cost-effective RAG for moderate-scale worklo
 
 RAGStack-Lambda addresses a gap in the RAG ecosystem: capable document intelligence at a price point accessible to small teams and individual developers. By leveraging serverless architecture and S3 Vectors storage, it eliminates the fixed costs that make traditional RAG prohibitive for moderate workloads.
 
-The absence of an external control plane means your data stays in your account, under your control, within your compliance boundary. Combined with multimodal embeddings, media timestamp linking, automated metadata extraction, and broad integration options—MCP servers, web components, GraphQL APIs—RAGStack provides production-ready document AI without enterprise complexity or SaaS dependencies.
+The absence of an external control plane means your data stays in your account, under your control, within your compliance boundary. Combined with multimodal embeddings, media timestamp linking, automated metadata extraction, and broad integration options,MCP servers, web components, GraphQL APIs,RAGStack provides production-ready document AI without enterprise complexity or SaaS dependencies.
 
 For use cases where sub-millisecond latency isn't critical but cost efficiency and data ownership are, RAGStack offers a practical path to production document AI.
 
