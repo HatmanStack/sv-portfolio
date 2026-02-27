@@ -71,7 +71,7 @@ export const webProjects: WebProject[] = [
     id: 'nba',
     title: 'NBA Stats',
     link: 'https://hatman-nba-fantasy-game.hf.space/',
-    description: 'Streamlit NBA prediction game. Build dream teams from NBA history and compete against AI squads at four difficulty levels. Keras model trained on 2018 season data. <a href="https://github.com/HatmanStack/streamlit-nba" target="_blank" rel="noopener noreferrer"><b>GitHub</b></a>',
+    description: 'Streamlit NBA prediction game featuring a Keras/TensorFlow foundation model trained on the 2018 season. Includes automated hyperparameter tuning (RandomizedSearchCV) and dynamic quarter-by-quarter game simulations. <a href="https://github.com/HatmanStack/streamlit-nba" target="_blank" rel="noopener noreferrer"><b>GitHub</b></a>',
     initialImg: seven,
     activeImg: nbaa
   },
