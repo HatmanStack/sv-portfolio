@@ -45,9 +45,9 @@ export const webProjects: WebProject[] = [
   },
   {
     id: 'connector',
-    title: 'Google Forms to Snowflake Connector',
+    title: 'Google Forms Connector',
     link: 'https://docs.google.com/forms/d/e/1FAIpQLSce94QihTjunjBvYzFdalz0mYGhVS6Ngy17uRrXkqLI_Da7nA/viewform?pli=1',
-    description: 'Serverless Node.js connector linking Google Forms to Snowflake via App Scripts. Lightweight alternative to Rivery/Fivetran—submissions populate in ~1-2 minutes. Data displays <a href="https://hatmanstack-streamlit-display-app-kicv24.streamlit.app/"><b>HERE</b></a>',
+    description: 'Serverless Node.js connector linking Google Forms to a database via App Scripts. Lightweight alternative to Rivery/Fivetran—submissions populate in ~1-2 minutes. Data displays <a href="https://hatmanstack-streamlit-display-app-kicv24.streamlit.app/"><b>HERE</b></a>',
     initialImg: four,
     activeImg: connectora
   },
@@ -63,14 +63,14 @@ export const webProjects: WebProject[] = [
     id: 'name-check',
     title: 'Name Check',
     link: 'https://github.com/HatmanStack/snow-flask-whoami',
-    description: 'Flask + Vega-Lite app comparing serverless cold starts across <a href="https://snow-flask-whoami-gpc-k6cy6vf2la-uc.a.run.app/" target="_blank" rel="noopener noreferrer"><b>GCP</b></a>, <a href="https://l1roun0jr9.execute-api.us-west-1.amazonaws.com/dev" target="_blank" rel="noopener noreferrer"><b>AWS</b></a>, and <a href="https://snow-flask-whoami-az.azurewebsites.net/Home" target="_blank" rel="noopener noreferrer"><b>Azure</b></a>. All three backends share a single Snowflake database.',
+    description: 'Flask + Vega-Lite app comparing serverless cold starts across <a href="https://snow-flask-whoami-gpc-k6cy6vf2la-uc.a.run.app/" target="_blank" rel="noopener noreferrer"><b>GCP</b></a>, <a href="https://l1roun0jr9.execute-api.us-west-1.amazonaws.com/dev" target="_blank" rel="noopener noreferrer"><b>AWS</b></a>, and <a href="https://snow-flask-whoami-az.azurewebsites.net/Home" target="_blank" rel="noopener noreferrer"><b>Azure</b></a>. All three backends share a single DynamoDB database.',
     initialImg: six,
     activeImg: whoamia
   },
   {
     id: 'nba',
     title: 'NBA Stats',
-    link: 'https://hatmanstack-streamlit-nba-app-dz3nxx.streamlit.app/',
+    link: 'https://hatman-nba-fantasy-game.hf.space/',
     description: 'Streamlit NBA prediction game. Build dream teams from NBA history and compete against AI squads at four difficulty levels. Keras model trained on 2018 season data. <a href="https://github.com/HatmanStack/streamlit-nba" target="_blank" rel="noopener noreferrer"><b>GitHub</b></a>',
     initialImg: seven,
     activeImg: nbaa
