@@ -6,11 +6,7 @@ date: 'Dec 14, 2022'
 time: '5 min read'
 ---
 
-# Connecting Google Forms to a DynamoDB Table (The SDK-Free Way)
-
 Every major cloud provider has great in-house tools to make survey results accessible inside their systems. To break out of that system takes a little work. We’ll use Google Forms, Apps Script, Google Cloud Run, and a secure AWS API Gateway bridge to **make it happen**.
-
-![Connect Google Forms with DynamoDB](/blog/connect-google-forms-with-snowflake-1.webp)
 
 <img src="/blog/connect-google-forms-with-snowflake-2.gif" width="300" height="300" alt="Connect Google Forms with DynamoDB">
 
