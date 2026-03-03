@@ -24,9 +24,7 @@
   }
 </script>
 
-<!-- svelte-ignore a11y_click_events_have_key_events -->
-<!-- svelte-ignore a11y_no_static_element_interactions -->
-<div class="content" class:expanded onclick={toggleExpand}>
+<div class="content" class:expanded role="button" tabindex="0" onclick={toggleExpand} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleExpand(); } }}>
   <img
     src={project.images.profession}
     class="profession_image"
