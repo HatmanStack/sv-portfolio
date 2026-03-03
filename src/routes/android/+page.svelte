@@ -311,6 +311,55 @@
     100% { opacity: 1; }
   }
 
+  /* Mobile Layout */
+  @media (max-width: 768px) {
+    .app-grid {
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: 50vh auto;
+      height: auto;
+      min-height: 100vh;
+    }
+
+    .app-item {
+      border-radius: 12px;
+      background-size: cover;
+    }
+
+    .content-panel {
+      grid-column: 1 / -1;
+      padding: 1.5rem 1rem;
+      min-height: 30vh;
+    }
+
+    .app-title {
+      font-size: 2em;
+    }
+
+    .app-description {
+      max-width: 90vw;
+    }
+
+    /* Override :has() column resizing on mobile */
+    .app-grid:has(.app-item:nth-child(1) input:checked),
+    .app-grid:has(.app-item:nth-child(2) input:checked),
+    .app-grid:has(.app-item:nth-child(3) input:checked),
+    .app-grid:has(.app-item:nth-child(4) input:checked),
+    .app-grid:has(.app-item:nth-child(5) input:checked),
+    .app-grid:has(.app-item:nth-child(6) input:checked) {
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    /* Selected app gets wider in row */
+    .app-grid:has(.app-item:nth-child(1) input:checked) .app-item:nth-child(1),
+    .app-grid:has(.app-item:nth-child(2) input:checked) .app-item:nth-child(2),
+    .app-grid:has(.app-item:nth-child(3) input:checked) .app-item:nth-child(3),
+    .app-grid:has(.app-item:nth-child(4) input:checked) .app-item:nth-child(4),
+    .app-grid:has(.app-item:nth-child(5) input:checked) .app-item:nth-child(5),
+    .app-grid:has(.app-item:nth-child(6) input:checked) .app-item:nth-child(6) {
+      grid-column: span 2;
+    }
+  }
+
   /* Reduced Motion */
   @media (prefers-reduced-motion: reduce) {
     .app-grid {

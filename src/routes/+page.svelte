@@ -135,4 +135,22 @@
     justify-content: center;
     height: 40%;
   }
+
+  @media (max-width: 768px) {
+    .portfolio-container {
+      min-height: auto;
+      padding: 1rem 0;
+    }
+
+    .category-container {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      height: auto;
+    }
+
+    .category-container.row-2 {
+      height: auto;
+    }
+  }
 </style>

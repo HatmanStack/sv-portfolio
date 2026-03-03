@@ -220,5 +220,11 @@
   100% { opacity: 1; }
 }
 
+@media (max-width: 768px) {
+  .header-text {
+    white-space: normal;
+    font-size: 2em;
+  }
+}
 
 </style>
