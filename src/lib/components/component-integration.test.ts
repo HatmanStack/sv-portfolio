@@ -75,7 +75,7 @@ describe('Component Integration', () => {
 			const link = getByRole('link');
 			expect(link).toHaveAttribute('href', 'https://example.com');
 
-			const button = getByRole('button');
+			const button = getByRole('button', { name: 'View' });
 			expect(link).toContainElement(button);
 		});
 	});

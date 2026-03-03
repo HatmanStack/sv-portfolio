@@ -24,7 +24,7 @@
   }
 </script>
 
-<div class="content" class:expanded role="button" tabindex="0" onclick={toggleExpand} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleExpand(); } }}>
+<div class="content" class:expanded role="button" tabindex="0" onclick={toggleExpand} onkeydown={(e) => { if (e.target !== e.currentTarget) return; if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleExpand(); } }}>
   <img
     src={project.images.profession}
     class="profession_image"

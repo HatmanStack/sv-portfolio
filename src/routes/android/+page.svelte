@@ -132,7 +132,7 @@
     position: relative;
     cursor: pointer;
     border-radius: 50px;
-    transition: background-image 0.3s ease;
+    transition: background-image 0.3s ease, transform 150ms ease, box-shadow 150ms ease;
   }
 
   .app-item:focus-within {

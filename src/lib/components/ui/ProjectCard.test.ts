@@ -127,7 +127,7 @@ describe('ProjectCard - Interactions', () => {
 		const project = createMockProject();
 		const { getByRole } = render(ProjectCard, { props: { project } });
 
-		const button = getByRole('button');
+		const button = getByRole('button', { name: 'View' });
 		await fireEvent.click(button);
 
 		expect(mockPlay).toHaveBeenCalled();
@@ -137,7 +137,7 @@ describe('ProjectCard - Interactions', () => {
 		const project = createMockProject();
 		const { getByRole } = render(ProjectCard, { props: { project } });
 
-		const button = getByRole('button');
+		const button = getByRole('button', { name: 'View' });
 		expect(button).toHaveClass('gooey-button');
 	});
 });
