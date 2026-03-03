@@ -13,13 +13,18 @@
   let { project, lazy = true }: Props = $props();
   
   const clickSound = createSoundStore(click);
-  
+  let expanded = $state(false);
+
   function handleClick() {
     clickSound.play();
   }
+
+  function toggleExpand() {
+    expanded = !expanded;
+  }
 </script>
 
-<div class="content">
+<div class="content" class:expanded role="button" tabindex="0" onclick={toggleExpand} onkeydown={(e) => { if (e.target !== e.currentTarget) return; if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleExpand(); } }}>
   <img
     src={project.images.profession}
     class="profession_image"
@@ -229,6 +234,67 @@
     }
     to {
       opacity: 1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .content {
+      width: 90vw;
+      height: auto;
+      min-height: 250px;
+      padding: 1.5rem;
+    }
+
+    /* Disable hover expansion on mobile (prevents iOS sticky hover) */
+    .content:hover {
+      width: 90vw;
+      --active: 0;
+    }
+
+    .content:hover .wrapper {
+      grid-template-rows: 0fr;
+    }
+
+    .content:hover .profile_quote {
+      transform: translateY(50%);
+      opacity: 0;
+    }
+
+    .content:hover .profile_detail {
+      opacity: 1;
+      animation: none;
+    }
+
+    .content:hover .fade-in {
+      animation: none;
+      opacity: 0;
+    }
+
+    /* Expanded state for touch (mirrors desktop hover) */
+    .content.expanded {
+      --active: 1;
+    }
+
+    .content.expanded .wrapper {
+      grid-template-rows: 1fr;
+    }
+
+    .content.expanded .profile_quote {
+      transform: none;
+      opacity: 1;
+    }
+
+    .content.expanded .profile_detail {
+      opacity: 0;
+      animation: fadeIn 1s ease-in 0.3s forwards;
+    }
+
+    .content.expanded .fade-in {
+      animation: fadeIn 1s ease-in 0.3s forwards;
+    }
+
+    .content.expanded .profession_image {
+      transform: scale(1);
     }
   }
 </style>

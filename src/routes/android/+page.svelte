@@ -132,7 +132,7 @@
     position: relative;
     cursor: pointer;
     border-radius: 50px;
-    transition: background-image 0.3s ease;
+    transition: background-image 0.3s ease, transform 150ms ease, box-shadow 150ms ease;
   }
 
   .app-item:focus-within {
@@ -309,6 +309,58 @@
     0% { opacity: 0; }
     24% { opacity: 0; }
     100% { opacity: 1; }
+  }
+
+  /* Mobile Layout */
+  @media (max-width: 768px) {
+    .app-grid {
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: 50vh auto;
+      height: auto;
+      min-height: 100vh;
+    }
+
+    .app-item {
+      border-radius: 12px;
+      background-size: cover;
+    }
+
+    .content-panel {
+      grid-column: 1 / -1;
+      padding: 1.5rem 1rem;
+      min-height: 30vh;
+    }
+
+    .app-title {
+      font-size: 2em;
+    }
+
+    .app-description {
+      max-width: 90vw;
+    }
+
+    /* Override :has() column resizing on mobile */
+    .app-grid:has(.app-item:nth-child(1) input:checked),
+    .app-grid:has(.app-item:nth-child(2) input:checked),
+    .app-grid:has(.app-item:nth-child(3) input:checked),
+    .app-grid:has(.app-item:nth-child(4) input:checked),
+    .app-grid:has(.app-item:nth-child(5) input:checked),
+    .app-grid:has(.app-item:nth-child(6) input:checked) {
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    /* Visual emphasis on selected app (no layout shift) */
+    .app-grid:has(.app-item:nth-child(1) input:checked) .app-item:nth-child(1),
+    .app-grid:has(.app-item:nth-child(2) input:checked) .app-item:nth-child(2),
+    .app-grid:has(.app-item:nth-child(3) input:checked) .app-item:nth-child(3),
+    .app-grid:has(.app-item:nth-child(4) input:checked) .app-item:nth-child(4),
+    .app-grid:has(.app-item:nth-child(5) input:checked) .app-item:nth-child(5),
+    .app-grid:has(.app-item:nth-child(6) input:checked) .app-item:nth-child(6) {
+      transform: scale(1.05);
+      transform-origin: center;
+      z-index: 1;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
   }
 
   /* Reduced Motion */

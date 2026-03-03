@@ -342,7 +342,93 @@ p {
 
 .items .item{
   background-image: var(--initial-img);
-  
+
+}
+
+@media (max-width: 768px) {
+  .header-text {
+    white-space: normal;
+    font-size: 2em;
+  }
+
+  .wrapper {
+    margin-top: 4rem;
+  }
+
+  p {
+    max-width: 90vw;
+    font-size: 0.9em;
+  }
+
+  .items {
+    flex-wrap: wrap;
+    justify-content: center;
+    perspective: calc(var(--index) * 20);
+  }
+
+  .item {
+    width: calc(25vw - 0.4rem);
+    height: 30vh;
+    filter: grayscale(0.5) brightness(0.7);
+  }
+
+  /* Disable hover transforms on mobile (no pointer hover on touch) */
+  .items .item:hover {
+    transform: none;
+    filter: grayscale(0.5) brightness(0.7);
+  }
+
+  .items .item:hover + *,
+  .items .item:hover + * + *,
+  .items .item:hover + * + * + *,
+  .items .item:hover + * + * + * + * {
+    transform: none;
+    filter: grayscale(0.5) brightness(0.7);
+  }
+
+  .items .item:has( + :hover),
+  .items .item:has( + * + :hover),
+  .items .item:has( + * + * + :hover),
+  .items .item:has( + * + * + * + :hover) {
+    transform: none;
+    filter: grayscale(0.5) brightness(0.7);
+  }
+
+  /* Keep 3D transforms on focus/active (tap interaction) */
+  .items .item:active,
+  .items .item:focus {
+    width: 28vw;
+    scale: 1;
+    transform: translateZ(calc(var(--index) * 10));
+    margin: 0 .45vw;
+  }
+
+  .items .item:focus {
+    scale: 1;
+  }
+
+  /* Adjacent item transforms on focus (preserve 3D depth on tap) */
+  .items .item:focus + * {
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * 8.5)) rotateY(35deg);
+    z-index: -1;
+  }
+
+  .items .item:focus + * + * {
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * 5.6)) rotateY(40deg);
+    z-index: -2;
+  }
+
+  .items .item:has( + :focus) {
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * 8.5)) rotateY(-35deg);
+  }
+
+  .items .item:has( + * + :focus) {
+    filter: inherit;
+    transform: translateZ(calc(var(--index) * 5.6)) rotateY(-40deg);
+  }
 }
 
 </style>
