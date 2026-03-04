@@ -284,7 +284,7 @@ svg.filters {
   .header-text {
     white-space: normal;
     font-size: 2em;
-    margin-top: 1rem;
+    margin-top: 1rem !important;
   }
 }
 
