@@ -29,7 +29,7 @@ export const webProjects: WebProject[] = [
   },
   {
     id: 'twa',
-    title: 'The Writers Almanac',
+    title: 'Writers Almanac',
     link: 'https://writer.hatstack.fun/',
     description: 'Digital poetry archive inspired by MPR\'s Writer\'s Almanac. Features tsparticles ink-on-paper effect, Whisper audio transcription, and upcoming Llama-powered poem analysis with RAG.',
     initialImg: two,
@@ -45,7 +45,7 @@ export const webProjects: WebProject[] = [
   },
   {
     id: 'connector',
-    title: 'Google Forms Connector',
+    title: 'Google Forms',
     link: 'https://github.com/HatmanStack/snow-node-sheets-gpc',
     description: 'Serverless Node.js connector linking Google Forms to DynamoDB via App Scripts. Lightweight alternative to Rivery/Fivetran.  Submissions populate in ~1-2 minutes. Fill out the <a href="https://docs.google.com/forms/d/e/1FAIpQLSce94QihTjunjBvYzFdalz0mYGhVS6Ngy17uRrXkqLI_Da7nA/viewform?pli=1&pli=1"><b>FORM</b></a> and check the data <a href="https://snow-node-sheets-gpc-357277717136.us-central1.run.app/dashboard"><b>HERE</b></a>',
     initialImg: four,
