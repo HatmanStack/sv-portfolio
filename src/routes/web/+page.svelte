@@ -355,7 +355,7 @@ p {
   }
 
   .wrapper-column {
-    margin-top: 0;
+    margin-top: 1rem;
   }
 
   .wrapper {
@@ -366,6 +366,9 @@ p {
   p {
     max-width: 90vw;
     font-size: 0.9em;
+    background: none;
+    -webkit-text-fill-color: #86868b;
+    color: #86868b;
   }
 
   .items {

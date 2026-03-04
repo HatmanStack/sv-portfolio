@@ -453,7 +453,13 @@
 	}
 }
 
+
 @media (max-width: 768px) {
+	.tab-bar__tabs {
+		gap: 0.5rem;
+		padding: 0 0.5rem;
+	}
+
 	.corner {
 		margin: 0.25rem 0.5rem;
 	}
