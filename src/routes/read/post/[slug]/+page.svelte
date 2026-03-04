@@ -72,12 +72,17 @@
 
 <article>
 <Header />
-{#if needsSplit}
+<div class="title-desktop">
+  {#if needsSplit}
     <h1 class="header-text glow-filter" style="margin-top:.3em;" data-text={firstHalf}></h1>
     <h1 class="header-text glow-filter" style="margin-top:1.3em;" data-text={secondHalf}></h1>
   {:else}
     <h1 class="header-text glow-filter" style="margin-top:.3em;" data-text={data.title}></h1>
   {/if}
+</div>
+<div class="title-mobile">
+  <h1 class="header-text glow-filter" data-text={data.title}></h1>
+</div>
 <div class="post-layout" use:applyClickSound><br>
    <data.content />
   <p style="text-align: center;"><a href={data.link} target="_blank" rel="noopener noreferrer">Read on Medium</a></p>
@@ -280,11 +285,26 @@ svg.filters {
   100% { opacity: 1; }
 }
 
+.title-mobile {
+  display: none;
+}
+
 @media (max-width: 768px) {
+  .title-desktop {
+    display: none;
+  }
+
+  .title-mobile {
+    display: block;
+  }
+
   .header-text {
     white-space: normal;
     font-size: 2em;
-    margin-top: 1rem !important;
+  }
+
+  .glow-filter::before {
+    position: relative;
   }
 }
 
