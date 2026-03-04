@@ -54,7 +54,7 @@
 <section>
 <div class="wrapper-column">
   {#if webContentMap[selectedImage]}
-    <h1 class="header-text glow-filter" data-text={webContentMap[selectedImage].title} style="margin-bottom: {selectedImage.includes('Splash') ? '10rem' : '0'}"></h1>
+    <h1 class="header-text glow-filter" class:slice-title={selectedImage !== 'Splash'} class:long-title={webContentMap[selectedImage].title.length > 15} data-text={webContentMap[selectedImage].title} style="margin-bottom: {selectedImage.includes('Splash') ? '10rem' : '0'}"></h1>
     {#if webContentMap[selectedImage].description}
     <p use:applyClickSound style="margin-bottom: {selectedImage.includes('Medium') ? '3rem' : '0'};margin-top: {selectedImage.includes('Medium') ? '4rem' : '2rem'}; text-wrap:balanced;">
     {@html webContentMap[selectedImage].description}</p>
@@ -346,13 +346,21 @@ p {
 }
 
 @media (max-width: 768px) {
-  .header-text {
-    white-space: normal;
+  .header-text.slice-title {
     font-size: 2em;
   }
 
+  .header-text.long-title {
+    white-space: normal;
+  }
+
+  .wrapper-column {
+    margin-top: 0;
+  }
+
   .wrapper {
-    margin-top: 4rem;
+    margin-top: 2rem;
+    overflow: visible;
   }
 
   p {
@@ -361,14 +369,24 @@ p {
   }
 
   .items {
-    flex-wrap: wrap;
-    justify-content: center;
-    perspective: calc(var(--index) * 20);
+    perspective: calc(var(--index) * 35);
+    overflow: visible;
+    transition: transform 1.25s cubic-bezier(.1, .7, 0, 1);
   }
 
+  /* Translate container to center the focused slice */
+  .items:has(.item:nth-child(1):focus) { transform: translateX(43.75%); }
+  .items:has(.item:nth-child(2):focus) { transform: translateX(31.25%); }
+  .items:has(.item:nth-child(3):focus) { transform: translateX(18.75%); }
+  .items:has(.item:nth-child(4):focus) { transform: translateX(6.25%); }
+  .items:has(.item:nth-child(5):focus) { transform: translateX(-6.25%); }
+  .items:has(.item:nth-child(6):focus) { transform: translateX(-18.75%); }
+  .items:has(.item:nth-child(7):focus) { transform: translateX(-31.25%); }
+  .items:has(.item:nth-child(8):focus) { transform: translateX(-43.75%); }
+
   .item {
-    width: calc(25vw - 0.4rem);
-    height: 30vh;
+    height: 25vh;
+    margin-top: 2rem;
     filter: grayscale(0.5) brightness(0.7);
   }
 
@@ -397,10 +415,10 @@ p {
   /* Keep 3D transforms on focus/active (tap interaction) */
   .items .item:active,
   .items .item:focus {
-    width: 28vw;
+    width: 50vw;
     scale: 1;
     transform: translateZ(calc(var(--index) * 10));
-    margin: 0 .45vw;
+    margin: 2rem .45vw 0;
   }
 
   .items .item:focus {

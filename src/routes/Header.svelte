@@ -453,4 +453,10 @@
 	}
 }
 
+@media (max-width: 768px) {
+	.corner {
+		margin: 0.25rem 0.5rem;
+	}
+}
+
 </style>
