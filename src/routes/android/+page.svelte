@@ -331,6 +331,10 @@
       min-height: 30vh;
     }
 
+    .cta-button {
+      margin: 0.5rem 0;
+    }
+
     .app-title {
       font-size: 2em;
     }
@@ -339,27 +343,24 @@
       max-width: 90vw;
     }
 
-    /* Override :has() column resizing on mobile */
-    .app-grid:has(.app-item:nth-child(1) input:checked),
-    .app-grid:has(.app-item:nth-child(2) input:checked),
-    .app-grid:has(.app-item:nth-child(3) input:checked),
-    .app-grid:has(.app-item:nth-child(4) input:checked),
-    .app-grid:has(.app-item:nth-child(5) input:checked),
-    .app-grid:has(.app-item:nth-child(6) input:checked) {
-      grid-template-columns: repeat(6, 1fr);
+    /* Override desktop :has() column resizing for mobile two-row layout */
+    .app-grid:has(.app-item:nth-child(1) input:checked) {
+      grid-template-columns: 3fr 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr;
     }
-
-    /* Visual emphasis on selected app (no layout shift) */
-    .app-grid:has(.app-item:nth-child(1) input:checked) .app-item:nth-child(1),
-    .app-grid:has(.app-item:nth-child(2) input:checked) .app-item:nth-child(2),
-    .app-grid:has(.app-item:nth-child(3) input:checked) .app-item:nth-child(3),
-    .app-grid:has(.app-item:nth-child(4) input:checked) .app-item:nth-child(4),
-    .app-grid:has(.app-item:nth-child(5) input:checked) .app-item:nth-child(5),
-    .app-grid:has(.app-item:nth-child(6) input:checked) .app-item:nth-child(6) {
-      transform: scale(1.05);
-      transform-origin: center;
-      z-index: 1;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    .app-grid:has(.app-item:nth-child(2) input:checked) {
+      grid-template-columns: 0.5fr 3fr 0.5fr 0.5fr 0.5fr 0.5fr;
+    }
+    .app-grid:has(.app-item:nth-child(3) input:checked) {
+      grid-template-columns: 0.5fr 0.5fr 3fr 0.5fr 0.5fr 0.5fr;
+    }
+    .app-grid:has(.app-item:nth-child(4) input:checked) {
+      grid-template-columns: 0.5fr 0.5fr 0.5fr 3fr 0.5fr 0.5fr;
+    }
+    .app-grid:has(.app-item:nth-child(5) input:checked) {
+      grid-template-columns: 0.5fr 0.5fr 0.5fr 0.5fr 3fr 0.5fr;
+    }
+    .app-grid:has(.app-item:nth-child(6) input:checked) {
+      grid-template-columns: 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr 3fr;
     }
   }
 
