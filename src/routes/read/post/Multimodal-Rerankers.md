@@ -73,7 +73,7 @@ None are available through Bedrock yet. They're all self-hosted, which means add
 
 The filtered search problem on object storage has three layers:
 
-* *Graph connectivity*: needs an infrastructure fix from AWS. ACORN's approach doesn't transfer to object storage without adaptation. I've filed the feature request.  
+* *Graph connectivity*: needs an infrastructure fix from AWS. ACORN's approach doesn't transfer to object storage without adaptation. I've filed the [feature request](https://repost.aws/questions/QUjrm6KygfTBiwaaKpwqY_lQ/filtered-query-relevancy-degradation-in-s3-vectors-and-a-potential-architectural-fix).  
 * *Score calibration*: the adaptive boost handles this now. It keeps filtered results surfacing above unfiltered regardless of selectivity. At small to medium scale, this is the right answer.  
 * *Relevance evaluation*: multimodal cross-encoders are the first architecture that can actually determine whether an image is relevant to a query, not just whether its vector is close. This is the layer that matters at scale, and the models just arrived.
 
