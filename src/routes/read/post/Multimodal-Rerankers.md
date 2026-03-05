@@ -24,7 +24,7 @@ So the graph-level fix requires AWS to build something new. I've filed a [featur
 
 ## **Multimodal Cross-Encoders: The Architecture That Fits**
 
-Over the last few months, a new class of rerankers has appeared that process images and text jointly through cross-attention. This is architecturally different from both bi-encoders and text cross-encoders.
+While multimodal cross-attention has existed in research for years, over the last few months, a new class of production-ready rerankers has finally made this architecture viable for joint image-text processing at scale. This is architecturally different from both bi-encoders and text cross-encoders.
 
 ![Multimodal Cross-Encoder Architecture](/blog/multimodal_1.jpeg)
 
