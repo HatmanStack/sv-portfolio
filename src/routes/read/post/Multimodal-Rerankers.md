@@ -8,7 +8,7 @@ time: '5 min read'
 
 **TL;DR:** Filtered HNSW search on object storage has a precision problem that existing solutions can't touch. At small scale, an adaptive boost works. At large scale, multimodal cross-encoders that process images and text through joint cross-attention are the architecture that fixes this.
 
-I've been running [RAGStack-Lambda](https://github.com/HatmanStack/RAGStack-Lambda) on S3 Vectors with a multimodal corpus, \~60% images with metadata. In my last post, I documented why filtered queries consistently return \~10% lower relevancy, sometimes surfacing the wrong results entirely. The root cause is HNSW graph disconnection from post-filtering compounded by quantization noise in smaller candidate pools.
+I've been running [RAGStack-Lambda](https://github.com/HatmanStack/RAGStack-Lambda) on S3 Vectors with a multimodal corpus, \~60% images with metadata. In my [last post](https://portfolio.hatstack.fun/read/post/S3-Vectors-Filtered-Query-Relevancy), I documented why filtered queries consistently return \~10% lower relevancy, sometimes surfacing the wrong results entirely. The root cause is HNSW graph disconnection from post-filtering compounded by quantization noise in smaller candidate pools.
 
 I solved it at my scale with an adaptive boost that keeps filtered results \~5% above unfiltered, scaling dynamically with how aggressively the filter shrinks the candidate pool. At \~1500 documents, that's enough. This post is about what comes next, not for me, but for anyone building multimodal RAG on object-storage vector databases at scale.
 
