@@ -85,7 +85,9 @@
 </div>
 <div class="post-layout" use:applyClickSound><br>
    <data.content />
-  <p style="text-align: center;"><a href={data.link} target="_blank" rel="noopener noreferrer">Read on Medium</a></p>
+  {#if data.link}
+    <p style="text-align: center;"><a href={data.link} target="_blank" rel="noopener noreferrer">Read on Medium</a></p>
+  {/if}
   </div>
 </article>
 

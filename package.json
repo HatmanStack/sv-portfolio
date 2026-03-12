@@ -38,6 +38,7 @@
 	},
 	"dependencies": {
 		"mdsvex": "^0.12.6",
+		"rehype-slug": "^6.0.0",
 		"run": "^1.5.0"
 	},
 	"pnpm": {

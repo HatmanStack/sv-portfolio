@@ -1,6 +1,5 @@
 ---
 title: 'RAGStack-Lambda: Scale-to-Zero RAG'
-link: 'https://github.com/HatmanStack/RAGStack-Lambda'
 description: 'Serverless document AI with S3 Vectors and Nova embeddings.'
 date: 'Jan 20, 2026'
 time: '10 min read'

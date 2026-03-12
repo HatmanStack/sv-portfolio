@@ -1,6 +1,7 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { mdsvex } from 'mdsvex';
+import rehypeSlug from 'rehype-slug';
 import sveltePreprocess from 'svelte-preprocess';
 
 const config = {
@@ -25,7 +26,8 @@ const config = {
     }),
     vitePreprocess(),
     mdsvex({
-      extensions: ['.md']
+      extensions: ['.md'],
+      rehypePlugins: [rehypeSlug]
     })
   ]
 };

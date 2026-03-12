@@ -1,6 +1,5 @@
 ---
 title: 'Family Archive - Document AI'
-link: 'https://github.com/HatmanStack/family-archive-document-ai'
 description: "Have a conversation with your family's memories. One-click AWS deployment, everything stays in your account."
 date: 'Feb 4, 2026'
 time: '5 min read'
