@@ -1,15 +1,15 @@
 ---
 title: 'Claude Forge'
-description: 'A GAN-inspired adversarial pipeline for Claude Code where separate agents generate and critique code in iterative loops.'
-date: 'Mar 12, 2026'
+description: 'A GAN-inspired adversarial multi-agent pipeline for Claude Code where separate agents generate and critique each other in iterative loops.'
+date: 'Mar 14, 2026'
 time: '7 min read'
 ---
 
-# Adversarial AI Development Pipeline
+# Adversarial Multi-Agent Pipeline for Claude Code
 
 What if your AI coding assistant could argue with itself and produce better code because of it?
 
-Claude Forge is an adversarial development pipeline for Claude Code that borrows from Generative Adversarial Networks (GANs). Instead of one AI agent writing code and hoping for the best, separate agents generate and critique each other's work in iterative loops until the output converges on something solid.
+Claude Forge is an adversarial multi-agent pipeline for Claude Code that borrows from Generative Adversarial Networks (GANs). Instead of one AI agent writing code and hoping for the best, separate agents generate and critique each other's work in iterative loops until the output converges on something solid.
 
 The result: plans that don't hallucinate files, implementations that follow the spec, and code that passes review before a human ever sees it.
 
@@ -29,17 +29,17 @@ The fundamental issue is that the same context window that generated the code is
 
 In machine learning, GANs pit two networks against each other: a generator creates content, a discriminator evaluates it, and the feedback loop drives both to improve. Claude Forge applies this same principle to the development workflow:
 
-![Diagram comparing generator and discriminator roles in GAN loops. Top: Planner vs. Plan Reviewer. Bottom: Implementer vs. Reviewer. Arrows indicate interaction.](/blog/gan.jpeg) 
+![Diagram comparing generator and discriminator roles in GAN loops. Top: Planner vs. Plan Reviewer. Bottom: Implementer vs. Reviewer. Arrows indicate interaction.](/blog/gan.jpeg)
 
 Each role runs as a **separate Claude agent with its own fresh context window**. The Plan Reviewer has never seen the Planner's reasoning process, it only sees the output. The Code Reviewer has never seen the Implementer's struggles, it only sees the code. This separation is the key insight: fresh context means fresh eyes.
 
-## The Pipeline
+## Four Pipeline Flows
 
-The full workflow has two phases: an interactive brainstorm with a human, then an automated build cycle where agents handle everything.
+The GAN architecture isn't limited to feature development. Claude Forge ships with four distinct flows, each triggered by its own intake skill:
 
-### Phase 1: Brainstorm (Human in the Loop)
+### Feature Development (`/brainstorm` → `/pipeline`)
 
-You start with a feature idea. The brainstorm skill explores your codebase, then asks you 5-15 clarifying questions, one at a time, preferring multiple choice:
+The original flow. You start with a feature idea and the brainstorm skill explores your codebase, then asks 5-15 clarifying questions to front-load high-impact decisions:
 
 ```
 The codebase uses DynamoDB for storage. For this feature's data, should we:
@@ -49,19 +49,36 @@ B) Use a different storage approach (e.g., S3 for documents)
 C) Both — DynamoDB for metadata, S3 for content
 ```
 
-Questions follow a priority order: scope first, then architecture, data model, user-facing behavior, and non-functional requirements. The goal is to front-load the high-impact decisions so the AI planner doesn't have to guess.
-
-The output is a structured brainstorm document, not a conversation transcript but a distilled set of decisions, scope boundaries, and codebase context that the Planner agent can consume without any prior conversation history.
-
-### Phase 2: Automated Pipeline (Agents Only)
-
-Once the brainstorm is complete, you kick off the pipeline and step back. The orchestrator spawns agents in sequence, routing signals between them:
+The output is a structured brainstorm document, not a conversation transcript but a distilled set of decisions that the Planner agent can consume cold. From there the pipeline runs: Planner ↔ Plan Reviewer → Implementer ↔ Code Reviewer → Final Reviewer (GO/NO-GO).
 
 ![Diagram titled Extended Pipeline Agent Workflow featuring a 3D character at a laptop. Workflow stages: brainstorming, planning, implementation, and final review, with stages depicted in orange boxes connected by arrows. Includes steps like codebase exploration, design spec production, and assessments (GO/NO-GO). Tone: systematic and organized.](/blog/arch.jpeg)
 
-Each GAN loop runs up to 3 iterations before escalating to the human. This prevents infinite cycles while still giving agents room to converge.
+### Repository Evaluation (`/repo-eval` → `/pipeline`)
 
-If the loop times out or you reach a token limit just restart with `/pipeline 2026-03-12-user-auth` and the pipeline picks up where it left off.
+Three evaluator agents run in parallel, each with a different lens:
+
+- **The Pragmatist** (hire lens): Would you hire this codebase? Scores onboarding, API design, testing, and error handling.
+- **The Oncall Engineer** (stress lens): Would you want to be paged for this at 3am? Scores observability, failure modes, recovery, and operational docs.
+- **The Team Lead** (day-2 lens): Can a team maintain this long-term? Scores modularity, dependency health, tech debt, and contribution friction.
+
+<br>
+
+They score 12 pillars (4 each) on a 1-10 scale. The pipeline then plans and implements fixes, looping until all pillars hit 9/10.
+
+### Repository Health (`/repo-health` → `/pipeline`)
+
+An auditor agent scans for technical debt across four vectors: architectural, structural, operational, and hygiene. The remediation uses a split generator topology:
+
+- **Hygienist** (subtractive): Deletes dead code, simplifies over-abstractions, removes unused dependencies.
+- **Fortifier** (additive): Adds linting, CI checks, git hooks, and missing configs.
+
+<br>
+
+Both run through the same adversarial review loop. The pipeline re-audits after each pass and loops until all CRITICAL and HIGH findings are resolved.
+
+### Documentation Health (`/doc-health` → `/pipeline`)
+
+A doc auditor runs six detection phases: discovery, comparison, examples, links, config, and structure. It finds drift between documentation and actual code, then a doc engineer fixes the gaps while a doc reviewer validates the changes. The pipeline re-audits until drift is resolved.
 
 ## Design Decisions That Make It Work
 
@@ -78,7 +95,7 @@ The Planner writes for a fictional engineer who is:
 - Skilled but has **zero context** on the codebase
 - Unfamiliar with the toolset and problem domain
 - **Will follow instructions precisely**
-- **Will not infer missing details** — if it's not in the plan, it won't happen
+- **Will not infer missing details**, if it's not in the plan, it won't happen
 
 <br>
 
@@ -104,20 +121,13 @@ When a reviewer finds an issue, it doesn't say "fix line 45." Instead, it asks:
 
 This isn't just a stylistic choice. It produces better fixes. When the Implementer agent is told exactly what to change, it makes a mechanical edit. When it's guided to *think about* the problem, it's more likely to find the root cause and fix related issues it might have otherwise missed.
 
-### Immutable Plans, Mutable Feedback
+### Signal Protocol
 
-A subtle but important rule: **reviewers cannot modify plan documents.** All feedback goes into a separate `feedback.md` file, tagged by source:
+Agents communicate through structured signals routed by the orchestrator: `PLAN_COMPLETE`, `REVISION_REQUIRED`, `PLAN_APPROVED`, `IMPLEMENTATION_COMPLETE`, `CHANGES_REQUESTED`, `GO`, `NO-GO`. Each non-feature pipeline adds its own signals. This formal protocol means the orchestrator doesn't need to interpret free-text output to decide what happens next.
 
-```markdown
-### PLAN_REVIEW - Iteration 1 - Phase 1, Task 3
+### State Recovery
 
-> **Consider:** This task says "Modify src/utils/date.js" but Glob
-> shows that file doesn't exist. Should this be "Create"?
-
-**Status:** OPEN
-```
-
-This separation means the plan remains a clean, auditable record of intent. The feedback file becomes the conversation log between generators and discriminators. When a generator resolves feedback, it moves the item to a "Resolved" section with a resolution note, creating a clear audit trail of what was caught and how it was fixed.
+All pipeline flows support re-entry. If you hit a token limit or need to step away, just run `/pipeline 2026-03-12-user-auth` again. The orchestrator detects progress via `feedback.md` signals and git log, then resumes at the correct stage.
 
 ### Adversarial Plan Review
 
@@ -131,25 +141,6 @@ The Plan Reviewer doesn't just verify structure. It actively tries to break the 
 <br>
 
 This is where the GAN analogy is most literal. The discriminator isn't checking if the plan *looks* good. It's trying to find failure modes.
-
-### Token Budgeting
-
-Each phase targets ~50,000 tokens, sized to fit in a single agent context window. The Plan Reviewer enforces this: phases under 25k should be combined, phases over 75k should be split.
-
-This isn't arbitrary. An agent that runs out of context mid-phase will lose critical information. By sizing phases to fit comfortably within a context window, each Implementer agent can hold the complete Phase-0 (conventions) plus the full Phase-N (tasks) without compression.
-
-### Date-Based Plan Versioning
-
-Plans use `YYYY-MM-DD-feature-slug` naming:
-
-```
-docs/plans/
-├── 2026-03-01-user-auth/
-├── 2026-03-12-notifications/
-└── 2026-03-20-billing-webhooks/
-```
-
-This is intentionally decoupled from release versions. Plans are audit artifacts, committed to the repo as a record of what was designed, what feedback was given, and how it was resolved. Tying them to release versions creates collision problems when features slip between releases or when you cut a release without a formal plan.
 
 ## What The Pipeline Catches
 
@@ -197,18 +188,25 @@ The trade-off is worth it for features where correctness matters more than speed
 Install by copying the `.claude/skills/` directory into your project:
 
 ```bash
-git clone https://github.com/yourusername/claude-forge.git
+git clone https://github.com/hatmanstack/claude-forge.git
 cp -r claude-forge/.claude/skills/ /path/to/your-project/.claude/skills/
 ```
 
 Then in your project:
 
 ```bash
-# Interactive brainstorm
+# Feature development
 /brainstorm I want to add webhook support for payment events
-
-# Automated pipeline (use the slug from brainstorm output)
 /pipeline 2026-03-12-payment-webhooks
+
+# Evaluate your repo
+/repo-eval
+
+# Audit for tech debt
+/repo-health
+
+# Check documentation drift
+/doc-health
 ```
 
 The pipeline handles the rest. You'll see progress reports between stages, and it'll stop and ask if anything needs human judgment.
@@ -217,4 +215,4 @@ The pipeline handles the rest. You'll see progress reports between stages, and i
 
 <br>
 
-Claude Forge is open source and available on [GitHub](https://github.com/yourusername/claude-forge). The pipeline is built entirely from Claude Code custom skills with no external tooling and no CI integration required. Just prompts, signals, and agents arguing with each other until the code is right.
+Claude Forge is open source and available on [GitHub](https://github.com/hatmanstack/claude-forge). The pipeline is built entirely from Claude Code custom skills with no external tooling and no CI integration required. Just prompts, signals, and agents arguing with each other until the code is right.
