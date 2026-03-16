@@ -1,8 +1,8 @@
 ---
 title: 'Claude Forge'
 description: 'A GAN-inspired adversarial multi-agent pipeline for Claude Code where separate agents generate and critique each other in iterative loops.'
-date: 'Mar 14, 2026'
-time: '7 min read'
+date: 'Mar 16, 2026'
+time: '8 min read'
 ---
 
 # Adversarial Multi-Agent Pipeline for Claude Code
@@ -63,7 +63,7 @@ Three evaluator agents run in parallel, each with a different lens:
 
 <br>
 
-They score 12 pillars (4 each) on a 1-10 scale. The pipeline then plans and implements fixes, looping until all pillars hit 9/10.
+They score 12 pillars (4 each) on a 1-10 scale with per-pillar threshold overrides. The pipeline then plans and implements fixes. A lightweight verification agent spot-checks the specific findings at the end — no expensive re-evaluation.
 
 ### Repository Health (`/repo-health` → `/pipeline`)
 
@@ -74,11 +74,24 @@ An auditor agent scans for technical debt across four vectors: architectural, st
 
 <br>
 
-Both run through the same adversarial review loop. The pipeline re-audits after each pass and loops until all CRITICAL and HIGH findings are resolved.
+Both run through the same adversarial review loop. A verification agent spot-checks the CRITICAL and HIGH findings at the end — the auditor never re-runs.
 
 ### Documentation Health (`/doc-health` → `/pipeline`)
 
-A doc auditor runs six detection phases: discovery, comparison, examples, links, config, and structure. It finds drift between documentation and actual code, then a doc engineer fixes the gaps while a doc reviewer validates the changes. The pipeline re-audits until drift is resolved.
+A doc auditor runs six detection phases: discovery, comparison, examples, links, config, and structure. It finds drift between documentation and actual code, then a doc engineer fixes the gaps while a doc reviewer validates the changes.
+
+### Combined Audit (`/audit` → `/pipeline`)
+
+The `/audit` skill runs any combination of the above. It asks scoping questions once, then spawns up to 5 agents in parallel (3 evaluators + health auditor + doc auditor). All intake docs land in one directory, and a single `/pipeline` command creates one unified plan with phases tagged by implementer type:
+
+1. `[HYGIENIST]` phases first — subtractive cleanup
+2. `[IMPLEMENTER]` phases next — structural fixes on clean code
+3. `[FORTIFIER]` phases next — lock in the clean state
+4. `[DOC-ENGINEER]` phases last — docs reflect final code
+
+<br>
+
+This is a merged-plan model, not sequential independent flows. The planner reads all findings together and consolidates overlapping concerns into single tasks.
 
 ## Design Decisions That Make It Work
 
@@ -129,6 +142,14 @@ Agents communicate through structured signals routed by the orchestrator: `PLAN_
 
 All pipeline flows support re-entry. If you hit a token limit or need to step away, just run `/pipeline 2026-03-12-user-auth` again. The orchestrator detects progress via `feedback.md` signals and git log, then resumes at the correct stage.
 
+### Verification Over Re-Evaluation
+
+An earlier design re-ran the full evaluator/auditor agents after remediation — 3-5 agents re-scanning the entire codebase. This was token-expensive and redundant since the per-phase reviewers had already verified each fix.
+
+The current design uses a single verification agent: one code reviewer with a targeted prompt that reads the original intake doc findings and spot-checks each specific `file:line` location. One agent, targeted scope, fraction of the tokens.
+
+Evaluator and auditor agents run exactly once (during intake) and never again.
+
 ### Adversarial Plan Review
 
 The Plan Reviewer doesn't just verify structure. It actively tries to break the plan:
@@ -162,11 +183,10 @@ In practice, the adversarial loops catch issues that single-pass generation cons
 
 <br>
 
-**Final Review catches:**
-- Integration failures between phases (Phase 2 broke Phase 1's tests)
-- Dead code (Phase 1 exports that Phase 2 never used)
-- Inconsistent error handling across phase boundaries
-- Scope drift from the original spec
+**Verification catches:**
+- Remediation targets that weren't actually addressed (file:line still has the issue)
+- Regressions introduced during fixes (tests that passed before now fail)
+- Partial fixes (the symptom changed but the root cause remains)
 
 <br>
 
@@ -199,13 +219,13 @@ Then in your project:
 /brainstorm I want to add webhook support for payment events
 /pipeline 2026-03-12-payment-webhooks
 
-# Evaluate your repo
+# Full audit (health + eval + docs) — one command
+/audit all
+/pipeline 2026-03-16-audit-my-app
+
+# Or run individual audits
 /repo-eval
-
-# Audit for tech debt
 /repo-health
-
-# Check documentation drift
 /doc-health
 ```
 
