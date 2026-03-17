@@ -63,7 +63,7 @@ Three evaluator agents run in parallel, each with a different lens:
 
 <br>
 
-They score 12 pillars (4 each) on a 1-10 scale with per-pillar threshold overrides. The pipeline then plans and implements fixes. A lightweight verification agent spot-checks the specific findings at the end — no expensive re-evaluation.
+They score 12 pillars (4 each) on a 1-10 scale with per-pillar threshold overrides. The pipeline then plans and implements fixes. A lightweight verification agent verifys the specific findings at the end — no expensive re-evaluation.
 
 ### Repository Health (`/repo-health` → `/pipeline`)
 
@@ -74,7 +74,7 @@ An auditor agent scans for technical debt across four vectors: architectural, st
 
 <br>
 
-Both run through the same adversarial review loop. A verification agent spot-checks the CRITICAL and HIGH findings at the end — the auditor never re-runs.
+Both run through the same adversarial review loop. A verification agent verifys the CRITICAL and HIGH findings at the end — the auditor never re-runs.
 
 ### Documentation Health (`/doc-health` → `/pipeline`)
 
@@ -136,17 +136,17 @@ This isn't just a stylistic choice. It produces better fixes. When the Implement
 
 ### Signal Protocol
 
-Agents communicate through structured signals routed by the orchestrator: `PLAN_COMPLETE`, `REVISION_REQUIRED`, `PLAN_APPROVED`, `IMPLEMENTATION_COMPLETE`, `CHANGES_REQUESTED`, `GO`, `NO-GO`. Each non-feature pipeline adds its own signals. This formal protocol means the orchestrator doesn't need to interpret free-text output to decide what happens next.
+Agents communicate through structured signals routed by the orchestrator: `PLAN_COMPLETE`, `REVISION_REQUIRED`, `PLAN_APPROVED`, `IMPLEMENTATION_COMPLETE`, `CHANGES_REQUESTED`, `GO`, `NO-GO`, `VERIFIED`, `UNVERIFIED`. Each intake agent also emits a completion signal (`EVAL_HIRE_COMPLETE`, `AUDIT_COMPLETE`, etc.) that the intake skill validates before writing the intake doc — if a signal is missing, the agent was likely truncated and the intake doc is not written with partial data.
 
 ### State Recovery
 
-All pipeline flows support re-entry. If you hit a token limit or need to step away, just run `/pipeline 2026-03-12-user-auth` again. The orchestrator detects progress via `feedback.md` signals and git log, then resumes at the correct stage.
+All pipeline flows support re-entry. If you hit a token limit or need to step away, just run `/pipeline 2026-03-12-user-auth` again. The orchestrator detects progress via `feedback.md` signals and git log, then resumes at the correct stage. Verification results (`VERIFIED`/`UNVERIFIED`) are persisted to `feedback.md` before reporting to the user, so even an interruption between verification and completion is recoverable.
 
 ### Verification Over Re-Evaluation
 
 An earlier design re-ran the full evaluator/auditor agents after remediation — 3-5 agents re-scanning the entire codebase. This was token-expensive and redundant since the per-phase reviewers had already verified each fix.
 
-The current design uses a single verification agent: one code reviewer with a targeted prompt that reads the original intake doc findings and spot-checks each specific `file:line` location. One agent, targeted scope, fraction of the tokens.
+The current design uses a single verification agent: one code reviewer with a targeted prompt that reads the original intake doc findings and verifys each specific `file:line` location. One agent, targeted scope, fraction of the tokens.
 
 Evaluator and auditor agents run exactly once (during intake) and never again.
 
