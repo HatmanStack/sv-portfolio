@@ -37,7 +37,7 @@
 		"vitest": "^4.1.0"
 	},
 	"dependencies": {
-		"mdsvex": "^0.12.6",
+		"mdsvex": "^0.12.7",
 		"rehype-slug": "^6.0.0",
 		"run": "^1.5.0"
 	},
