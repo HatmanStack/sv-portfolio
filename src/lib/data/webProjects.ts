@@ -5,7 +5,7 @@ import twaa from '$lib/images/twa.avif';
 import credentialsa from '$lib/images/credentials.avif';
 import connectora from '$lib/images/connector.avif';
 import plotPalettea from '$lib/images/plotpalette.avif';
-import whoamia from '$lib/images/name-check.avif';
+import claudeForgea from '$lib/images/claude-forge.avif';
 import nbaa from '$lib/images/nba.avif';
 import novaCanvasa from '$lib/images/nova-canvas.avif';
 
@@ -60,12 +60,12 @@ export const webProjects: WebProject[] = [
     activeImg: plotPalettea
   },
   {
-    id: 'name-check',
-    title: 'Name Check',
-    link: 'https://github.com/HatmanStack/snow-flask-whoami',
-    description: 'Flask + Vega-Lite app comparing serverless cold starts across <a href="https://snow-flask-whoami-gpc-k6cy6vf2la-uc.a.run.app/" target="_blank" rel="noopener noreferrer"><b>GCP</b></a>, <a href="https://l1roun0jr9.execute-api.us-west-1.amazonaws.com/dev" target="_blank" rel="noopener noreferrer"><b>AWS</b></a>, and <a href="https://snow-flask-whoami-az.azurewebsites.net/Home" target="_blank" rel="noopener noreferrer"><b>Azure</b></a>. All three backends share a single DynamoDB database.',
+    id: 'claude-forge',
+    title: 'Claude Forge',
+    link: 'https://github.com/HatmanStack/claude-forge',
+    description: 'Adversarial multi-agent pipeline for Claude Code. Separate agents generate and critique each other\'s work in GAN-style loops. Includes skills for feature development, repo evaluation, health audits, and documentation drift detection.',
     initialImg: six,
-    activeImg: whoamia
+    activeImg: claudeForgea
   },
   {
     id: 'nba',
