@@ -27,6 +27,17 @@ This article walks through why that pattern works, how to build it, and when it 
 - [When to Use This (And When Not To)](#when-to-use-this-and-when-not-to)
 - [Getting Started](#getting-started)
 
+## Prerequisites
+
+- Familiarity with [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or a similar AI coding agent
+- A working installation of Claude Code (for the hands-on sections)
+- Basic understanding of how LLM context windows work
+- Git installed and configured
+
+<br>
+
+No machine learning background is required. The GAN concepts are explained from first principles where they appear.
+
 ## The Single-Pass Problem
 
 The AI generates code in one pass. If it hallucinates a file path, misunderstands the architecture, or writes tests that do not actually test anything, you catch it during review. Or worse, you do not.
@@ -39,9 +50,9 @@ The problem compounds with task complexity. A simple utility function generates 
 
 There is a growing ecosystem of frameworks tackling different aspects of this problem. They each bring real contributions worth understanding.
 
-**Superpowers** focuses on development methodology. It uses subagent-driven development, TDD enforcement, and multi-stage review. The framework generates a design spec, then an implementation plan, then dispatches subagents to execute. Review subagents check the output, and if they find issues, the implementer revises and gets re-reviewed until approved.
+**[Superpowers](https://github.com/obra/superpowers)** focuses on development methodology. It uses subagent-driven development, TDD enforcement, and multi-stage review. The framework generates a design spec, then an implementation plan, then dispatches subagents to execute. Review subagents check the output, and if they find issues, the implementer revises and gets re-reviewed until approved.
 
-**Get Shit Done (GSD)** focuses on context engineering. Its key insight is fighting context window degradation through fresh 200k subagent contexts, parallel wave execution, and XML-structured plans. A JavaScript CLI handles the deterministic work (tracking progress, dependency ordering, context budgets) so the LLM never wastes tokens on bookkeeping it would do unreliably anyway.
+**[Get Shit Done (GSD)](https://github.com/gsd-build/get-shit-done)** focuses on context engineering. Its key insight is fighting context window degradation through fresh 200k subagent contexts, parallel wave execution, and XML-structured plans. A JavaScript CLI handles the deterministic work (tracking progress, dependency ordering, context budgets) so the LLM never wastes tokens on bookkeeping it would do unreliably anyway.
 
 Both frameworks share a crucial design decision: fresh context windows. When an agent has been reasoning for 100k tokens, its attention degrades. By spawning subagents with clean 200k contexts, these frameworks sidestep the "context rot" problem that plagues long-running agent sessions.
 
