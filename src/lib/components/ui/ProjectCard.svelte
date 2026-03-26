@@ -15,7 +15,8 @@
 	const clickSound = createSoundStore(click);
 	let expanded = $state(false);
 
-	function handleClick() {
+	function handleClick(e: Event) {
+		e.stopPropagation();
 		clickSound.play();
 		window.location.href = project.link;
 	}

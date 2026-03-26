@@ -76,7 +76,7 @@ describe('ProjectCard - Rendering', () => {
 		const { getByRole } = render(ProjectCard, { props: { project } });
 
 		const button = getByRole('button', { name: 'View' });
-		expect(button).toBeDefined();
+		expect(button).toBeInTheDocument();
 	});
 
 	test('renders button with correct text', () => {

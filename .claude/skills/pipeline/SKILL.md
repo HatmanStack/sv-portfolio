@@ -1,7 +1,7 @@
 ---
 name: pipeline
 description: Run the adversarial plan-implement-review pipeline. Spawns agents for each role with their own context windows. Use after /brainstorm, /repo-eval, /repo-health, or /doc-health has produced a starting doc.
-allowed-tools: Agent, Read, Write, Glob, Grep, Bash, Edit
+allowed-tools: Agent, SendMessage, Read, Write, Glob, Grep, Bash, Edit
 ---
 
 # Pipeline Orchestrator
@@ -319,7 +319,7 @@ Before reporting the final verdict, append an entry to `.claude/skill-runs.json`
 }
 ```
 
-- `verdict`: the final outcome of this pipeline run
+- `verdict`: the outcome of this pipeline run
 - Read the existing file, parse the JSON array, append the new entry, and write it back
 - If the file is malformed, overwrite it with a fresh array containing only the new entry
 
