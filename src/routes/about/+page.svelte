@@ -50,10 +50,10 @@
   </section>
   <section class="socials">
     <ul class="social-links">
-	<li><a href="https://www.linkedin.com/in/christopher-galliart-gemenie-labs/" target="_blank"><img src={linkedIn} alt="LinkedIn" /></a></li>
-	<li><a href="https://huggingface.co/Hatman" target="_blank"><img src={huggingface} alt="Hugging Face" /></a></li>
-	<li><a href="https://twitter.com/HatmanStack" target="_blank"><img src={x} alt="X" /></a></li>
-  <li><a href="https://calendly.com/christopher-galliart" target="_blank"><img src={calendly} alt="Calendly" /></a></li>
+	<li><a href="https://www.linkedin.com/in/christopher-galliart-gemenie-labs/" target="_blank" rel="noopener noreferrer"><img src={linkedIn} alt="LinkedIn" /></a></li>
+	<li><a href="https://huggingface.co/Hatman" target="_blank" rel="noopener noreferrer"><img src={huggingface} alt="Hugging Face" /></a></li>
+	<li><a href="https://twitter.com/HatmanStack" target="_blank" rel="noopener noreferrer"><img src={x} alt="X" /></a></li>
+  <li><a href="https://calendly.com/christopher-galliart" target="_blank" rel="noopener noreferrer"><img src={calendly} alt="Calendly" /></a></li>
 	</ul>
   </section>
 </div>

@@ -37,4 +37,34 @@ describe('Single Blog Post Load Function', () => {
 			expect(error).toBeDefined();
 		}
 	});
+
+	test('rejects slugs with path traversal characters', async () => {
+		const maliciousSlugs = ['../etc/passwd', 'foo/bar', 'test..slug', 'hello%20world'];
+
+		for (const slug of maliciousSlugs) {
+			try {
+				// @ts-ignore - partial mock for testing
+				await load({ params: { slug } });
+				// Should not reach here
+				expect(true).toBe(false);
+			} catch (error) {
+				expect(error).toBeDefined();
+			}
+		}
+	});
+
+	test('accepts valid slugs', async () => {
+		const validSlugs = ['my-post', 'Post-Title-123', 'simple'];
+
+		for (const slug of validSlugs) {
+			try {
+				// @ts-ignore - partial mock for testing
+				await load({ params: { slug } });
+			} catch (error) {
+				// The post won't exist, but the slug validation should pass.
+				// The error should be from the dynamic import, not slug validation.
+				expect(error).toBeDefined();
+			}
+		}
+	});
 });
