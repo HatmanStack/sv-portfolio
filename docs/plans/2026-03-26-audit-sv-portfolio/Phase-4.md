@@ -96,12 +96,12 @@ Additional updates post-Phases 1-3:
 - Verify the project structure tree matches the actual directory layout after all deletions in Phase 1 (LinkedIn.svelte removed, navigation.ts removed)
 
 **Verification Checklist:**
-- [ ] Vite version matches `package.json`
-- [ ] Deployment section mentions Amplify
-- [ ] No `/lib/utils` in project structure
-- [ ] All listed directories and files actually exist
-- [ ] Lint commands documented
-- [ ] `pnpm run lint:md` passes on README.md
+- [x] Vite version matches `package.json`
+- [x] Deployment section mentions Amplify
+- [x] No `/lib/utils` in project structure
+- [x] All listed directories and files actually exist
+- [x] Lint commands documented
+- [x] `pnpm run lint:md` passes on README.md
 
 **Testing Instructions:**
 - Cross-reference every file/directory listed in README with the actual filesystem

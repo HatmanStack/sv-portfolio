@@ -31,12 +31,15 @@ Modern portfolio showcasing CodePen favorites, built with Svelte 5 and SvelteKit
 
 ## Tech Stack
 
-- **Framework**: Svelte 5.0, SvelteKit 2.0
-- **Language**: TypeScript 5.0
+- **Framework**: Svelte 5, SvelteKit 2
+- **Language**: TypeScript 5
 - **Styling**: CSS custom properties, SCSS preprocessing
-- **Build**: Vite 5.4
-- **Deployment**: Static adapter for any static host
-- **Package Manager**: pnpm
+- **Build**: Vite 8
+- **Testing**: Vitest 4, @testing-library/svelte 5
+- **Linting**: ESLint 10, Prettier 3, markdownlint
+- **Git Hooks**: Husky (lint-staged, commitlint)
+- **Deployment**: AWS Amplify (static adapter with precompression)
+- **Package Manager**: pnpm 9
 
 ## Project Structure
 
@@ -45,15 +48,14 @@ Modern portfolio showcasing CodePen favorites, built with Svelte 5 and SvelteKit
   /lib
     /components   # Reusable components (PascalCase)
       /ui         # UI components (ProjectCard, ImageGrid, GooeyButton)
-      /icons      # SVG icon components
     /stores       # Svelte 5 runes-based stores
     /types        # Centralized TypeScript types
     /data         # Static data files
     /styles       # Global styles and design tokens
-    /hooks        # Custom hooks and utilities
-    /utils        # Helper functions
+    /hooks        # Custom hooks (sound system)
     /images       # Image assets
     /sounds       # Audio files
+    /test-utils   # Test helpers and mock factories
   /routes         # SvelteKit file-based routing
 ```
 
@@ -76,6 +78,24 @@ pnpm preview
 
 # Type check
 pnpm run check
+
+# Lint
+pnpm run lint
+
+# Format
+pnpm run format
+
+# Check formatting
+pnpm run format:check
+
+# Lint markdown
+pnpm run lint:md
+
+# Run tests
+pnpm test
+
+# Run tests with coverage
+pnpm test:coverage
 ```
 
 ## Documentation
