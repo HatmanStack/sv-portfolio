@@ -9,7 +9,7 @@
 	let { children, onclick }: Props = $props();
 
 	let buttonElement: HTMLButtonElement;
-	let introInterval: number;
+	let introInterval: ReturnType<typeof setInterval>;
 
 	function moveBg(e: PointerEvent) {
 		const rect = (e.target as HTMLElement).getBoundingClientRect();

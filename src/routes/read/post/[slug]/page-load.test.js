@@ -25,17 +25,10 @@ describe('Single Blog Post Load Function', () => {
 	});
 
 	test('function structure handles params correctly', async () => {
-		// Test that the function accepts params object
 		const testParams = { slug: 'test' };
 
-		try {
-			// @ts-ignore - partial mock for testing
-			await load({ params: testParams });
-		} catch (error) {
-			// Error is expected for non-existent slug
-			// We're just testing the function accepts the right structure
-			expect(error).toBeDefined();
-		}
+		// @ts-ignore - partial mock for testing
+		await expect(load({ params: testParams })).rejects.toThrow();
 	});
 
 	test('rejects slugs with path traversal characters', async () => {
@@ -45,25 +38,27 @@ describe('Single Blog Post Load Function', () => {
 			try {
 				// @ts-ignore - partial mock for testing
 				await load({ params: { slug } });
-				// Should not reach here
-				expect(true).toBe(false);
-			} catch (error) {
-				expect(error).toBeDefined();
+				expect.unreachable('Should have thrown');
+			} catch (/** @type {any} */ err) {
+				// SvelteKit error() throws HttpError with status/body, not standard Error
+				expect(err).toBeDefined();
+				expect(err.status).toBe(404);
 			}
 		}
 	});
 
-	test('accepts valid slugs', async () => {
+	test('accepts valid slugs without triggering validation error', async () => {
 		const validSlugs = ['my-post', 'Post-Title-123', 'simple'];
 
 		for (const slug of validSlugs) {
 			try {
 				// @ts-ignore - partial mock for testing
 				await load({ params: { slug } });
-			} catch (error) {
-				// The post won't exist, but the slug validation should pass.
-				// The error should be from the dynamic import, not slug validation.
-				expect(error).toBeDefined();
+				expect.unreachable('Should have thrown');
+			} catch (/** @type {any} */ err) {
+				// Slug passes validation; error is from dynamic import, not slug check
+				// HttpError from validation has status 404, import errors don't
+				expect(err.status).toBeUndefined();
 			}
 		}
 	});

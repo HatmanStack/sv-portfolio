@@ -14,7 +14,7 @@
 			x="-50%"
 			y="-200%"
 			width="200%"
-			Height="500%"
+			height="500%"
 		>
 			<feGaussianBlur in="SourceGraphic" data-target-blur="4" stdDeviation="4" result="blur4" />
 			<feGaussianBlur in="SourceGraphic" data-target-blur="19" stdDeviation="19" result="blur19" />

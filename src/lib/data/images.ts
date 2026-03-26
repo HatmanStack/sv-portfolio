@@ -63,7 +63,7 @@ export const gridImages: ImageGridItem[] = [
 	{ id: 'credentials-2', src: credentials, alt: 'Credentials project' },
 	{ id: 'movies-1', src: movies, alt: 'Movies project' },
 	{ id: 'nba-2', src: nba, alt: 'NBA project' },
-	{ id: 'empty-1', src: '', alt: '' },
+	{ id: 'empty-1', src: '', alt: '', special: true, content: '' },
 	{ id: 'pixel-prompt-2', src: pixelPrompt, alt: 'Pixel Prompt project' },
 	{ id: 'italian-2', src: italian, alt: 'Italian project' },
 	{ id: 'plot-palette-2', src: plotPalette, alt: 'Plot Palette project' },

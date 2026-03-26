@@ -2,7 +2,7 @@ import { error } from '@sveltejs/kit';
 
 export async function load({ params }) {
 	// Validate slug to prevent path traversal
-	if (!/^[a-z0-9-]+$/i.test(params.slug)) {
+	if (!/^[a-z0-9+=_-]+$/i.test(params.slug)) {
 		throw error(404, 'Invalid slug');
 	}
 
@@ -13,8 +13,8 @@ export async function load({ params }) {
 			...post.metadata,
 			content: post.default
 		};
-	} catch (error) {
-		console.error('Error loading post:', error);
-		throw error;
+	} catch (err) {
+		console.error('Error loading post:', err);
+		throw err;
 	}
 }

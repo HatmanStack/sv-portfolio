@@ -33,9 +33,9 @@
 	background-clip: text;
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
-	filter: url(#glow-4);
-	-moz-filter: url(#glow-4);
-	-webkit-filter: url(#glow-4);
+	filter: url('#glow-4');
+	-moz-filter: url('#glow-4');
+	-webkit-filter: url('#glow-4');
 	opacity: 0;
 	animation: onloadopacity 1s ease-out forwards;
 }

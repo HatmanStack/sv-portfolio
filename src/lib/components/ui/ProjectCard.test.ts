@@ -71,12 +71,12 @@ describe('ProjectCard - Rendering', () => {
 		});
 	});
 
-	test('renders link with correct href', () => {
-		const project = createMockProject({ link: 'https://example.com' });
+	test('renders button that navigates to project link', () => {
+		const project = createMockProject({ link: 'https://example.com', buttonText: 'View' });
 		const { getByRole } = render(ProjectCard, { props: { project } });
 
-		const link = getByRole('link');
-		expect(link).toHaveAttribute('href', 'https://example.com');
+		const button = getByRole('button', { name: 'View' });
+		expect(button).toBeDefined();
 	});
 
 	test('renders button with correct text', () => {

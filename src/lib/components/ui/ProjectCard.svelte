@@ -17,6 +17,7 @@
 
 	function handleClick() {
 		clickSound.play();
+		window.location.href = project.link;
 	}
 
 	function toggleExpand() {
@@ -70,11 +71,9 @@
 	<div class="wrapper">
 		<div class="profile_quote">
 			<p style="font-size:.8em" class="fade-in">{project.description}</p>
-			<a href={project.link}>
-				<GooeyButton onclick={handleClick}>
-					{project.buttonText}
-				</GooeyButton>
-			</a>
+			<GooeyButton onclick={handleClick}>
+				{project.buttonText}
+			</GooeyButton>
 		</div>
 	</div>
 </div>
@@ -219,10 +218,6 @@
 		font-size: var(--font-size-2xl);
 		font-weight: var(--font-weight-semibold);
 		color: var(--color-card-light);
-	}
-
-	.profile_quote button {
-		flex-shrink: 0;
 	}
 
 	.content:hover .wrapper {

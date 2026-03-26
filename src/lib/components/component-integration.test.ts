@@ -68,15 +68,12 @@ describe('Component Integration', () => {
 			expect(button).toHaveClass('gooey-button');
 		});
 
-		test('ProjectCard button is within link', () => {
+		test('ProjectCard renders button for navigation', () => {
 			const project = createMockProject({ link: 'https://example.com' });
 			const { getByRole } = render(ProjectCard, { props: { project } });
 
-			const link = getByRole('link');
-			expect(link).toHaveAttribute('href', 'https://example.com');
-
 			const button = getByRole('button', { name: 'View' });
-			expect(link).toContainElement(button);
+			expect(button).toHaveClass('gooey-button');
 		});
 	});
 
