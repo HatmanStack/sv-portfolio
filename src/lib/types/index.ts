@@ -1,3 +1,5 @@
+import type { Snippet } from 'svelte';
+
 /**
  * Type Definitions
  *
@@ -238,7 +240,7 @@ export interface ImageGridProps {
  */
 export interface GooeyButtonProps {
   /** Button content (children) */
-  children?: any;
+  children?: Snippet;
 
   /** Click handler */
   onclick?: () => void;

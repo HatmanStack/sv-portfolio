@@ -1,10 +1,11 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import '../app.css';
 	import { appStore } from '$lib/stores/app.svelte.js';
 	import { page } from '$app/stores';
 
 	interface Props {
-		children: any;
+		children: Snippet;
 	}
 
 	let { children }: Props = $props();
