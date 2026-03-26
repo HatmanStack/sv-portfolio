@@ -15,9 +15,26 @@
 		"test:coverage": "vitest run --coverage",
 		"lint": "eslint src/",
 		"format": "prettier --write .",
-		"format:check": "prettier --check ."
+		"format:check": "prettier --check .",
+		"prepare": "husky"
+	},
+	"lint-staged": {
+		"*.{js,ts,svelte}": [
+			"eslint --fix",
+			"prettier --write"
+		],
+		"*.{css,json}": [
+			"prettier --write"
+		]
+	},
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-conventional"
+		]
 	},
 	"devDependencies": {
+		"@commitlint/cli": "^20.5.0",
+		"@commitlint/config-conventional": "^20.5.0",
 		"@eslint/js": "^10.0.1",
 		"@fontsource/fira-mono": "^5.2.7",
 		"@sveltejs/adapter-auto": "^7.0.1",
@@ -33,7 +50,9 @@
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.16.0",
 		"globals": "^17.4.0",
+		"husky": "^9.1.7",
 		"jsdom": "^29.0.0",
+		"lint-staged": "^16.4.0",
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.5.1",
 		"prismjs": "^1.30.0",
