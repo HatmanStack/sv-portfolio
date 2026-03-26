@@ -191,7 +191,7 @@
 	}
 	&__tab {
 		text-align: center;
-		width: em;
+		width: 3em;
 		min-width: 3em;
 		&-icon,
 		&-name {
