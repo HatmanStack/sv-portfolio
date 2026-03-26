@@ -69,7 +69,7 @@ export const projectsRow2: Project[] = [
   {
     id: 'ragstack',
     title: 'RAGStack',
-    description: 'Serverless document processing with AI chat. Upload docs, OCR extraction, query via Amazon Bedrock. One-click AWS deploy. Login: guest@hatstack.fun / Guest@123',
+    description: 'Serverless document processing with AI chat. Upload docs, OCR extraction, query via Amazon Bedrock. One-click AWS deploy.',
     category: 'AWS',
     images: {
       profession: ragstacka,
