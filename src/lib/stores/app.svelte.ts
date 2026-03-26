@@ -1,7 +1,7 @@
-import type { AppState, NavigationState, UserPreferences, Theme } from '$lib/types/index.js';
+import type { AppState, Theme } from '$lib/types/index.js';
 
 function createAppStore() {
-  let state = $state<AppState>({
+  const state = $state<AppState>({
     navigation: {
       currentSection: 'home',
       isMenuOpen: false

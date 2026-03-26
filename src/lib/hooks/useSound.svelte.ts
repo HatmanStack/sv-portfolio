@@ -91,6 +91,7 @@ export function createApplyClickSound(soundFile: string, options: SoundOptions =
   const soundStore = createSoundStore(soundFile, options);
 
   return (node: HTMLElement) => {
+    // eslint-disable-next-line svelte/prefer-svelte-reactivity -- non-reactive DOM handler tracking
     const handlers = new Map<HTMLElement, () => void>();
 
     function attachListeners() {

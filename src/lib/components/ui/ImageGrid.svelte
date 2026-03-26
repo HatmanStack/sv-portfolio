@@ -11,7 +11,7 @@
 
 <div class="scroll-container">
   <div class="stuck-grid {className}">
-    {#each images as image, index (image.id)}
+    {#each images as image (image.id)}
       <div 
         class="grid-item {image.special ? 'special' : ''}" 
         style="--animation-range: {image.animationRange}"

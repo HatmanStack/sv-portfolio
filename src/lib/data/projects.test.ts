@@ -7,7 +7,6 @@
 
 import { describe, test, expect } from 'vitest';
 import { projects, projectsRow2 } from './projects';
-import type { Project } from '$lib/types';
 
 describe('Projects Data', () => {
 	describe('Data Structure', () => {
