@@ -40,7 +40,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { browser } from '$app/environment';
-  import '../app.css';
   import Header from './Header.svelte';
   import ImageGrid from '$lib/components/ui/ImageGrid.svelte';
   import ProjectCard from '$lib/components/ui/ProjectCard.svelte';
