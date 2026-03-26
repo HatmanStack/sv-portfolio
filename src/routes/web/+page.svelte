@@ -196,7 +196,10 @@ p {
     cursor: pointer;
     filter: grayscale(1) brightness(.5);
     transition: transform 1.25s var(--transition), filter 3s var(--transition), width 1.25s var(--transition);
-    will-change: transform, filter, rotateY, width;
+}
+
+.item:hover, .item:focus-within {
+    will-change: transform, filter, width;
 }
 
 .item::before, .item::after{
