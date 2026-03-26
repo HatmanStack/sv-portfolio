@@ -193,11 +193,11 @@ Additional updates:
 - Verify all test file paths mentioned in TESTING.md still exist after Phase 1 deletions
 
 **Verification Checklist:**
-- [ ] Coverage thresholds match `vitest.config.ts`
-- [ ] Node version matches CI config
-- [ ] Import paths in examples are correct
-- [ ] All referenced test files exist
-- [ ] `pnpm run lint:md` passes
+- [x] Coverage thresholds match `vitest.config.ts`
+- [x] Node version matches CI config
+- [x] Import paths in examples are correct
+- [x] All referenced test files exist
+- [x] `pnpm run lint:md` passes
 
 **Testing Instructions:**
 - Cross-reference every number and path in TESTING.md with config files

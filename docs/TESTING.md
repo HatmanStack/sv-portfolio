@@ -7,7 +7,7 @@ This project uses Vitest and @testing-library/svelte for comprehensive test cove
 **Test Framework**: Vitest v4
 **Component Testing**: @testing-library/svelte v5
 **Environment**: jsdom
-**Coverage Target**: 80%
+**Coverage Target**: 65%+ (see thresholds below)
 
 ## Running Tests
 
@@ -78,7 +78,7 @@ test('renders project title', () => {
 Test state mutations and side effects:
 
 ```typescript
-import { createAppStore } from './app.svelte';
+import { createAppStore } from '$lib/stores/app.svelte';
 import { createMockLocalStorage } from '$lib/test-utils/store-helpers';
 
 test('toggleSound updates preference', () => {
@@ -183,10 +183,10 @@ test('toggles menu on button click', async () => {
 ## Coverage Goals
 
 Current thresholds enforced in CI:
-- **Statements**: 80%
-- **Branches**: 75%
-- **Functions**: 80%
-- **Lines**: 80%
+- **Statements**: 65%
+- **Branches**: 60%
+- **Functions**: 70%
+- **Lines**: 75%
 
 ## Test Suite Structure
 
@@ -261,14 +261,19 @@ Ensure `resolve.conditions: ['browser']` is set in vitest.config.ts to force bro
 ## CI/CD
 
 Tests run automatically on:
-- Every push to any branch
-- Every pull request to main
-- Both Node 18 and Node 20
+
+- Every push to `main` and `claude/*` branches
+- Every pull request to `main`
+- Node 24
+
+CI jobs: lint-and-typecheck, ESLint/Prettier, unit tests (with coverage), build.
 
 Builds fail if:
+
 - Any test fails
 - Coverage drops below thresholds
 - Type checking fails
+- ESLint or Prettier checks fail
 
 ## Common Queries
 
