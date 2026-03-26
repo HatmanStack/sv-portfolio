@@ -115,7 +115,6 @@
     gap: 1rem;
     width: 100%;
     min-height: 89vh;
-    background-image: var(--bg-color);
     background: transparent;
   }
 
