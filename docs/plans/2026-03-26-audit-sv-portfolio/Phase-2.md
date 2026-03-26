@@ -45,10 +45,10 @@ For slug validation:
 - This prevents path traversal even though Vite's module resolution is already a guard
 
 **Verification Checklist:**
-- [ ] All `target="_blank"` links in about page have `rel="noopener noreferrer"`
-- [ ] Slug validation rejects slugs containing `..`, `/`, or other path traversal characters
-- [ ] `pnpm test` passes
-- [ ] `pnpm run check` passes
+- [x] All `target="_blank"` links in about page have `rel="noopener noreferrer"`
+- [x] Slug validation rejects slugs containing `..`, `/`, or other path traversal characters
+- [x] `pnpm test` passes
+- [x] `pnpm run check` passes
 
 **Testing Instructions:**
 - If a test exists for `+page.js` slug loading, add a case for an invalid slug (e.g., `../etc/passwd`). If no test exists, add one.
@@ -89,10 +89,10 @@ For the `@html` usage:
 - If the project ever moves to dynamic data, DOMPurify should be added. For now, type safety is the fix.
 
 **Verification Checklist:**
-- [ ] No `Record<string, any>` casts remain in `webProjects.ts` or `androidApps.ts`
-- [ ] Content map access is type-safe (accessing `.description` on a seed entry produces a compile error or returns `undefined` safely)
-- [ ] `pnpm run check` passes with no type errors
-- [ ] `pnpm test` passes
+- [x] No `Record<string, any>` casts remain in `webProjects.ts` or `androidApps.ts`
+- [x] Content map access is type-safe (accessing `.description` on a seed entry produces a compile error or returns `undefined` safely)
+- [x] `pnpm run check` passes with no type errors
+- [x] `pnpm test` passes
 
 **Testing Instructions:**
 - Update any existing tests for `webProjects.ts` or `androidApps.ts` to reflect new types
@@ -125,10 +125,10 @@ fix(types): replace Record<string, any> casts in content maps
 - Run `pnpm run check` after each file change to catch cascading type errors
 
 **Verification Checklist:**
-- [ ] No `any` type annotations in production `src/` files (excluding test files)
-- [ ] `Snippet` is used for all `children` props
-- [ ] `pnpm run check` passes
-- [ ] `pnpm test` passes
+- [x] No `any` type annotations in production `src/` files (excluding test files)
+- [x] `Snippet` is used for all `children` props
+- [x] `pnpm run check` passes
+- [x] `pnpm test` passes
 
 **Testing Instructions:**
 - No new tests needed. Type checking is the verification.
@@ -161,11 +161,11 @@ fix(types): replace all any types with proper types in production code
 - Check `src/lib/components/ui/AndroidFilters.svelte` for any `id="glow-4"` conflict and rename if needed
 
 **Verification Checklist:**
-- [ ] No inline SVG filter definitions in blog post template
-- [ ] `SVGFilters.svelte` is the single source for the `glow-4` filter
-- [ ] No duplicate `id="glow-4"` definitions that could conflict
-- [ ] `pnpm test` passes
-- [ ] Visual: blog post pages still render glow effects correctly
+- [x] No inline SVG filter definitions in blog post template
+- [x] `SVGFilters.svelte` is the single source for the `glow-4` filter
+- [x] No duplicate `id="glow-4"` definitions that could conflict
+- [x] `pnpm test` passes
+- [x] Visual: blog post pages still render glow effects correctly
 
 **Testing Instructions:**
 - If component tests exist for the blog post page, verify they still pass
@@ -214,11 +214,11 @@ For glow/header CSS:
 Note on Svelte scoped styles: If these CSS classes are used on elements within the component, Svelte's scoped styles may add hash suffixes. In that case, the shared CSS should use `:global()` selectors or be imported as a global stylesheet. Check how `tokens.css` is currently imported for the pattern to follow.
 
 **Verification Checklist:**
-- [ ] `.glow-filter`, `.header-text`, and keyframe definitions exist in exactly one place
-- [ ] `:root` custom properties (shared ones) defined in exactly one place
-- [ ] All 3 route pages render identically to before
-- [ ] `pnpm run check` passes
-- [ ] `pnpm test` passes
+- [x] `.glow-filter`, `.header-text`, and keyframe definitions exist in exactly one place
+- [x] `:root` custom properties (shared ones) defined in exactly one place
+- [x] All 3 route pages render identically to before
+- [x] `pnpm run check` passes
+- [x] `pnpm test` passes
 
 **Testing Instructions:**
 - Run `pnpm run build` to verify prerendering works

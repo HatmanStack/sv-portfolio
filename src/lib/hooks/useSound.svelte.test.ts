@@ -5,7 +5,7 @@
  */
 
 import { describe, test, expect, beforeEach, vi } from 'vitest';
-import { createSoundStore, useSoundAction } from './useSound.svelte';
+import { createSoundStore, useSoundAction, createApplyClickSound } from './useSound.svelte';
 
 describe('Sound Hooks', () => {
 	let mockAudio: any;
@@ -234,7 +234,7 @@ describe('Sound Hooks', () => {
 			expect(mockElement.addEventListener).toHaveBeenCalledWith('click', expect.any(Function));
 		});
 
-		test('click prevents default and triggers playback', () => {
+		test('click does not call preventDefault', () => {
 			const action = useSoundAction('/test-sound.mp3');
 			action(mockElement);
 
@@ -252,7 +252,7 @@ describe('Sound Hooks', () => {
 			const mockEvent = { preventDefault: vi.fn() };
 			clickHandler?.(mockEvent);
 
-			expect(mockEvent.preventDefault).toHaveBeenCalled();
+			expect(mockEvent.preventDefault).not.toHaveBeenCalled();
 		});
 
 		test('destroy removes event listener', () => {
@@ -274,6 +274,54 @@ describe('Sound Hooks', () => {
 
 			expect(mockAudio.volume).toBe(0.3);
 			expect(mockAudio.loop).toBe(true);
+		});
+	});
+
+	describe('createApplyClickSound', () => {
+		test('attaches click listeners to all anchor tags in node', () => {
+			const mockLink1 = { addEventListener: vi.fn(), removeEventListener: vi.fn() };
+			const mockLink2 = { addEventListener: vi.fn(), removeEventListener: vi.fn() };
+			const mockNode = {
+				querySelectorAll: vi.fn().mockReturnValue([mockLink1, mockLink2])
+			};
+
+			const action = createApplyClickSound('/test-sound.mp3');
+			action(mockNode as any);
+
+			expect(mockNode.querySelectorAll).toHaveBeenCalledWith('a');
+			expect(mockLink1.addEventListener).toHaveBeenCalledWith('click', expect.any(Function));
+			expect(mockLink2.addEventListener).toHaveBeenCalledWith('click', expect.any(Function));
+		});
+
+		test('destroy removes all event listeners', () => {
+			const mockLink = { addEventListener: vi.fn(), removeEventListener: vi.fn() };
+			const mockNode = {
+				querySelectorAll: vi.fn().mockReturnValue([mockLink])
+			};
+
+			const action = createApplyClickSound('/test-sound.mp3');
+			const result = action(mockNode as any);
+
+			result.destroy();
+
+			expect(mockLink.removeEventListener).toHaveBeenCalledWith('click', expect.any(Function));
+		});
+
+		test('update attaches listeners to new links', () => {
+			const mockLink1 = { addEventListener: vi.fn(), removeEventListener: vi.fn() };
+			const mockLink2 = { addEventListener: vi.fn(), removeEventListener: vi.fn() };
+			const mockNode = {
+				querySelectorAll: vi.fn()
+					.mockReturnValueOnce([mockLink1])
+					.mockReturnValueOnce([mockLink1, mockLink2])
+			};
+
+			const action = createApplyClickSound('/test-sound.mp3');
+			const result = action(mockNode as any);
+
+			result.update();
+
+			expect(mockLink2.addEventListener).toHaveBeenCalledWith('click', expect.any(Function));
 		});
 	});
 });

@@ -2,8 +2,7 @@
   import type { PageData } from './$types';
   import Header from '../../../Header.svelte';
   import SVGFilters from '$lib/components/ui/SVGFilters.svelte';
-  import { applyClickSound } from "$lib/hooks/applyClickSound";
-  import { useSound } from "$lib/hooks/useSound";
+  import { useSoundAction, createApplyClickSound } from "$lib/hooks/useSound.svelte";
   import click from "$lib/sounds/click.wav";
   import { page } from '$app/stores';
 
@@ -18,7 +17,8 @@
   let secondHalf = $derived(titleWords.slice(Math.ceil(titleWords.length / 2)).join(' '));
   let needsSplit = $derived(titleWords.length > 6);
 
-  const click_sound = useSound(click,["click"])
+  const click_sound = useSoundAction(click)
+  const applyClickSound = createApplyClickSound(click)
 
   const SITE_URL = 'https://portfolio.hatstack.fun';
   let postUrl = $derived(SITE_URL + $page.url.pathname);

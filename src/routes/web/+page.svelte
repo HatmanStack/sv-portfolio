@@ -37,13 +37,13 @@
   import Header from '../Header.svelte';
   import SVGFilters from '$lib/components/ui/SVGFilters.svelte';
 
-  import { useSound } from "$lib/hooks/useSound";
-  import { applyClickSound } from "$lib/hooks/applyClickSound";
+  import { useSoundAction, createApplyClickSound } from "$lib/hooks/useSound.svelte";
   import click from "$lib/sounds/click.wav";
   import expand from "$lib/sounds/expand.wav";
 
-  const expand_sound = useSound(expand,["expand"]);
-  const click_sound = useSound(click,["click"]);
+  const expand_sound = useSoundAction(expand);
+  const click_sound = useSoundAction(click);
+  const applyClickSound = createApplyClickSound(click);
 
   let selectedImage = $state('Splash');
   let selectedEntry = $derived(webContentMap[selectedImage]);

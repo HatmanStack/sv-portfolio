@@ -42,9 +42,9 @@
 
   let { data }: Props = $props();
 
-  import { useSound } from "$lib/hooks/useSound";
+  import { useSoundAction } from "$lib/hooks/useSound.svelte";
   import click from "$lib/sounds/click.wav";
-  const click_sound = useSound(click,["click"])
+  const click_sound = useSoundAction(click)
 </script>
 
 <section>

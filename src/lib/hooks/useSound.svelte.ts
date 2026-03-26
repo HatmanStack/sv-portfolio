@@ -67,10 +67,9 @@ export function createSoundStore(soundFile: string, options: SoundOptions = {}) 
 
 export function useSoundAction(soundFile: string, options: SoundOptions = {}) {
   const soundStore = createSoundStore(soundFile, options);
-  
+
   return (node: HTMLElement) => {
-    const handleClick = (event: Event) => {
-      event.preventDefault();
+    const handleClick = () => {
       soundStore.play();
     };
 
@@ -79,6 +78,43 @@ export function useSoundAction(soundFile: string, options: SoundOptions = {}) {
     return {
       destroy() {
         node.removeEventListener('click', handleClick);
+      }
+    };
+  };
+}
+
+/**
+ * Creates a Svelte action that applies click sound to all anchor links within a node.
+ * Replacement for the legacy applyClickSound.js.
+ */
+export function createApplyClickSound(soundFile: string, options: SoundOptions = {}) {
+  const soundStore = createSoundStore(soundFile, options);
+
+  return (node: HTMLElement) => {
+    const handlers = new Map<HTMLElement, () => void>();
+
+    function attachListeners() {
+      const links = node.querySelectorAll<HTMLElement>('a');
+      links.forEach((link) => {
+        if (!handlers.has(link)) {
+          const handler = () => { soundStore.play(); };
+          link.addEventListener('click', handler);
+          handlers.set(link, handler);
+        }
+      });
+    }
+
+    attachListeners();
+
+    return {
+      update() {
+        attachListeners();
+      },
+      destroy() {
+        handlers.forEach((handler, link) => {
+          link.removeEventListener('click', handler);
+        });
+        handlers.clear();
       }
     };
   };

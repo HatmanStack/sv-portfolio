@@ -44,11 +44,11 @@
     return entry != null && typeof entry === 'object' && 'id' in entry;
   }
 
-  import { useSound } from "$lib/hooks/useSound";
+  import { useSoundAction } from "$lib/hooks/useSound.svelte";
   import click from "$lib/sounds/click.wav";
   import swoosh from "$lib/sounds/swoosh.mp3";
-  const click_sound = useSound(click,["click"])
-  const swoosh_sound = useSound(swoosh,["swoosh"])
+  const click_sound = useSoundAction(click)
+  const swoosh_sound = useSoundAction(swoosh)
 </script>
 
 <section style="margin-bottom:1rem;">

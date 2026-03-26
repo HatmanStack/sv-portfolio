@@ -3,9 +3,9 @@
 	import { goto } from '$app/navigation';
 	import logo from '$lib/images/logo.svg';
 	import github from '$lib/images/github.svg';	
-	import { useSound } from "$lib/hooks/useSound";
+	import { useSoundAction } from "$lib/hooks/useSound.svelte";
 	import click from "$lib/sounds/click.wav";
-	const click_sound = useSound(click,["click"])
+	const click_sound = useSoundAction(click)
 
 	function navigateToContainer(event: MouseEvent) {
 		event.preventDefault();
