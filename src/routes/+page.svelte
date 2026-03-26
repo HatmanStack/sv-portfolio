@@ -85,7 +85,9 @@
   </div>
 </section>
 
-<!-- SVG filter for gooey buttons -->
+<!-- SVG "goo" filter for gooey buttons. This is a simplified variant (feComponentTransfer-based)
+     separate from the GooeyButton component's own "goo" filter (feGaussianBlur+feColorMatrix-based).
+     Both use id="goo" so whichever renders last wins. Kept here as a page-level fallback. -->
 <svg width="0" height="0" style="position: absolute;">
   <filter id="goo" x="-50%" y="-50%" width="200%" height="200%">
     <feComponentTransfer>
