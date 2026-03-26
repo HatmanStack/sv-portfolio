@@ -10,7 +10,6 @@ import { projects } from './projects';
 import { androidApps } from './androidApps';
 import { webProjects } from './webProjects';
 
-
 describe('Cross-Data Validation', () => {
 	describe('Category Consistency', () => {
 		test('project categories are from valid set', () => {
@@ -86,7 +85,6 @@ describe('Cross-Data Validation', () => {
 				expect(project.buttonText.length).toBeLessThan(20);
 			});
 		});
-
 	});
 
 	describe('Content Completeness', () => {
@@ -103,6 +101,5 @@ describe('Cross-Data Validation', () => {
 				expect(project.buttonText).toBeTruthy();
 			});
 		});
-
 	});
 });

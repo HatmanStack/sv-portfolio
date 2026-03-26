@@ -79,7 +79,10 @@ describe('Sound Hooks', () => {
 		test('registers canplaythrough event listener', () => {
 			createSoundStore('/test-sound.mp3');
 
-			expect(mockAudio.addEventListener).toHaveBeenCalledWith('canplaythrough', expect.any(Function));
+			expect(mockAudio.addEventListener).toHaveBeenCalledWith(
+				'canplaythrough',
+				expect.any(Function)
+			);
 		});
 
 		test('registers error event listener', () => {
@@ -311,7 +314,8 @@ describe('Sound Hooks', () => {
 			const mockLink1 = { addEventListener: vi.fn(), removeEventListener: vi.fn() };
 			const mockLink2 = { addEventListener: vi.fn(), removeEventListener: vi.fn() };
 			const mockNode = {
-				querySelectorAll: vi.fn()
+				querySelectorAll: vi
+					.fn()
 					.mockReturnValueOnce([mockLink1])
 					.mockReturnValueOnce([mockLink1, mockLink2])
 			};

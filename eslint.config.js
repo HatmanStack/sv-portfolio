@@ -45,7 +45,7 @@ export default ts.config(
 			'no-console': 'warn'
 		}
 	},
-prettier,
+	prettier,
 	{
 		ignores: [
 			'build/',

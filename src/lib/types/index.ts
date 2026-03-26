@@ -20,34 +20,34 @@ import type { Snippet } from 'svelte';
  * major projects like Float, Nova Canvas, and Savor Swipe.
  */
 export interface Project {
-  /** Unique identifier for the project */
-  id: string;
+	/** Unique identifier for the project */
+	id: string;
 
-  /** Project title/name */
-  title: string;
+	/** Project title/name */
+	title: string;
 
-  /** Detailed description of the project */
-  description: string;
+	/** Detailed description of the project */
+	description: string;
 
-  /** Project category (e.g., "Cross-Platform", "Web") */
-  category: string;
+	/** Project category (e.g., "Cross-Platform", "Web") */
+	category: string;
 
-  /** Project images for different states */
-  images: {
-    /** Professional/active state image */
-    profession: string;
-    /** Profile/default state image */
-    profile: string;
-  };
+	/** Project images for different states */
+	images: {
+		/** Professional/active state image */
+		profession: string;
+		/** Profile/default state image */
+		profile: string;
+	};
 
-  /** URL to the live project or demo */
-  link: string;
+	/** URL to the live project or demo */
+	link: string;
 
-  /** URL to the GitHub repository (optional) */
-  github?: string;
+	/** URL to the GitHub repository (optional) */
+	github?: string;
 
-  /** Text for the call-to-action button */
-  buttonText: string;
+	/** Text for the call-to-action button */
+	buttonText: string;
 }
 
 /**
@@ -56,26 +56,26 @@ export interface Project {
  * Used to display Android apps in the /android showcase page.
  */
 export interface AndroidApp {
-  /** Unique identifier for the Android app */
-  id: string;
+	/** Unique identifier for the Android app */
+	id: string;
 
-  /** App title/name */
-  title: string;
+	/** App title/name */
+	title: string;
 
-  /** Link to Google Play Store or demo (optional) */
-  link?: string;
+	/** Link to Google Play Store or demo (optional) */
+	link?: string;
 
-  /** Link to cross-platform web implementation (optional) */
-  webLink?: string;
+	/** Link to cross-platform web implementation (optional) */
+	webLink?: string;
 
-  /** Detailed description of the app (optional) */
-  description?: string;
+	/** Detailed description of the app (optional) */
+	description?: string;
 
-  /** Initial/default state image */
-  initialImg: string;
+	/** Initial/default state image */
+	initialImg: string;
 
-  /** Active/hover state image */
-  activeImg: string;
+	/** Active/hover state image */
+	activeImg: string;
 }
 
 /**
@@ -84,23 +84,23 @@ export interface AndroidApp {
  * Used to display web projects in the /web showcase page.
  */
 export interface WebProject {
-  /** Unique identifier for the web project */
-  id: string;
+	/** Unique identifier for the web project */
+	id: string;
 
-  /** Project title/name */
-  title: string;
+	/** Project title/name */
+	title: string;
 
-  /** Link to live project or demo (optional) */
-  link?: string;
+	/** Link to live project or demo (optional) */
+	link?: string;
 
-  /** Detailed description of the project (optional) */
-  description?: string;
+	/** Detailed description of the project (optional) */
+	description?: string;
 
-  /** Initial/default state image */
-  initialImg: string;
+	/** Initial/default state image */
+	initialImg: string;
 
-  /** Active/hover state image */
-  activeImg: string;
+	/** Active/hover state image */
+	activeImg: string;
 }
 
 /**
@@ -110,23 +110,23 @@ export interface WebProject {
  * and loaded via MDSvex.
  */
 export interface BlogPost {
-  /** URL-friendly slug (used in route /read/post/[slug]) */
-  slug: string;
+	/** URL-friendly slug (used in route /read/post/[slug]) */
+	slug: string;
 
-  /** Post title */
-  title: string;
+	/** Post title */
+	title: string;
 
-  /** Publication date (human-readable format) */
-  date: string;
+	/** Publication date (human-readable format) */
+	date: string;
 
-  /** Short description/excerpt for listing pages */
-  description: string;
+	/** Short description/excerpt for listing pages */
+	description: string;
 
-  /** Estimated reading time */
-  time: string;
+	/** Estimated reading time */
+	time: string;
 
-  /** Optional link to external article (e.g., Medium) */
-  link?: string;
+	/** Optional link to external article (e.g., Medium) */
+	link?: string;
 }
 
 /**
@@ -136,20 +136,20 @@ export interface BlogPost {
  * of .md files in /routes/read/post/
  */
 export interface BlogPostMetadata {
-  /** Post title */
-  title: string;
+	/** Post title */
+	title: string;
 
-  /** Publication date */
-  date: string;
+	/** Publication date */
+	date: string;
 
-  /** Short description */
-  description: string;
+	/** Short description */
+	description: string;
 
-  /** Reading time estimate */
-  time: string;
+	/** Reading time estimate */
+	time: string;
 
-  /** Optional external link */
-  link?: string;
+	/** Optional external link */
+	link?: string;
 }
 
 /**
@@ -158,23 +158,23 @@ export interface BlogPostMetadata {
  * Used to display animated image grids with scroll-based animations.
  */
 export interface ImageGridItem {
-  /** Unique identifier for the image */
-  id: string;
+	/** Unique identifier for the image */
+	id: string;
 
-  /** Image source path or URL */
-  src: string;
+	/** Image source path or URL */
+	src: string;
 
-  /** Alt text for accessibility */
-  alt: string;
+	/** Alt text for accessibility */
+	alt: string;
 
-  /** Optional animation range for scroll animations (e.g., "10% 20%") */
-  animationRange?: string;
+	/** Optional animation range for scroll animations (e.g., "10% 20%") */
+	animationRange?: string;
 
-  /** Whether this is a special item (text instead of image) */
-  special?: boolean;
+	/** Whether this is a special item (text instead of image) */
+	special?: boolean;
 
-  /** Content for special items */
-  content?: string;
+	/** Content for special items */
+	content?: string;
 }
 
 /**
@@ -183,17 +183,17 @@ export interface ImageGridItem {
  * Used for the main navigation menu in the Header component.
  */
 export interface NavigationItem {
-  /** Unique identifier for the nav item */
-  id: string;
+	/** Unique identifier for the nav item */
+	id: string;
 
-  /** Display name for the nav item */
-  name: string;
+	/** Display name for the nav item */
+	name: string;
 
-  /** Route path */
-  href: string;
+	/** Route path */
+	href: string;
 
-  /** SVG icon markup */
-  icon: string;
+	/** SVG icon markup */
+	icon: string;
 }
 
 /**
@@ -201,7 +201,7 @@ export interface NavigationItem {
  * These provide a title-only placeholder used as the default selection state.
  */
 export interface ContentMapSeed {
-  title: string;
+	title: string;
 }
 
 /* ============================================
@@ -215,8 +215,8 @@ export interface ContentMapSeed {
  * title, description, and call-to-action button.
  */
 export interface ProjectCardProps {
-  /** The project to display */
-  project: Project;
+	/** The project to display */
+	project: Project;
 }
 
 /**
@@ -226,11 +226,11 @@ export interface ProjectCardProps {
  * animations and optional special content items.
  */
 export interface ImageGridProps {
-  /** Array of images to display */
-  images: ImageGridItem[];
+	/** Array of images to display */
+	images: ImageGridItem[];
 
-  /** Additional CSS classes */
-  className?: string;
+	/** Additional CSS classes */
+	className?: string;
 }
 
 /**
@@ -239,11 +239,11 @@ export interface ImageGridProps {
  * Interactive button with gooey animation effect.
  */
 export interface GooeyButtonProps {
-  /** Button content (children) */
-  children?: Snippet;
+	/** Button content (children) */
+	children?: Snippet;
 
-  /** Click handler */
-  onclick?: () => void;
+	/** Click handler */
+	onclick?: () => void;
 }
 
 /* ============================================
@@ -256,11 +256,11 @@ export interface GooeyButtonProps {
  * Tracks current route and menu state for the application.
  */
 export interface NavigationState {
-  /** Current section/route identifier */
-  currentSection: string;
+	/** Current section/route identifier */
+	currentSection: string;
 
-  /** Whether mobile menu is open */
-  isMenuOpen: boolean;
+	/** Whether mobile menu is open */
+	isMenuOpen: boolean;
 }
 
 /**
@@ -269,14 +269,14 @@ export interface NavigationState {
  * Stored in localStorage and applied app-wide.
  */
 export interface UserPreferences {
-  /** Whether sound effects are enabled */
-  soundEnabled: boolean;
+	/** Whether sound effects are enabled */
+	soundEnabled: boolean;
 
-  /** Whether to respect prefers-reduced-motion */
-  reducedMotion: boolean;
+	/** Whether to respect prefers-reduced-motion */
+	reducedMotion: boolean;
 
-  /** Theme preference: light, dark, or auto (system) */
-  theme: Theme;
+	/** Theme preference: light, dark, or auto (system) */
+	theme: Theme;
 }
 
 /**
@@ -285,14 +285,14 @@ export interface UserPreferences {
  * Global application state managed by app store.
  */
 export interface AppState {
-  /** Navigation state */
-  navigation: NavigationState;
+	/** Navigation state */
+	navigation: NavigationState;
 
-  /** User preferences */
-  preferences: UserPreferences;
+	/** User preferences */
+	preferences: UserPreferences;
 
-  /** Global loading state */
-  isLoading: boolean;
+	/** Global loading state */
+	isLoading: boolean;
 }
 
 /* ============================================
@@ -322,12 +322,12 @@ export type AppliedTheme = 'light' | 'dark';
  * Used to configure audio playback in the sound hook.
  */
 export interface SoundOptions {
-  /** Volume level (0-1) */
-  volume?: number;
+	/** Volume level (0-1) */
+	volume?: number;
 
-  /** Whether to loop the sound */
-  loop?: boolean;
+	/** Whether to loop the sound */
+	loop?: boolean;
 
-  /** Whether to preload the audio */
-  preload?: boolean;
+	/** Whether to preload the audio */
+	preload?: boolean;
 }

@@ -1,12 +1,40 @@
+<script lang="ts">
+	import type { WebProject } from '$lib/types/index.js';
+	import { webProjects, webContentMap } from '$lib/data/webProjects';
+	import Header from '../Header.svelte';
+	import SVGFilters from '$lib/components/ui/SVGFilters.svelte';
+
+	import { useSoundAction, createApplyClickSound } from '$lib/hooks/useSound.svelte';
+	import click from '$lib/sounds/click.wav';
+	import expand from '$lib/sounds/expand.wav';
+
+	const expand_sound = useSoundAction(expand);
+	const click_sound = useSoundAction(click);
+	const applyClickSound = createApplyClickSound(click);
+
+	let selectedImage = $state('Splash');
+	let selectedEntry = $derived(webContentMap[selectedImage]);
+
+	function isWebProject(entry: unknown): entry is WebProject {
+		return entry != null && typeof entry === 'object' && 'id' in entry;
+	}
+</script>
+
 <svelte:head>
 	<title>Web Projects | Christopher Galliart</title>
-	<meta name="description" content="Web development projects by Christopher Galliart. Explore interactive demos, Gradio applications, and full-stack web projects built with modern frameworks." />
+	<meta
+		name="description"
+		content="Web development projects by Christopher Galliart. Explore interactive demos, Gradio applications, and full-stack web projects built with modern frameworks."
+	/>
 
 	<!-- Open Graph -->
 	<meta property="og:type" content="website" />
 	<meta property="og:site_name" content="CG Portfolio" />
 	<meta property="og:title" content="Web Projects | Christopher Galliart" />
-	<meta property="og:description" content="Web development projects by Christopher Galliart. Explore interactive demos and full-stack web projects." />
+	<meta
+		property="og:description"
+		content="Web development projects by Christopher Galliart. Explore interactive demos and full-stack web projects."
+	/>
 	<meta property="og:url" content="https://portfolio.hatstack.fun/web" />
 	<meta property="og:image" content="https://portfolio.hatstack.fun/og-image.jpg" />
 
@@ -14,384 +42,399 @@
 	<meta name="twitter:card" content="summary" />
 	<meta name="twitter:site" content="@HatmanStack" />
 	<meta name="twitter:title" content="Web Projects | Christopher Galliart" />
-	<meta name="twitter:description" content="Web development projects by Christopher Galliart. Explore interactive demos and full-stack projects." />
+	<meta
+		name="twitter:description"
+		content="Web development projects by Christopher Galliart. Explore interactive demos and full-stack projects."
+	/>
 	<meta name="twitter:image" content="https://portfolio.hatstack.fun/og-image.jpg" />
 
 	<!-- JSON-LD -->
 	{@html `<script type="application/ld+json">${JSON.stringify({
-		"@context": "https://schema.org",
-		"@type": "CollectionPage",
-		"name": "Web Projects",
-		"description": "Web development projects by Christopher Galliart",
-		"url": "https://portfolio.hatstack.fun/web",
-		"author": {
-			"@type": "Person",
-			"name": "Christopher Galliart"
+		'@context': 'https://schema.org',
+		'@type': 'CollectionPage',
+		name: 'Web Projects',
+		description: 'Web development projects by Christopher Galliart',
+		url: 'https://portfolio.hatstack.fun/web',
+		author: {
+			'@type': 'Person',
+			name: 'Christopher Galliart'
 		}
 	})}</script>`}
 </svelte:head>
 
-<script lang="ts">
-  import type { WebProject } from '$lib/types/index.js';
-  import { webProjects, webContentMap } from '$lib/data/webProjects';
-  import Header from '../Header.svelte';
-  import SVGFilters from '$lib/components/ui/SVGFilters.svelte';
-
-  import { useSoundAction, createApplyClickSound } from "$lib/hooks/useSound.svelte";
-  import click from "$lib/sounds/click.wav";
-  import expand from "$lib/sounds/expand.wav";
-
-  const expand_sound = useSoundAction(expand);
-  const click_sound = useSoundAction(click);
-  const applyClickSound = createApplyClickSound(click);
-
-  let selectedImage = $state('Splash');
-  let selectedEntry = $derived(webContentMap[selectedImage]);
-
-  function isWebProject(entry: unknown): entry is WebProject {
-    return entry != null && typeof entry === 'object' && 'id' in entry;
-  }
-</script>
-
 <section>
-<Header />
+	<Header />
 </section>
 
 <section>
-<div class="wrapper-column">
-  {#if selectedEntry}
-    <h1 class="header-text glow-filter" class:slice-title={selectedImage !== 'Splash'} class:long-title={selectedEntry.title.length > 15} data-text={selectedEntry.title} style="margin-bottom: {selectedImage.includes('Splash') ? '10rem' : '0'}"></h1>
-    {#if isWebProject(selectedEntry) && selectedEntry.description}
-    <!-- Renders trusted static HTML from project descriptions (not user input) -->
-    <p use:applyClickSound style="margin-bottom: {selectedImage.includes('Medium') ? '3rem' : '0'};margin-top: {selectedImage.includes('Medium') ? '4rem' : '2rem'}; text-wrap:balanced;">
-    {@html selectedEntry.description}</p>
-    {/if}
-    {#if isWebProject(selectedEntry) && selectedEntry.link}
-      <a href={selectedEntry.link} target="_blank" rel="noopener noreferrer">
-        <button class="button" use:click_sound>More Stuff</button>
-      </a>
-    {/if}
-  {/if}
-<div class="wrapper">
-  <div class="items">
-    {#each webProjects as project}
-      <div
-        class="item"
-        tabindex="0"
-        role="button"
-        style="--initial-img: url({project.initialImg}); --active-img: url({project.activeImg});"
-        onclick={(event) => {
-          if (selectedImage === project.title) {
-            selectedImage = 'Splash';
-            const target = event.target as HTMLElement | null;
-            target?.blur();
-          } else {
-            selectedImage = project.title;
-          }
-        }}
-        use:expand_sound
-      ></div>
-    {/each}
-  </div>      
-</div>
-</div>
+	<div class="wrapper-column">
+		{#if selectedEntry}
+			<h1
+				class="header-text glow-filter"
+				class:slice-title={selectedImage !== 'Splash'}
+				class:long-title={selectedEntry.title.length > 15}
+				data-text={selectedEntry.title}
+				style="margin-bottom: {selectedImage.includes('Splash') ? '10rem' : '0'}"
+			></h1>
+			{#if isWebProject(selectedEntry) && selectedEntry.description}
+				<!-- Renders trusted static HTML from project descriptions (not user input) -->
+				<p
+					use:applyClickSound
+					style="margin-bottom: {selectedImage.includes('Medium')
+						? '3rem'
+						: '0'};margin-top: {selectedImage.includes('Medium')
+						? '4rem'
+						: '2rem'}; text-wrap:balanced;"
+				>
+					{@html selectedEntry.description}
+				</p>
+			{/if}
+			{#if isWebProject(selectedEntry) && selectedEntry.link}
+				<a href={selectedEntry.link} target="_blank" rel="noopener noreferrer">
+					<button class="button" use:click_sound>More Stuff</button>
+				</a>
+			{/if}
+		{/if}
+		<div class="wrapper">
+			<div class="items">
+				{#each webProjects as project}
+					<div
+						class="item"
+						tabindex="0"
+						role="button"
+						style="--initial-img: url({project.initialImg}); --active-img: url({project.activeImg});"
+						onclick={(event) => {
+							if (selectedImage === project.title) {
+								selectedImage = 'Splash';
+								const target = event.target as HTMLElement | null;
+								target?.blur();
+							} else {
+								selectedImage = project.title;
+							}
+						}}
+						use:expand_sound
+					></div>
+				{/each}
+			</div>
+		</div>
+	</div>
 </section>
 <section>
-  <SVGFilters />
+	<SVGFilters />
 </section>
-
 
 <style>
-:root {
-  --transition-speed: 0.3s;
-  --border-radius: 12px;
-  --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  --transition: cubic-bezier(.1, .7, 0, 1);
-}
+	:root {
+		--transition-speed: 0.3s;
+		--border-radius: 12px;
+		--box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+		--transition: cubic-bezier(0.1, 0.7, 0, 1);
+	}
 
-.wrapper-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 1rem;
-}
+	.wrapper-column {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-top: 1rem;
+	}
 
-.wrapper{
-    margin-top: 10rem;
-}
+	.wrapper {
+		margin-top: 10rem;
+	}
 
-:global(p a) {
-    color: #bdc2c9;
-    -webkit-text-fill-color: #bdc2c9;
-    text-decoration: none;
-    background: rgba(75, 50, 35, 0.35);
-    padding: 0.15em 0.4em;
-    border-radius: 4px;
-    font-weight: 600;
-    transition: background 0.3s ease;
-  }
+	:global(p a) {
+		color: #bdc2c9;
+		-webkit-text-fill-color: #bdc2c9;
+		text-decoration: none;
+		background: rgba(75, 50, 35, 0.35);
+		padding: 0.15em 0.4em;
+		border-radius: 4px;
+		font-weight: 600;
+		transition: background 0.3s ease;
+	}
 
-  :global(p a:hover) {
-    background: rgba(95, 65, 45, 0.5);
-  }
+	:global(p a:hover) {
+		background: rgba(95, 65, 45, 0.5);
+	}
 
-p {
-  color: #86868b;
-  font-weight: 600;
-  background: linear-gradient(0deg, #86868b 0%, #bdc2c9 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  max-width: 60em;
-  text-align: center;
-}
+	p {
+		color: #86868b;
+		font-weight: 600;
+		background: linear-gradient(0deg, #86868b 0%, #bdc2c9 100%);
+		background-clip: text;
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		max-width: 60em;
+		text-align: center;
+	}
 
-.button {
-  padding: 15px 30px;
-  color: var(--text-color);
-  font-size: 14px;
-  border-radius: var(--border-radius);
-  transition: color var(--transition-speed), background var(--transition-speed);
-  position: relative;
-  overflow: hidden;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: .5rem;
-  background: transparent;
-  color: var(--accent-color);
-}
+	.button {
+		padding: 15px 30px;
+		color: var(--text-color);
+		font-size: 14px;
+		border-radius: var(--border-radius);
+		transition:
+			color var(--transition-speed),
+			background var(--transition-speed);
+		position: relative;
+		overflow: hidden;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		margin-top: 0.5rem;
+		background: transparent;
+		color: var(--accent-color);
+	}
 
-.button::before {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: -100%;
-  background: var(--accent-color);
-  z-index: -1;
-  transition: all var(--transition-speed);
-}
+	.button::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: -100%;
+		background: var(--accent-color);
+		z-index: -1;
+		transition: all var(--transition-speed);
+	}
 
-.button:hover::before {
-  left: 0;
-}
+	.button:hover::before {
+		left: 0;
+	}
 
-.button:hover {
-  color: var(--text-color);
-}
+	.button:hover {
+		color: var(--text-color);
+	}
 
-.items{
-    display: flex;
-    gap: 0.4rem;
-    perspective: calc(var(--index) * 35);
-}
+	.items {
+		display: flex;
+		gap: 0.4rem;
+		perspective: calc(var(--index) * 35);
+	}
 
-.item{
-    width: calc(var(--index) * 3);
-    height: calc(var(--index) * 12);
-    background-color: #222;
-    background-size: cover;
-    background-position: center;
-    cursor: pointer;
-    filter: grayscale(1) brightness(.5);
-    transition: transform 1.25s var(--transition), filter 3s var(--transition), width 1.25s var(--transition);
-}
+	.item {
+		width: calc(var(--index) * 3);
+		height: calc(var(--index) * 12);
+		background-color: #222;
+		background-size: cover;
+		background-position: center;
+		cursor: pointer;
+		filter: grayscale(1) brightness(0.5);
+		transition:
+			transform 1.25s var(--transition),
+			filter 3s var(--transition),
+			width 1.25s var(--transition);
+	}
 
-.item:hover, .item:focus-within {
-    will-change: transform, filter, width;
-}
+	.item:hover,
+	.item:focus-within {
+		will-change: transform, filter, width;
+	}
 
-.item::before, .item::after{
-    content: '';
-    position: absolute;
-    height: 100%;
-    width: 20px;
-    right: calc(var(--index) * -1);
-}
+	.item::before,
+	.item::after {
+		content: '';
+		position: absolute;
+		height: 100%;
+		width: 20px;
+		right: calc(var(--index) * -1);
+	}
 
-.item::after{
-    left: calc(var(--index) * -1);
-}
+	.item::after {
+		left: calc(var(--index) * -1);
+	}
 
-.items .item:hover{
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 10));
-}
+	.items .item:hover {
+		filter: inherit;
+		transform: translateZ(calc(var(--index) * 10));
+	}
 
-/*Right*/
+	/*Right*/
 
-.items .item:hover + *{
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 8.5)) rotateY(35deg);
-    z-index: -1;
-}
+	.items .item:hover + * {
+		filter: inherit;
+		transform: translateZ(calc(var(--index) * 8.5)) rotateY(35deg);
+		z-index: -1;
+	}
 
-.items .item:hover + * + *{
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 5.6)) rotateY(40deg);
-    z-index: -2;
-}
+	.items .item:hover + * + * {
+		filter: inherit;
+		transform: translateZ(calc(var(--index) * 5.6)) rotateY(40deg);
+		z-index: -2;
+	}
 
-.items .item:hover + * + * + *{
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 2.5)) rotateY(30deg);
-    z-index: -3;
-}
+	.items .item:hover + * + * + * {
+		filter: inherit;
+		transform: translateZ(calc(var(--index) * 2.5)) rotateY(30deg);
+		z-index: -3;
+	}
 
-.items .item:hover + * + * + * + *{
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * .6)) rotateY(15deg);
-    z-index: -4;
-}
+	.items .item:hover + * + * + * + * {
+		filter: inherit;
+		transform: translateZ(calc(var(--index) * 0.6)) rotateY(15deg);
+		z-index: -4;
+	}
 
+	/*Left*/
 
-/*Left*/
+	.items .item:has(+ :hover) {
+		filter: inherit;
+		transform: translateZ(calc(var(--index) * 8.5)) rotateY(-35deg);
+	}
 
-.items .item:has( + :hover){
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 8.5)) rotateY(-35deg);
-}
+	.items .item:has(+ * + :hover) {
+		filter: inherit;
+		transform: translateZ(calc(var(--index) * 5.6)) rotateY(-40deg);
+	}
 
-.items .item:has( + * + :hover){
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 5.6)) rotateY(-40deg);
-}
+	.items .item:has(+ * + * + :hover) {
+		filter: inherit;
+		transform: translateZ(calc(var(--index) * 2.5)) rotateY(-30deg);
+	}
 
-.items .item:has( + * + * + :hover){
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 2.5)) rotateY(-30deg);
-}
+	.items .item:has(+ * + * + * + :hover) {
+		filter: inherit;
+		transform: translateZ(calc(var(--index) * 0.6)) rotateY(-15deg);
+	}
 
-.items .item:has( + * + * + * + :hover){
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * .6)) rotateY(-15deg);
-}
+	.items .item:active,
+	.items .item:focus {
+		width: 28vw;
+		filter: inherit;
+		z-index: 100;
+		transform: translateZ(calc(var(--index) * 10));
+		margin: 0 0.45vw;
+	}
 
-.items .item:active, .items .item:focus {
-	width: 28vw;
-	filter: inherit;
-	z-index: 100;
-	transform: translateZ(calc(var(--index) * 10));
-    margin: 0 .45vw;
-}
+	.items .item:focus {
+		background-image: var(--active-img);
+		filter: brightness(1.1);
+		transform: scale(1.9);
+	}
 
-.items .item:focus {
-  background-image: var(--active-img);
-  filter: brightness(1.1); 
-  transform: scale(1.9); 
-}
+	.items .item {
+		background-image: var(--initial-img);
+	}
 
-.items .item{
-  background-image: var(--initial-img);
+	@media (max-width: 768px) {
+		.header-text.slice-title {
+			font-size: 2em;
+		}
 
-}
+		.header-text.long-title {
+			white-space: normal;
+		}
 
-@media (max-width: 768px) {
-  .header-text.slice-title {
-    font-size: 2em;
-  }
+		.wrapper-column {
+			margin-top: 1rem;
+		}
 
-  .header-text.long-title {
-    white-space: normal;
-  }
+		.wrapper {
+			margin-top: 2rem;
+			overflow: visible;
+		}
 
-  .wrapper-column {
-    margin-top: 1rem;
-  }
+		p {
+			max-width: 90vw;
+			font-size: 0.9em;
+			background: none;
+			-webkit-text-fill-color: #86868b;
+			color: #86868b;
+		}
 
-  .wrapper {
-    margin-top: 2rem;
-    overflow: visible;
-  }
+		.items {
+			perspective: calc(var(--index) * 35);
+			overflow: visible;
+			transition: transform 1.25s cubic-bezier(0.1, 0.7, 0, 1);
+		}
 
-  p {
-    max-width: 90vw;
-    font-size: 0.9em;
-    background: none;
-    -webkit-text-fill-color: #86868b;
-    color: #86868b;
-  }
+		/* Translate container to center the focused slice */
+		.items:has(.item:nth-child(1):focus) {
+			transform: translateX(43.75%);
+		}
+		.items:has(.item:nth-child(2):focus) {
+			transform: translateX(31.25%);
+		}
+		.items:has(.item:nth-child(3):focus) {
+			transform: translateX(18.75%);
+		}
+		.items:has(.item:nth-child(4):focus) {
+			transform: translateX(6.25%);
+		}
+		.items:has(.item:nth-child(5):focus) {
+			transform: translateX(-6.25%);
+		}
+		.items:has(.item:nth-child(6):focus) {
+			transform: translateX(-18.75%);
+		}
+		.items:has(.item:nth-child(7):focus) {
+			transform: translateX(-31.25%);
+		}
+		.items:has(.item:nth-child(8):focus) {
+			transform: translateX(-43.75%);
+		}
 
-  .items {
-    perspective: calc(var(--index) * 35);
-    overflow: visible;
-    transition: transform 1.25s cubic-bezier(.1, .7, 0, 1);
-  }
+		.item {
+			height: 25vh;
+			margin-top: 2rem;
+			filter: grayscale(0.5) brightness(0.7);
+		}
 
-  /* Translate container to center the focused slice */
-  .items:has(.item:nth-child(1):focus) { transform: translateX(43.75%); }
-  .items:has(.item:nth-child(2):focus) { transform: translateX(31.25%); }
-  .items:has(.item:nth-child(3):focus) { transform: translateX(18.75%); }
-  .items:has(.item:nth-child(4):focus) { transform: translateX(6.25%); }
-  .items:has(.item:nth-child(5):focus) { transform: translateX(-6.25%); }
-  .items:has(.item:nth-child(6):focus) { transform: translateX(-18.75%); }
-  .items:has(.item:nth-child(7):focus) { transform: translateX(-31.25%); }
-  .items:has(.item:nth-child(8):focus) { transform: translateX(-43.75%); }
+		/* Disable hover transforms on mobile (no pointer hover on touch) */
+		.items .item:hover {
+			transform: none;
+			filter: grayscale(0.5) brightness(0.7);
+		}
 
-  .item {
-    height: 25vh;
-    margin-top: 2rem;
-    filter: grayscale(0.5) brightness(0.7);
-  }
+		.items .item:hover + *,
+		.items .item:hover + * + *,
+		.items .item:hover + * + * + *,
+		.items .item:hover + * + * + * + * {
+			transform: none;
+			filter: grayscale(0.5) brightness(0.7);
+		}
 
-  /* Disable hover transforms on mobile (no pointer hover on touch) */
-  .items .item:hover {
-    transform: none;
-    filter: grayscale(0.5) brightness(0.7);
-  }
+		.items .item:has(+ :hover),
+		.items .item:has(+ * + :hover),
+		.items .item:has(+ * + * + :hover),
+		.items .item:has(+ * + * + * + :hover) {
+			transform: none;
+			filter: grayscale(0.5) brightness(0.7);
+		}
 
-  .items .item:hover + *,
-  .items .item:hover + * + *,
-  .items .item:hover + * + * + *,
-  .items .item:hover + * + * + * + * {
-    transform: none;
-    filter: grayscale(0.5) brightness(0.7);
-  }
+		/* Keep 3D transforms on focus/active (tap interaction) */
+		.items .item:active,
+		.items .item:focus {
+			width: 50vw;
+			scale: 1;
+			transform: translateZ(calc(var(--index) * 10));
+			margin: 2rem 0.45vw 0;
+		}
 
-  .items .item:has( + :hover),
-  .items .item:has( + * + :hover),
-  .items .item:has( + * + * + :hover),
-  .items .item:has( + * + * + * + :hover) {
-    transform: none;
-    filter: grayscale(0.5) brightness(0.7);
-  }
+		.items .item:focus {
+			scale: 1;
+		}
 
-  /* Keep 3D transforms on focus/active (tap interaction) */
-  .items .item:active,
-  .items .item:focus {
-    width: 50vw;
-    scale: 1;
-    transform: translateZ(calc(var(--index) * 10));
-    margin: 2rem .45vw 0;
-  }
+		/* Adjacent item transforms on focus (preserve 3D depth on tap) */
+		.items .item:focus + * {
+			filter: inherit;
+			transform: translateZ(calc(var(--index) * 8.5)) rotateY(35deg);
+			z-index: -1;
+		}
 
-  .items .item:focus {
-    scale: 1;
-  }
+		.items .item:focus + * + * {
+			filter: inherit;
+			transform: translateZ(calc(var(--index) * 5.6)) rotateY(40deg);
+			z-index: -2;
+		}
 
-  /* Adjacent item transforms on focus (preserve 3D depth on tap) */
-  .items .item:focus + * {
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 8.5)) rotateY(35deg);
-    z-index: -1;
-  }
+		.items .item:has(+ :focus) {
+			filter: inherit;
+			transform: translateZ(calc(var(--index) * 8.5)) rotateY(-35deg);
+		}
 
-  .items .item:focus + * + * {
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 5.6)) rotateY(40deg);
-    z-index: -2;
-  }
-
-  .items .item:has( + :focus) {
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 8.5)) rotateY(-35deg);
-  }
-
-  .items .item:has( + * + :focus) {
-    filter: inherit;
-    transform: translateZ(calc(var(--index) * 5.6)) rotateY(-40deg);
-  }
-}
-
+		.items .item:has(+ * + :focus) {
+			filter: inherit;
+			transform: translateZ(calc(var(--index) * 5.6)) rotateY(-40deg);
+		}
+	}
 </style>

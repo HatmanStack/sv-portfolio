@@ -46,9 +46,9 @@ Add ESLint, Prettier, Husky pre-commit hooks, and CI improvements to prevent reg
 - Prefer auto-fixable rules to minimize manual intervention
 
 **Verification Checklist:**
-- [ ] `eslint.config.js` exists with Svelte + TS config
-- [ ] `pnpm run lint` passes with 0 errors (warnings acceptable)
-- [ ] `package.json` has `lint` script
+- [x] `eslint.config.js` exists with Svelte + TS config
+- [x] `pnpm run lint` passes with 0 errors (warnings acceptable)
+- [x] `package.json` has `lint` script
 
 **Testing Instructions:**
 - Run `pnpm run lint` and verify it completes without errors

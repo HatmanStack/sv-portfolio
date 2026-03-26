@@ -277,12 +277,12 @@ Phase D - Delete legacy files:
 - Update or remove any tests that reference the deleted files
 
 **Verification Checklist:**
-- [ ] `useSound.js` deleted
-- [ ] `applyClickSound.js` deleted
-- [ ] No imports reference deleted files
-- [ ] All sound actions have `destroy()` cleanup
-- [ ] `pnpm test` passes
-- [ ] `pnpm run check` passes
+- [x] `useSound.js` deleted
+- [x] `applyClickSound.js` deleted
+- [x] No imports reference deleted files
+- [x] All sound actions have `destroy()` cleanup
+- [x] `pnpm test` passes
+- [x] `pnpm run check` passes
 
 **Testing Instructions:**
 - Update `src/lib/hooks/useSound.svelte.test.ts` to cover any new exports (e.g., `createSoundAction`)
@@ -316,10 +316,10 @@ refactor(sound): consolidate to single runes-based sound API
 - Apply the same pattern to the `click_sound` conditional at lines ~64-68 if applicable
 
 **Verification Checklist:**
-- [ ] No duplicated `.item` markup in the `{#if}` conditional
-- [ ] Sound actions still fire correctly when loaded
-- [ ] No-op when sound is not loaded (no errors)
-- [ ] `pnpm test` passes
+- [x] No duplicated `.item` markup in the `{#if}` conditional
+- [x] Sound actions still fire correctly when loaded
+- [x] No-op when sound is not loaded (no errors)
+- [x] `pnpm test` passes
 
 **Testing Instructions:**
 - Existing tests for the web page should still pass
@@ -350,9 +350,9 @@ refactor: eliminate conditional template duplication in web page
 - Check for any other instances of legacy event syntax (`on:click`, `on:keydown`, etc.) in this file and fix them too
 
 **Verification Checklist:**
-- [ ] No `on:` event syntax in `android/+page.svelte`
-- [ ] `pnpm run check` passes
-- [ ] `pnpm test` passes
+- [x] No `on:` event syntax in `android/+page.svelte`
+- [x] `pnpm run check` passes
+- [x] `pnpm test` passes
 
 **Testing Instructions:**
 - No new tests. Existing tests verify functionality.
@@ -388,10 +388,10 @@ For credentials:
 - Replace with a generic note like "Demo credentials available on request" or simply remove the login information entirely
 
 **Verification Checklist:**
-- [ ] `event.preventDefault()` no longer called unconditionally in sound action
-- [ ] No credentials (usernames, passwords) in source code
-- [ ] `pnpm test` passes
-- [ ] `pnpm run check` passes
+- [x] `event.preventDefault()` no longer called unconditionally in sound action
+- [x] No credentials (usernames, passwords) in source code
+- [x] `pnpm test` passes
+- [x] `pnpm run check` passes
 
 **Testing Instructions:**
 - Update sound action tests to verify `preventDefault` is not called on anchor elements
@@ -430,10 +430,10 @@ fix(security): remove credentials and fix preventDefault in sound action
 - Also remove the `display: none` on the scroll container for affected browsers
 
 **Verification Checklist:**
-- [ ] No `navigator.userAgent` string matching in the codebase
-- [ ] Feature detection uses `CSS.supports()` or `@supports` if still needed
-- [ ] `pnpm test` passes
-- [ ] `pnpm run check` passes
+- [x] No `navigator.userAgent` string matching in the codebase
+- [x] Feature detection uses `CSS.supports()` or `@supports` if still needed
+- [x] `pnpm test` passes
+- [x] `pnpm run check` passes
 
 **Testing Instructions:**
 - Update any existing tests for `+page.svelte` that mock `navigator.userAgent`
@@ -464,8 +464,8 @@ fix: replace Firefox UA sniffing with feature detection
 - The `:hover` rule likely already exists for the item's transform/filter transitions
 
 **Verification Checklist:**
-- [ ] `will-change` is not set on `.item` at rest, only on `:hover`/`:focus-within`
-- [ ] `pnpm run check` passes
+- [x] `will-change` is not set on `.item` at rest, only on `:hover`/`:focus-within`
+- [x] `pnpm run check` passes
 
 **Testing Instructions:**
 - No automated tests for CSS perf. Visual verification that hover animations still work smoothly.

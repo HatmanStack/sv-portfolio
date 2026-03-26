@@ -6,7 +6,11 @@
  */
 
 import { describe, test, expect } from 'vitest';
-import { createMockProject, createMockNavigationState, createMockUserPreferences } from './mock-factories';
+import {
+	createMockProject,
+	createMockNavigationState,
+	createMockUserPreferences
+} from './mock-factories';
 import { projectsFixture, navigationItemsFixture } from './fixtures';
 
 describe('Test Infrastructure', () => {
