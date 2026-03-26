@@ -98,9 +98,20 @@ pnpm test
 pnpm test:coverage
 ```
 
+No environment variables are required. The project runs with default configuration.
+
+## Deployment
+
+The site deploys via AWS Amplify as a static site. The build pipeline is configured in `amplify.yml`:
+
+- **Build command**: `pnpm build`
+- **Output directory**: `build/`
+- **Static adapter**: `@sveltejs/adapter-static` with `precompress: true` generates Brotli and gzip compressed assets
+
 ## Documentation
 
 - [Structure](./docs/STRUCTURE.md) - Directory organization
+- [Testing](./docs/TESTING.md) - Test setup and conventions
 - [Performance](./docs/PERFORMANCE.md) - Performance metrics and optimizations
 - [Refactoring Summary](./docs/archive/REFACTORING_SUMMARY.md) - Complete refactoring details (archived)
 

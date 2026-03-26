@@ -264,9 +264,9 @@ docs: update Node version prerequisite in plans README
   - Note that `adapter-static` with `precompress: true` generates Brotli/gzip assets
 
 **Verification Checklist:**
-- [ ] README documents whether env vars are needed
-- [ ] README has a deployment section referencing Amplify
-- [ ] `pnpm run lint:md` passes
+- [x] README documents whether env vars are needed
+- [x] README has a deployment section referencing Amplify
+- [x] `pnpm run lint:md` passes
 
 **Testing Instructions:**
 - Verify `amplify.yml` exists and the README description matches its contents
