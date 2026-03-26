@@ -228,8 +228,8 @@ docs: fix TESTING.md drift from actual config
 - This is a minor change but prevents confusion for new contributors setting up their environment
 
 **Verification Checklist:**
-- [ ] Node version in plans README matches CI config
-- [ ] `pnpm run lint:md` passes
+- [x] Node version in plans README matches CI config
+- [x] `pnpm run lint:md` passes
 
 **Testing Instructions:**
 - Verify the version matches `.github/workflows/ci.yml`
