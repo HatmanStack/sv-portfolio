@@ -36,10 +36,10 @@ Remove dead code, unused dependencies, and stale files from the codebase. This p
 - Run `pnpm test` and `pnpm run check` to verify no breakage
 
 **Verification Checklist:**
-- [ ] `run` no longer appears in `package.json`
-- [ ] `pnpm install` succeeds
-- [ ] `pnpm test` passes
-- [ ] `pnpm run check` passes
+- [x] `run` no longer appears in `package.json`
+- [x] `pnpm install` succeeds
+- [x] `pnpm test` passes
+- [x] `pnpm run check` passes
 
 **Testing Instructions:**
 - No new tests needed. Existing tests confirm nothing depends on this package.
@@ -68,9 +68,9 @@ chore(deps): remove unused run dependency
 - Check with `git status` whether the file is tracked
 
 **Verification Checklist:**
-- [ ] `package-lock.json` does not exist in working directory
-- [ ] `pnpm install --frozen-lockfile` still works
-- [ ] Only `pnpm-lock.yaml` remains as a lockfile
+- [x] `package-lock.json` does not exist in working directory
+- [x] `pnpm install --frozen-lockfile` still works
+- [x] Only `pnpm-lock.yaml` remains as a lockfile
 
 **Testing Instructions:**
 - No tests needed.
@@ -100,9 +100,9 @@ chore(deps): remove stale package-lock.json
 - Run `pnpm test` to ensure no other tests reference it
 
 **Verification Checklist:**
-- [ ] No file in `src/` imports `LinkedIn.svelte`
-- [ ] Both files deleted
-- [ ] `pnpm test` passes
+- [x] No file in `src/` imports `LinkedIn.svelte`
+- [x] Both files deleted
+- [x] `pnpm test` passes
 
 **Testing Instructions:**
 - No new tests. Run existing suite to confirm no references break.
@@ -136,10 +136,10 @@ chore: remove unused LinkedIn icon component
 - Run `pnpm test` and `pnpm run check`
 
 **Verification Checklist:**
-- [ ] No production code imports `navigation.ts`
-- [ ] File deleted
-- [ ] `pnpm test` passes
-- [ ] `pnpm run check` passes
+- [x] No production code imports `navigation.ts`
+- [x] File deleted
+- [x] `pnpm test` passes
+- [x] `pnpm run check` passes
 
 **Testing Instructions:**
 - Run full test suite. Remove any test file that exclusively tests `navigation.ts`.
@@ -170,9 +170,9 @@ chore: remove unused navigation.ts data file
 - If the entire file is only a placeholder, delete it
 
 **Verification Checklist:**
-- [ ] No `expect(true).toBe(true)` remains in the codebase
-- [ ] `pnpm test` passes
-- [ ] Coverage thresholds still met
+- [x] No `expect(true).toBe(true)` remains in the codebase
+- [x] `pnpm test` passes
+- [x] Coverage thresholds still met
 
 **Testing Instructions:**
 - Run `pnpm test:coverage` to verify coverage is not degraded.
@@ -203,9 +203,9 @@ test: replace placeholder assertion in setup test
 - Run `pnpm run build` (or at minimum `pnpm run check`) to verify no style regression
 
 **Verification Checklist:**
-- [ ] `app.css` imported only in `+layout.svelte`
-- [ ] `pnpm run check` passes
-- [ ] `pnpm test` passes
+- [x] `app.css` imported only in `+layout.svelte`
+- [x] `pnpm run check` passes
+- [x] `pnpm test` passes
 
 **Testing Instructions:**
 - No new tests. Visual check that the homepage renders correctly (this is a build-time deduplicated import, so removal has no runtime effect).
@@ -234,8 +234,8 @@ chore(css): remove duplicate app.css import from +page.svelte
 - Verify the intent: if `background: transparent` is the desired state, the `background-image` line is dead. If the image was intended, the `background` shorthand should be removed instead. Check git blame if unclear.
 
 **Verification Checklist:**
-- [ ] No CSS property is immediately overridden by the next declaration in the same rule
-- [ ] `pnpm run check` passes
+- [x] No CSS property is immediately overridden by the next declaration in the same rule
+- [x] `pnpm run check` passes
 
 **Testing Instructions:**
 - No new tests. Visual check that homepage background renders correctly.
@@ -265,8 +265,8 @@ fix(css): remove dead background-image declaration in +page.svelte
 - If uncertain, use the same value as `min-width` (3em) since the browser was already falling back to it
 
 **Verification Checklist:**
-- [ ] `width: em;` replaced with a valid CSS declaration
-- [ ] `pnpm run check` passes
+- [x] `width: em;` replaced with a valid CSS declaration
+- [x] `pnpm run check` passes
 
 **Testing Instructions:**
 - No new tests. Visual check that header navigation items render correctly.
@@ -298,10 +298,10 @@ fix(css): fix invalid width declaration in Header.svelte
 - Run `pnpm test` and `pnpm run check` after updates
 
 **Verification Checklist:**
-- [ ] `pnpm audit` shows 0 high vulnerabilities (moderate/low may remain if they require breaking changes)
-- [ ] `pnpm test` passes
-- [ ] `pnpm run check` passes
-- [ ] `pnpm run build` succeeds
+- [x] `pnpm audit` shows 0 high vulnerabilities (moderate/low may remain if they require breaking changes)
+- [x] `pnpm test` passes
+- [x] `pnpm run check` passes
+- [x] `pnpm run build` succeeds
 
 **Testing Instructions:**
 - Run full test suite. If any tests break due to dependency updates, fix them.
