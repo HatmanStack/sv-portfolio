@@ -89,8 +89,6 @@
 <style>
   /* CSS Variables */
   :root {
-    --text-color: #aaaa9f;
-    --accent-color: #4c4b43;
     --transition-speed: 0.3s;
     --border-radius: 50px;
     --glow-color: #fffaf6;

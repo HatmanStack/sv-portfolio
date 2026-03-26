@@ -203,6 +203,12 @@
   --z-popover: 1500;
   --z-tooltip: 1600;
 
+  /* ===== Route-shared Tokens ===== */
+  /* Used across web, read, and android route pages */
+  --text-color: #aaaa9f;
+  --accent-color: #4c4b43;
+  --index: calc(1vw + 1vh);
+
   /* ===== Animation & Color Hue ===== */
   /* Used for dynamic color animations in buttons */
   --hue: 100;

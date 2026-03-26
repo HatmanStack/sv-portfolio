@@ -1,6 +1,7 @@
 @import '@fontsource/fira-mono';
 @import 'reset.css';
 @import './lib/styles/tokens.css';
+@import './lib/styles/glow.css';
 
 :global(body) {
 	width: 100%;
