@@ -316,8 +316,9 @@ describe('Sound Hooks', () => {
 			const mockNode = {
 				querySelectorAll: vi
 					.fn()
-					.mockReturnValueOnce([mockLink1])
-					.mockReturnValueOnce([mockLink1, mockLink2])
+					.mockReturnValueOnce([mockLink1]) // initial attachListeners
+					.mockReturnValueOnce([mockLink1, mockLink2]) // update cleanup scan
+					.mockReturnValueOnce([mockLink1, mockLink2]) // update attachListeners
 			};
 
 			const action = createApplyClickSound('/test-sound.mp3');

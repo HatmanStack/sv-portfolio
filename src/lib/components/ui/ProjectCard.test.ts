@@ -71,20 +71,20 @@ describe('ProjectCard - Rendering', () => {
 		});
 	});
 
-	test('renders button that navigates to project link', () => {
-		const project = createMockProject({ link: 'https://example.com', buttonText: 'View' });
+	test('renders link with correct href', () => {
+		const project = createMockProject({ link: 'https://example.com' });
 		const { getByRole } = render(ProjectCard, { props: { project } });
 
-		const button = getByRole('button', { name: 'View' });
-		expect(button).toBeInTheDocument();
+		const link = getByRole('link', { name: project.buttonText });
+		expect(link).toHaveAttribute('href', 'https://example.com');
 	});
 
-	test('renders button with correct text', () => {
+	test('renders project link with correct text', () => {
 		const project = createMockProject({ buttonText: 'Click Me' });
 		const { getByRole } = render(ProjectCard, { props: { project } });
 
-		const button = getByRole('button', { name: 'Click Me' });
-		expect(button).toBeInTheDocument();
+		const link = getByRole('link', { name: 'Click Me' });
+		expect(link).toBeInTheDocument();
 	});
 
 	test('images have alt text with project title', () => {
@@ -127,17 +127,17 @@ describe('ProjectCard - Interactions', () => {
 		const project = createMockProject();
 		const { getByRole } = render(ProjectCard, { props: { project } });
 
-		const button = getByRole('button', { name: 'View' });
-		await fireEvent.click(button);
+		const link = getByRole('link', { name: 'View' });
+		await fireEvent.click(link);
 
 		expect(mockPlay).toHaveBeenCalled();
 	});
 
-	test('integrates with GooeyButton component', () => {
-		const project = createMockProject();
+	test('project link has correct href', () => {
+		const project = createMockProject({ link: 'https://example.com' });
 		const { getByRole } = render(ProjectCard, { props: { project } });
 
-		const button = getByRole('button', { name: 'View' });
-		expect(button).toHaveClass('gooey-button');
+		const link = getByRole('link', { name: project.buttonText });
+		expect(link).toHaveAttribute('href', 'https://example.com');
 	});
 });

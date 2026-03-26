@@ -59,21 +59,21 @@ describe('Component Integration', () => {
 		});
 	});
 
-	describe('ProjectCard + GooeyButton Integration', () => {
-		test('ProjectCard integrates correctly with GooeyButton', () => {
+	describe('ProjectCard Link Integration', () => {
+		test('ProjectCard renders project link with correct text', () => {
 			const project = createMockProject({ buttonText: 'View Project' });
 			const { getByRole } = render(ProjectCard, { props: { project } });
 
-			const button = getByRole('button', { name: 'View Project' });
-			expect(button).toHaveClass('gooey-button');
+			const link = getByRole('link', { name: 'View Project' });
+			expect(link).toBeInTheDocument();
 		});
 
-		test('ProjectCard renders button for navigation', () => {
+		test('ProjectCard renders link for navigation', () => {
 			const project = createMockProject({ link: 'https://example.com' });
 			const { getByRole } = render(ProjectCard, { props: { project } });
 
-			const button = getByRole('button', { name: 'View' });
-			expect(button).toHaveClass('gooey-button');
+			const link = getByRole('link', { name: project.buttonText });
+			expect(link).toHaveAttribute('href', 'https://example.com');
 		});
 	});
 

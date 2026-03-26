@@ -199,9 +199,9 @@ Create the directory.
 
 Before spawning agents, read all required role prompt files. Only read prompts for selected audits.
 
-- **If health selected:** Read `skills/pipeline/health-auditor.md`
-- **If eval selected:** Read `skills/pipeline/eval-hire.md`, `skills/pipeline/eval-stress.md`, `skills/pipeline/eval-day2.md`
-- **If docs selected:** Read `skills/pipeline/doc-auditor.md`
+- **If health selected:** Read `.claude/skills/pipeline/health-auditor.md`
+- **If eval selected:** Read `.claude/skills/pipeline/eval-hire.md`, `skills/pipeline/eval-stress.md`, `skills/pipeline/eval-day2.md`
+- **If docs selected:** Read `.claude/skills/pipeline/doc-auditor.md`
 
 ### Step 5: Spawn All Agents in Parallel
 

@@ -117,6 +117,15 @@ export function createApplyClickSound(soundFile: string, options: SoundOptions =
 
 		return {
 			update() {
+				// Remove handlers for detached nodes
+				// eslint-disable-next-line svelte/prefer-svelte-reactivity -- non-reactive DOM tracking
+				const currentLinks = new Set(node.querySelectorAll<HTMLElement>('a'));
+				handlers.forEach((handler, link) => {
+					if (!currentLinks.has(link)) {
+						link.removeEventListener('click', handler);
+						handlers.delete(link);
+					}
+				});
 				attachListeners();
 			},
 			destroy() {
