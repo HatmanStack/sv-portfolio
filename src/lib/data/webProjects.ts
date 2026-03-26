@@ -1,5 +1,5 @@
 // Web projects data
-import type { WebProject } from '$lib/types/index.js';
+import type { WebProject, ContentMapSeed } from '$lib/types/index.js';
 import pixelPrompta from '$lib/images/pixel-prompt.avif';
 import twaa from '$lib/images/twa.avif';
 import credentialsa from '$lib/images/credentials.avif';
@@ -85,7 +85,7 @@ export const webProjects: WebProject[] = [
   }
 ];
 
-export const webContentMap = webProjects.reduce((acc, project) => {
+export const webContentMap = webProjects.reduce<Record<string, WebProject | ContentMapSeed>>((acc, project) => {
   acc[project.title] = project;
   return acc;
-}, { 'Splash': { title: 'Web Stuff' } } as Record<string, any>);
+}, { 'Splash': { title: 'Web Stuff' } });

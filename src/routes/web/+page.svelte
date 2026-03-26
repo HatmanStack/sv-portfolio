@@ -32,6 +32,7 @@
 </svelte:head>
 
 <script lang="ts">
+  import type { WebProject } from '$lib/types/index.js';
   import { webProjects, webContentMap } from '$lib/data/webProjects';
   import Header from '../Header.svelte';
   import SVGFilters from '$lib/components/ui/SVGFilters.svelte';
@@ -45,6 +46,11 @@
   const click_sound = useSound(click,["click"]);
 
   let selectedImage = $state('Splash');
+  let selectedEntry = $derived(webContentMap[selectedImage]);
+
+  function isWebProject(entry: unknown): entry is WebProject {
+    return entry != null && typeof entry === 'object' && 'id' in entry;
+  }
 </script>
 
 <section>
@@ -53,14 +59,15 @@
 
 <section>
 <div class="wrapper-column">
-  {#if webContentMap[selectedImage]}
-    <h1 class="header-text glow-filter" class:slice-title={selectedImage !== 'Splash'} class:long-title={webContentMap[selectedImage].title.length > 15} data-text={webContentMap[selectedImage].title} style="margin-bottom: {selectedImage.includes('Splash') ? '10rem' : '0'}"></h1>
-    {#if webContentMap[selectedImage].description}
+  {#if selectedEntry}
+    <h1 class="header-text glow-filter" class:slice-title={selectedImage !== 'Splash'} class:long-title={selectedEntry.title.length > 15} data-text={selectedEntry.title} style="margin-bottom: {selectedImage.includes('Splash') ? '10rem' : '0'}"></h1>
+    {#if isWebProject(selectedEntry) && selectedEntry.description}
+    <!-- Renders trusted static HTML from project descriptions (not user input) -->
     <p use:applyClickSound style="margin-bottom: {selectedImage.includes('Medium') ? '3rem' : '0'};margin-top: {selectedImage.includes('Medium') ? '4rem' : '2rem'}; text-wrap:balanced;">
-    {@html webContentMap[selectedImage].description}</p>
-    {/if}    
-    {#if webContentMap[selectedImage].link}
-      <a href={webContentMap[selectedImage].link} target="_blank" rel="noopener noreferrer">
+    {@html selectedEntry.description}</p>
+    {/if}
+    {#if isWebProject(selectedEntry) && selectedEntry.link}
+      <a href={selectedEntry.link} target="_blank" rel="noopener noreferrer">
         {#if click_sound}
         <button class="button" use:click_sound>More Stuff</button>
         {:else}

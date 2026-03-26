@@ -194,6 +194,14 @@ export interface NavigationItem {
   icon: string;
 }
 
+/**
+ * Seed entry for content maps (non-project entries like "Splash" or "Android Stuff").
+ * These provide a title-only placeholder used as the default selection state.
+ */
+export interface ContentMapSeed {
+  title: string;
+}
+
 /* ============================================
  * Component Prop Types
  * ============================================ */

@@ -32,11 +32,17 @@
 </svelte:head>
 
 <script lang="ts">
+  import type { AndroidApp } from '$lib/types/index.js';
   import { androidApps, androidContentMap } from '$lib/data/androidApps';
   import Header from '../Header.svelte';
   import AndroidFilters from '$lib/components/ui/AndroidFilters.svelte';
 
   let selectedImage = $state('Android Stuff');
+  let selectedEntry = $derived(androidContentMap[selectedImage]);
+
+  function isAndroidApp(entry: unknown): entry is AndroidApp {
+    return entry != null && typeof entry === 'object' && 'id' in entry;
+  }
 
   import { useSound } from "$lib/hooks/useSound";
   import click from "$lib/sounds/click.wav";
@@ -58,18 +64,18 @@
       </label>
     {/each}
     <div class="content-panel">
-      {#if androidContentMap[selectedImage]}
-        <h1 class="app-title" data-text={androidContentMap[selectedImage].title}>{androidContentMap[selectedImage].title}</h1>
-        {#if androidContentMap[selectedImage].description}
-        <p class="app-description">{androidContentMap[selectedImage].description}</p>
+      {#if selectedEntry}
+        <h1 class="app-title" data-text={selectedEntry.title}>{selectedEntry.title}</h1>
+        {#if isAndroidApp(selectedEntry) && selectedEntry.description}
+        <p class="app-description">{selectedEntry.description}</p>
         {/if}
-        {#if androidContentMap[selectedImage].webLink}
-        <a href={androidContentMap[selectedImage].webLink} target="_blank" rel="noopener noreferrer">
+        {#if isAndroidApp(selectedEntry) && selectedEntry.webLink}
+        <a href={selectedEntry.webLink} target="_blank" rel="noopener noreferrer">
           <button class="cta-button" use:click_sound>Cross-Platform</button>
         </a>
         {/if}
-        {#if androidContentMap[selectedImage].link}
-        <a href={androidContentMap[selectedImage].link} target="_blank" rel="noopener noreferrer">
+        {#if isAndroidApp(selectedEntry) && selectedEntry.link}
+        <a href={selectedEntry.link} target="_blank" rel="noopener noreferrer">
           <button class="cta-button" use:click_sound>Play Store Stuff</button>
         </a>
         {/if}

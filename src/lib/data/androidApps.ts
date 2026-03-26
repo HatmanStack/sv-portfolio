@@ -1,5 +1,5 @@
 // Android apps data
-import type { AndroidApp } from '$lib/types/index.js';
+import type { AndroidApp, ContentMapSeed } from '$lib/types/index.js';
 import trachtenberg from '$lib/images/trachtenberg.avif';
 import stock from '$lib/images/stock.avif';
 import movies from '$lib/images/movies.avif';
@@ -68,7 +68,7 @@ export const androidApps: AndroidApp[] = [
   }
 ];
 
-export const androidContentMap = androidApps.reduce((acc, app) => {
+export const androidContentMap = androidApps.reduce<Record<string, AndroidApp | ContentMapSeed>>((acc, app) => {
   acc[app.title] = app;
   return acc;
-}, { 'Android Stuff': { title: 'Android Stuff' } } as Record<string, any>);
+}, { 'Android Stuff': { title: 'Android Stuff' } });
