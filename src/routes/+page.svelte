@@ -47,10 +47,10 @@
   import { projects, projectsRow2 } from '$lib/data/projects.js';
   import sloth from '$lib/images/sloth_stuff.jpg';
 
-  const REDIRECT_FLAG = 'firefoxRedirected';
+  const REDIRECT_FLAG = 'noScrollAnimRedirected';
 
   $effect(() => {
-    if (browser && navigator.userAgent.includes("Firefox")) {
+    if (browser && !CSS.supports('animation-timeline', 'scroll()')) {
       const scrollContainer = document.querySelector('.scroll-container') as HTMLElement | null;
       if (scrollContainer) {
         scrollContainer.style.display = 'none';
