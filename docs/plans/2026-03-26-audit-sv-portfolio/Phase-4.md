@@ -55,9 +55,9 @@ Fix all documentation drift, gaps, and stale content identified in the doc audit
 - Verify no other docs link to these files (search for relative links). If any do, update the links.
 
 **Verification Checklist:**
-- [ ] `docs/archive/` contains all 10 historical files
-- [ ] `docs/` root contains only living docs (STRUCTURE, TESTING, PERFORMANCE, PRELOAD_STRATEGY, plans/)
-- [ ] No broken relative links in remaining docs
+- [x] `docs/archive/` contains all 10 historical files
+- [x] `docs/` root contains only living docs (STRUCTURE, TESTING, PERFORMANCE, PRELOAD_STRATEGY, plans/)
+- [x] No broken relative links in remaining docs
 
 **Testing Instructions:**
 - Search all `.md` files for references to moved filenames

@@ -82,7 +82,7 @@ pnpm run check
 
 - [Structure](./docs/STRUCTURE.md) - Directory organization
 - [Performance](./docs/PERFORMANCE.md) - Performance metrics and optimizations
-- [Refactoring Summary](./docs/REFACTORING_SUMMARY.md) - Complete refactoring details
+- [Refactoring Summary](./docs/archive/REFACTORING_SUMMARY.md) - Complete refactoring details (archived)
 
 ## Recent Refactoring
 
@@ -96,7 +96,7 @@ This project recently underwent a comprehensive 7-phase refactoring to modernize
 - ✅ Consistent PascalCase component naming
 - ✅ Fixed all TypeScript errors (0 errors)
 
-See [REFACTORING_SUMMARY.md](./docs/REFACTORING_SUMMARY.md) for complete details.
+See [REFACTORING_SUMMARY.md](./docs/archive/REFACTORING_SUMMARY.md) for complete details.
 
 ## Featured CodePens
 
