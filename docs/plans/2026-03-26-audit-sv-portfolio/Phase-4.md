@@ -149,12 +149,12 @@ Additional updates:
 - Update the hooks section to reflect the consolidated sound API
 
 **Verification Checklist:**
-- [ ] Every file and directory listed in STRUCTURE.md exists on disk
-- [ ] No references to deleted files (useSound.js, applyClickSound.js, LinkedIn.svelte, navigation.ts, app.scss)
-- [ ] No references to non-existent directories (/lib/utils, /components/layouts)
-- [ ] Data directory lists all 5 files (after Phase 1 deletions, verify count)
-- [ ] Import examples match actual import conventions
-- [ ] `pnpm run lint:md` passes
+- [x] Every file and directory listed in STRUCTURE.md exists on disk
+- [x] No references to deleted files (useSound.js, applyClickSound.js, LinkedIn.svelte, navigation.ts, app.scss)
+- [x] No references to non-existent directories (/lib/utils, /components/layouts)
+- [x] Data directory lists all 5 files (after Phase 1 deletions, verify count)
+- [x] Import examples match actual import conventions
+- [x] `pnpm run lint:md` passes
 
 **Testing Instructions:**
 - For every file path in STRUCTURE.md, verify it exists with `ls` or `find`
