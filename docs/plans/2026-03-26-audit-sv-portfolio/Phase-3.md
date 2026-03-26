@@ -88,9 +88,9 @@ ci(lint): add ESLint with Svelte and TypeScript support
 - Commit the formatting changes separately from the config changes
 
 **Verification Checklist:**
-- [ ] `.prettierrc` exists
-- [ ] `pnpm run format:check` passes (all files formatted)
-- [ ] `pnpm run lint` still passes (no ESLint/Prettier conflicts)
+- [x] `.prettierrc` exists
+- [x] `pnpm run format:check` passes (all files formatted)
+- [x] `pnpm run lint` still passes (no ESLint/Prettier conflicts)
 
 **Testing Instructions:**
 - Run `pnpm run format:check` and verify it exits 0
@@ -144,11 +144,11 @@ style: apply Prettier formatting to entire codebase
 - Test the hooks by making a small change and committing
 
 **Verification Checklist:**
-- [ ] `.husky/pre-commit` exists and is executable
-- [ ] `.husky/commit-msg` exists and is executable
-- [ ] A commit with bad formatting is auto-fixed by lint-staged
-- [ ] A commit with message "bad message" is rejected by commitlint
-- [ ] A commit with message "fix: good message" passes
+- [x] `.husky/pre-commit` exists and is executable
+- [x] `.husky/commit-msg` exists and is executable
+- [x] A commit with bad formatting is auto-fixed by lint-staged
+- [x] A commit with message "bad message" is rejected by commitlint
+- [x] A commit with message "fix: good message" passes
 
 **Testing Instructions:**
 - Stage a file with intentional formatting issues, commit, verify lint-staged fixes them
@@ -181,10 +181,10 @@ ci: add Husky pre-commit and commit-msg hooks
 - Keep the `status-check` job updated with the new `lint` job in its `needs`
 
 **Verification Checklist:**
-- [ ] CI yml has a `lint` job running ESLint and Prettier check
-- [ ] CI test job runs `pnpm test:coverage`
-- [ ] `build` job depends on `lint-and-typecheck`, `lint`, and `test`
-- [ ] `status-check` includes all jobs
+- [x] CI yml has a `lint` job running ESLint and Prettier check
+- [x] CI test job runs `pnpm test:coverage`
+- [x] `build` job depends on `lint-and-typecheck`, `lint`, and `test`
+- [x] `status-check` includes all jobs
 - [ ] CI pipeline passes locally with `act` or by pushing a test branch
 
 **Testing Instructions:**
@@ -222,9 +222,9 @@ ci: add lint job and enforce coverage thresholds in CI
 - Run `pnpm run lint:md` and fix any violations in docs that will survive Phase 4
 
 **Verification Checklist:**
-- [ ] `.markdownlint.json` exists
-- [ ] `pnpm run lint:md` passes
-- [ ] lint-staged includes markdown files
+- [x] `.markdownlint.json` exists
+- [x] `pnpm run lint:md` passes
+- [x] lint-staged includes markdown files
 
 **Testing Instructions:**
 - Run `pnpm run lint:md` and verify 0 errors
