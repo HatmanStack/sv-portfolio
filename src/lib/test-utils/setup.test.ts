@@ -10,10 +10,6 @@ import { createMockProject, createMockNavigationState, createMockUserPreferences
 import { projectsFixture, navigationItemsFixture } from './fixtures';
 
 describe('Test Infrastructure', () => {
-	test('vitest runs successfully', () => {
-		expect(true).toBe(true);
-	});
-
 	test('jest-dom matchers are available', () => {
 		const div = document.createElement('div');
 		div.textContent = 'Hello World';
