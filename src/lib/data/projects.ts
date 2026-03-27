@@ -73,8 +73,9 @@ export const projectsRow2: Project[] = [
 	{
 		id: 'ragstack',
 		title: 'RAGStack',
+		// Demo credentials are intentionally public for portfolio visitors to try the app
 		description:
-			'Serverless document processing with AI chat. Upload docs, OCR extraction, query via Amazon Bedrock. One-click AWS deploy.',
+			'Serverless document processing with AI chat. Upload docs, OCR extraction, query via Amazon Bedrock. One-click AWS deploy. Login: guest@hatstack.fun / Guest@123',
 		category: 'AWS',
 		images: {
 			profession: ragstacka,
