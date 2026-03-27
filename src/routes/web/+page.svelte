@@ -74,10 +74,9 @@
 				class:slice-title={selectedImage !== 'Splash'}
 				class:long-title={selectedEntry.title.length > 15}
 				data-text={selectedEntry.title}
+				aria-label={selectedEntry.title}
 				style="margin-bottom: {selectedImage.includes('Splash') ? '10rem' : '0'}"
-			>
-				{selectedEntry.title}
-			</h1>
+			></h1>
 			{#if isWebProject(selectedEntry) && selectedEntry.description}
 				<!-- Renders trusted static HTML from project descriptions (not user input) -->
 				<p

@@ -63,7 +63,7 @@
 
 <section>
 	<div class="wrapper-column">
-		<h1 class="header-text glow-filter" data-text="Blog Stuff">Blog Stuff</h1>
+		<h1 class="header-text glow-filter" data-text="Blog Stuff" aria-label="Blog Stuff"></h1>
 		<div class="articles-list">
 			{#each data.posts as post}
 				<a href="/read/post/{post.slug}" class="article-link" use:click_sound>

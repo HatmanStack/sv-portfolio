@@ -76,20 +76,29 @@
 	<Header />
 	<div class="title-desktop">
 		{#if needsSplit}
-			<h1 class="header-text glow-filter" style="margin-top:.3em;" data-text={firstHalf}>
-				{firstHalf}
-			</h1>
-			<h1 class="header-text glow-filter" style="margin-top:1.3em;" data-text={secondHalf}>
-				{secondHalf}
-			</h1>
+			<h1
+				class="header-text glow-filter"
+				style="margin-top:.3em;"
+				data-text={firstHalf}
+				aria-label={firstHalf}
+			></h1>
+			<h1
+				class="header-text glow-filter"
+				style="margin-top:1.3em;"
+				data-text={secondHalf}
+				aria-label={secondHalf}
+			></h1>
 		{:else}
-			<h1 class="header-text glow-filter" style="margin-top:.3em;" data-text={data.title}>
-				{data.title}
-			</h1>
+			<h1
+				class="header-text glow-filter"
+				style="margin-top:.3em;"
+				data-text={data.title}
+				aria-label={data.title}
+			></h1>
 		{/if}
 	</div>
 	<div class="title-mobile">
-		<h1 class="header-text glow-filter" data-text={data.title}>{data.title}</h1>
+		<h1 class="header-text glow-filter" data-text={data.title} aria-label={data.title}></h1>
 	</div>
 	<div class="post-layout" use:applyClickSound>
 		<br />
