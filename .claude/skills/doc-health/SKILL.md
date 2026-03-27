@@ -135,7 +135,7 @@ Append an entry to `.claude/skill-runs.json` in the repo root. If the file does 
 ```
 
 - Read the existing file, parse the JSON array, append the new entry, and write it back
-- If the file is malformed, overwrite it with a fresh array containing only the new entry
+- If the file is malformed, move it to `.claude/skill-runs.json.corrupt-<TIMESTAMP>`, log a warning, and write a fresh array containing only the new entry
 
 ### Step 6: Handoff
 

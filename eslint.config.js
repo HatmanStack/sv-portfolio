@@ -29,13 +29,6 @@ export default ts.config(
 		}
 	},
 	{
-		files: ['**/*.test.ts', '**/*.test.js', '**/*.spec.ts', '**/*.spec.js', '**/test-utils/**'],
-		rules: {
-			'@typescript-eslint/no-explicit-any': 'off',
-			'@typescript-eslint/ban-ts-comment': 'off'
-		}
-	},
-	{
 		rules: {
 			'@typescript-eslint/no-unused-vars': [
 				'error',
@@ -43,6 +36,13 @@ export default ts.config(
 			],
 			'@typescript-eslint/no-explicit-any': 'warn',
 			'no-console': 'warn'
+		}
+	},
+	{
+		files: ['**/*.test.ts', '**/*.test.js', '**/*.spec.ts', '**/*.spec.js', '**/test-utils/**'],
+		rules: {
+			'@typescript-eslint/no-explicit-any': 'off',
+			'@typescript-eslint/ban-ts-comment': 'off'
 		}
 	},
 	prettier,
