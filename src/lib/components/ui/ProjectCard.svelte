@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Project } from '$lib/types/index.js';
 	import { createSoundStore } from '$lib/hooks/useSound.svelte.js';
+	import GooeyButton from './GooeyButton.svelte';
 	import click from '$lib/sounds/click.wav';
 	import githubIcon from '$lib/images/github.svg';
 
@@ -14,8 +15,7 @@
 	const clickSound = createSoundStore(click);
 	let expanded = $state(false);
 
-	function handleClick(e: Event) {
-		e.stopPropagation();
+	function handleClick() {
 		clickSound.play();
 	}
 
@@ -70,8 +70,10 @@
 	<div class="wrapper">
 		<div class="profile_quote">
 			<p style="font-size:.8em" class="fade-in">{project.description}</p>
-			<a href={project.link} class="project-link" onclick={handleClick}>
-				{project.buttonText}
+			<a href={project.link}>
+				<GooeyButton onclick={handleClick}>
+					{project.buttonText}
+				</GooeyButton>
 			</a>
 		</div>
 	</div>
@@ -212,11 +214,8 @@
 		z-index: 1;
 	}
 
-	.project-link {
+	.profile_quote button {
 		flex-shrink: 0;
-		color: var(--color-card-light);
-		text-decoration: none;
-		font-weight: var(--font-weight-semibold);
 	}
 
 	.profile_quote p {

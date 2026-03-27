@@ -75,16 +75,16 @@ describe('ProjectCard - Rendering', () => {
 		const project = createMockProject({ link: 'https://example.com' });
 		const { getByRole } = render(ProjectCard, { props: { project } });
 
-		const link = getByRole('link', { name: project.buttonText });
+		const link = getByRole('link');
 		expect(link).toHaveAttribute('href', 'https://example.com');
 	});
 
-	test('renders project link with correct text', () => {
+	test('renders button with correct text', () => {
 		const project = createMockProject({ buttonText: 'Click Me' });
 		const { getByRole } = render(ProjectCard, { props: { project } });
 
-		const link = getByRole('link', { name: 'Click Me' });
-		expect(link).toBeInTheDocument();
+		const button = getByRole('button', { name: 'Click Me' });
+		expect(button).toBeInTheDocument();
 	});
 
 	test('images have alt text with project title', () => {
@@ -127,17 +127,17 @@ describe('ProjectCard - Interactions', () => {
 		const project = createMockProject();
 		const { getByRole } = render(ProjectCard, { props: { project } });
 
-		const link = getByRole('link', { name: 'View' });
-		await fireEvent.click(link);
+		const button = getByRole('button', { name: 'View' });
+		await fireEvent.click(button);
 
 		expect(mockPlay).toHaveBeenCalled();
 	});
 
-	test('project link has correct href', () => {
-		const project = createMockProject({ link: 'https://example.com' });
+	test('integrates with GooeyButton component', () => {
+		const project = createMockProject();
 		const { getByRole } = render(ProjectCard, { props: { project } });
 
-		const link = getByRole('link', { name: project.buttonText });
-		expect(link).toHaveAttribute('href', 'https://example.com');
+		const button = getByRole('button', { name: 'View' });
+		expect(button).toHaveClass('gooey-button');
 	});
 });
