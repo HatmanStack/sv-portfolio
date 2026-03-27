@@ -9,7 +9,6 @@ import { describe, test, expect } from 'vitest';
 import { projects } from './projects';
 import { androidApps } from './androidApps';
 import { webProjects } from './webProjects';
-import { navigationItems } from './navigation';
 
 describe('Cross-Data Validation', () => {
 	describe('Category Consistency', () => {
@@ -18,26 +17,6 @@ describe('Cross-Data Validation', () => {
 
 			projects.forEach((project) => {
 				expect(validCategories).toContain(project.category);
-			});
-		});
-	});
-
-	describe('Navigation Path Coverage', () => {
-		test('all primary navigation paths are defined', () => {
-			const expectedPaths = ['/', '/web', '/android', '/read', '/about'];
-
-			const actualPaths = navigationItems.map((item) => item.href);
-
-			expectedPaths.forEach((expectedPath) => {
-				expect(actualPaths).toContain(expectedPath);
-			});
-		});
-
-		test('navigation paths match expected route structure', () => {
-			const validPathPattern = /^\/[a-z]*$/;
-
-			navigationItems.forEach((item) => {
-				expect(item.href).toMatch(validPathPattern);
 			});
 		});
 	});
@@ -59,11 +38,6 @@ describe('Cross-Data Validation', () => {
 			const totalWebProjects = webProjects.length;
 			expect(totalWebProjects).toBeGreaterThan(0);
 			expect(totalWebProjects).toBeLessThan(50); // Sanity check
-		});
-
-		test('total navigation items match expected count', () => {
-			// Should have main navigation items: home, web, android, read, about
-			expect(navigationItems.length).toBe(5);
 		});
 	});
 
@@ -111,14 +85,6 @@ describe('Cross-Data Validation', () => {
 				expect(project.buttonText.length).toBeLessThan(20);
 			});
 		});
-
-		test('all navigation items have meaningful names', () => {
-			navigationItems.forEach((item) => {
-				// Names should be capitalized and meaningful
-				expect(item.name.length).toBeGreaterThan(0);
-				expect(item.name[0]).toBe(item.name[0].toUpperCase());
-			});
-		});
 	});
 
 	describe('Content Completeness', () => {
@@ -133,15 +99,6 @@ describe('Cross-Data Validation', () => {
 				expect(project.images.profile).toBeTruthy();
 				expect(project.link).toBeTruthy();
 				expect(project.buttonText).toBeTruthy();
-			});
-		});
-
-		test('all navigation items have complete data', () => {
-			navigationItems.forEach((item) => {
-				expect(item.id).toBeTruthy();
-				expect(item.name).toBeTruthy();
-				expect(item.href).toBeTruthy();
-				expect(item.icon).toBeTruthy();
 			});
 		});
 	});

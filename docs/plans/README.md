@@ -11,7 +11,7 @@ This implementation prioritizes isolated unit tests with mocked dependencies, en
 ## Prerequisites
 
 ### Required Tools & Environment
-- **Node.js**: v18+ (verify with `node --version`)
+- **Node.js**: v24 (verify with `node --version`)
 - **pnpm**: Latest version (verify with `pnpm --version`)
 - **Git**: For version control and commits
   - Configure credentials before starting:

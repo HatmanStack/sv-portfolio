@@ -1,10 +1,11 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import '../app.css';
 	import { appStore } from '$lib/stores/app.svelte.js';
 	import { page } from '$app/stores';
 
 	interface Props {
-		children: any;
+		children: Snippet;
 	}
 
 	let { children }: Props = $props();
@@ -31,11 +32,11 @@
 </svelte:head>
 
 <div class="page-content" class:visible={mounted}>
-<div class="app">
-	<main>
-	  {@render children()}
-	</main>
-  </div>
+	<div class="app">
+		<main>
+			{@render children()}
+		</main>
+	</div>
 </div>
 
 <style>
@@ -46,13 +47,13 @@
 	}
 
 	.page-content {
-    opacity: 0;
-    transition: opacity 0.5s ease-out;
-  }
-  
-  .visible {
-    opacity: 1;
-  }
+		opacity: 0;
+		transition: opacity 0.5s ease-out;
+	}
+
+	.visible {
+		opacity: 1;
+	}
 
 	main {
 		flex: 1;
@@ -63,5 +64,4 @@
 		margin: 0 auto;
 		box-sizing: border-box;
 	}
-	
 </style>

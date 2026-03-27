@@ -370,5 +370,5 @@ For use cases where sub-millisecond latency isn't critical but cost efficiency a
 <br>
 
 * https://github.com/HatmanStack/RAGStack-Lambda
-* https://dhrmkxyt1t9pb.cloudfront.net/ (guest@hatstack.fun / Guest@123)
+* https://dhrmkxyt1t9pb.cloudfront.net/
 * https://aws.amazon.com/marketplace/pp/prodview-5afdiw2zrht6o (requires AWS sign-in to view)
