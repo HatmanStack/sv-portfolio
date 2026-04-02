@@ -5,8 +5,6 @@ date: 'Mar 16, 2026'
 time: '8 min read'
 ---
 
-## Adversarial Multi-Agent Pipeline for Claude Code
-
 What if your AI coding assistant could argue with itself and produce better code because of it?
 
 Claude Forge is an adversarial multi-agent pipeline for Claude Code that borrows from Generative Adversarial Networks (GANs). Instead of one AI agent writing code and hoping for the best, separate agents generate and critique each other's work in iterative loops until the output converges on something solid.
