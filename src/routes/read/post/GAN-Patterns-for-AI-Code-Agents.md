@@ -316,14 +316,39 @@ The trade-off is worth it for features where correctness matters more than speed
 
 ## Getting Started
 
-Claude Forge is built entirely from Claude Code custom skills. No external tooling, no CI integration required. Install by copying the skills directory into your project:
+Claude Forge is built entirely from Claude Code custom skills. No external tooling, no CI integration required.
+
+### Enable Agent Teams
+
+The adversarial loops depend on the `SendMessage` tool, which allows spawned agents to pass information directly to each other — plans to reviewers, review feedback back to implementers, and signals to the orchestrator. This is what makes the multi-agent coordination possible. `SendMessage` is part of Claude Code's experimental Agent Teams feature and requires a feature flag to be enabled.
+
+Set the environment variable in your shell profile (e.g., `~/.bashrc`, `~/.zshrc`) so it persists across sessions:
+
+```bash
+export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
+```
+
+Reload your shell or run `source ~/.bashrc` (or `~/.zshrc`) for the change to take effect. You can verify it's set:
+
+```bash
+echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS
+# Should output: 1
+```
+
+Without this flag, agents cannot communicate with each other and the pipeline skills will not function.
+
+### Install
+
+Copy the skills directory into your project:
 
 ```bash
 git clone https://github.com/hatmanstack/claude-forge.git
 cp -r claude-forge/.claude/skills/ /path/to/your-project/.claude/skills/
 ```
 
-Then in your project:
+### Run
+
+In your project:
 
 ```bash
 # Feature development
