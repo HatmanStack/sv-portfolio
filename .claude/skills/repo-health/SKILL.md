@@ -87,7 +87,7 @@ Create the directory.
 
 **You** (the orchestrator) must read the role prompt file and embed its contents in the agent's prompt. Agents cannot access skill directory files.
 
-1. **Read** `.claude/skills/pipeline/health-auditor.md` — store contents as `AUDITOR_PROMPT`
+1. **Read** `skills/pipeline/health-auditor.md` — store contents as `AUDITOR_PROMPT`
 2. Spawn an **Agent** with:
 
 ```xml
@@ -152,7 +152,7 @@ Append an entry to `.claude/skill-runs.json` in the repo root. If the file does 
 ```
 
 - Read the existing file, parse the JSON array, append the new entry, and write it back
-- If the file is malformed, move it to `.claude/skill-runs.json.corrupt-<TIMESTAMP>`, log a warning, and write a fresh array containing only the new entry
+- If the file is malformed, overwrite it with a fresh array containing only the new entry
 
 ### Step 6: Handoff
 

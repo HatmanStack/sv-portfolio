@@ -1,7 +1,7 @@
 ---
 name: pipeline
 description: Run the adversarial plan-implement-review pipeline. Spawns agents for each role with their own context windows. Use after /brainstorm, /repo-eval, /repo-health, or /doc-health has produced a starting doc.
-allowed-tools: Agent, SendMessage, Read, Write, Glob, Grep, Bash, Edit
+allowed-tools: Agent, Read, Write, Glob, Grep, Bash, Edit
 ---
 
 # Pipeline Orchestrator
@@ -62,7 +62,7 @@ Based on findings:
 
 Report the detected state to the user before continuing.
 
-## Stage 1: Planning (Planner ↔ Plan Reviewer GAN Loop)
+## Stage 1: Planning (Planner ↔ Plan Reviewer Adversarial Loop)
 
 **Max iterations: 3.** If not approved after 3 cycles, stop and surface the unresolved issues to the user.
 
@@ -152,7 +152,7 @@ Phases identified: [list phases found]
 Starting implementation...
 ```
 
-## Stage 2: Implementation (Per-Phase Implementer ↔ Reviewer GAN Loop)
+## Stage 2: Implementation (Per-Phase Implementer ↔ Reviewer Adversarial Loop)
 
 **Max iterations per phase: 3.** If not approved after 3 cycles, stop and surface issues.
 
@@ -319,9 +319,9 @@ Before reporting the final verdict, append an entry to `.claude/skill-runs.json`
 }
 ```
 
-- `verdict`: the outcome of this pipeline run
+- `verdict`: the final outcome of this pipeline run
 - Read the existing file, parse the JSON array, append the new entry, and write it back
-- If the file is malformed, move it to `.claude/skill-runs.json.corrupt-<TIMESTAMP>`, log a warning, and write a fresh array containing only the new entry
+- If the file is malformed, overwrite it with a fresh array containing only the new entry
 
 ### On GO
 
