@@ -4,7 +4,7 @@ description: 'Setting up Jaeger v2 with OpenTelemetry to trace multi-agent AI sw
 date: 'Apr 22, 2026'
 time: '12 min read'
 ---
-When you run a single AI agent, debugging is straightforward. You read the log. You see what happened. Five agents in a swarm, each spawning its own tool calls and producing its own output, that's a bad time.  You no longer can rely on the “read the log”  strategy.
+When you run a single AI agent, debugging is straightforward. You read the log. You see what happened. Five agents in a swarm, each spawning its own tool calls and producing its own output, that's a bad time.  You no longer can rely on “read the log”  strategy.
 
 [Claude Forge](https://github.com/HatmanStack/claude-forge)  is an adversarial multi-agent coding framework on top of Claude Code that spawns a swarm, a sequential swarm, but a swarm.  The work is evaluated by one another and their are gatekeepers with quality checks.  Timestamps and text dumps aren't enough to see which agent is responsible for drift or a failure, how long it took, or how many tokens were used.
 
