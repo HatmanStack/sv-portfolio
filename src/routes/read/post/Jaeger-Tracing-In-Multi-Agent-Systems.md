@@ -4,12 +4,11 @@ description: 'Setting up Jaeger v2 with OpenTelemetry to trace multi-agent AI sw
 date: 'Apr 22, 2026'
 time: '12 min read'
 ---
-When you run a single AI agent, debugging is straightforward. You read the log. You see what happened. When you run five agents in a swarm, each spawning its own tool calls and producing its own output, "read the log" stops being a strategy.
+When you run a single AI agent, debugging is straightforward. You read the log. You see what happened. Five agents in a swarm, each spawning its own tool calls and producing its own output, that's a bad time.  You no longer can rely on the “read the log”  strategy.
 
-I built [Claude Forge](https://github.com/HatmanStack/claude-forge) as an adversarial multi-agent coding framework on top of Claude Code. A typical run spawns a planner, an implementer, a reviewer, and a fixer. They evaluate each other's work and loop back when quality checks fail. When something went wrong I had timestamps and text dumps but no way to see which agent was responsible, how long it actually took, or where the tokens went.
+[Claude Forge](https://github.com/HatmanStack/claude-forge)  is an adversarial multi-agent coding framework on top of Claude Code that spawns a swarm, a sequential swarm, but a swarm.  The work is evaluated by one another and their are gatekeepers with quality checks.  Timestamps and text dumps aren't enough to see which agent is responsible for drift or a failure, how long it took, or how many tokens were used.
 
-Jaeger fixed that. This article covers setting up Jaeger v2 with Docker, wiring it into a multi-agent system through OpenTelemetry, and some gotchas.
-
+Jaeger is the answer. Here I cover setting up Jaeger v2 with Docker, wiring it into a multi-agent system through OpenTelemetry, and some common problems.
 ## Table of Contents
 
 - [What Is Distributed Tracing?](#what-is-distributed-tracing)
