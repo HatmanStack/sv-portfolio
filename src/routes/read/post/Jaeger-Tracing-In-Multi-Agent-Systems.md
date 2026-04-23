@@ -34,9 +34,9 @@ OpenTelemetry (OTel) is the standard. It gives you SDKs for creating spans and s
 
 ## Why Jaeger v2?
 
-Jaeger started at Uber and graduated as a CNCF project in 2019. v1 hit end of life in December 2025. v2 is the current release: single binary, ships with collector, query service, and UI all in one. It accepts OTLP natively on port 4317 (gRPC) and 4318 (HTTP). No separate OpenTelemetry Collector needed for local work.
+Jaeger started at Uber and graduated as a CNCF project in 2019. v1 hit end of life in December 2025. v2 is the current release, built on the OpenTelemetry Collector framework. Single binary: collector, query service, and UI. It speaks OTLP natively on port 4317 (gRPC) and 4318 (HTTP). No separate collector needed for local work.
 
-One container, three ports. That is the whole setup.
+One important difference from v1: configuration moved from CLI flags and environment variables to a YAML file. The old `-e SPAN_STORAGE_TYPE=badger` env vars are silently ignored in v2. The container starts fine but falls back to in-memory storage. I lost two days of traces before noticing. More on the correct setup below.
 
 ## Prerequisites
 
@@ -87,35 +87,68 @@ Out of the box, the all-in-one image stores everything in memory. Remove the con
 
 ### Persistent Storage with Badger
 
-Badger is an embedded key-value store that Jaeger v2 can use instead of Elasticsearch or Cassandra. One gotcha: the container runs as UID 10001, but Docker named volumes default to root ownership. Without fixing permissions first, the container crash-loops with `mkdir /badger/key: permission denied`.
+v2 reads configuration from a YAML file, not environment variables. Save this as `~/.local/share/jaeger/config.yaml`:
 
-Pre-create the volume:
+```yaml
+service:
+  extensions: [jaeger_storage, jaeger_query, healthcheckv2]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [jaeger_storage_exporter]
+extensions:
+  healthcheckv2:
+    use_v2: true
+    http: { endpoint: 0.0.0.0:13133 }
+  jaeger_query:
+    storage: { traces: main_store }
+  jaeger_storage:
+    backends:
+      main_store:
+        badger:
+          directories: { keys: /badger/key, values: /badger/data }
+          ephemeral: false
+          ttl: { spans: 720h }
+receivers:
+  otlp:
+    protocols:
+      grpc: { endpoint: 0.0.0.0:4317 }
+      http: { endpoint: 0.0.0.0:4318 }
+processors:
+  batch:
+exporters:
+  jaeger_storage_exporter:
+    trace_storage: main_store
+```
+
+The Jaeger container runs as UID 10001. Docker named volumes default to root ownership. Without fixing permissions first, the container crash-loops with `mkdir /badger/key: permission denied`.
+
+Pre-create the volume and fix ownership:
 
 ```bash
 docker volume create jaeger-data
-
+ 
 docker run --rm \
   -v jaeger-data:/badger \
   alpine sh -c "mkdir -p /badger/data /badger/key && chown -R 10001:10001 /badger"
 ```
 
-Then run Jaeger with Badger:
+Then run Jaeger with the config mounted in:
 
 ```bash
 docker run -d --name jaeger \
   --restart unless-stopped \
+  -v ~/.local/share/jaeger/config.yaml:/etc/jaeger/config.yaml:ro \
+  -v jaeger-data:/badger \
   -p 16686:16686 \
   -p 4317:4317 \
   -p 4318:4318 \
-  -e SPAN_STORAGE_TYPE=badger \
-  -e BADGER_EPHEMERAL=false \
-  -e BADGER_DIRECTORY_VALUE=/badger/data \
-  -e BADGER_DIRECTORY_KEY=/badger/key \
-  -v jaeger-data:/badger \
-  jaegertracing/jaeger:latest
+  jaegertracing/jaeger:2.17.0 \
+  --config /etc/jaeger/config.yaml
 ```
 
-`--restart unless-stopped` brings Jaeger back after a reboot. Hit `http://localhost:16686` and you should see the UI with an empty service list.
+Verify persistence by running `docker restart jaeger` and confirming a previously recorded trace is still there. Hit `http://localhost:16686` and you should see the UI.
 
 ## Setting Up Claude Forge Tracing
 
