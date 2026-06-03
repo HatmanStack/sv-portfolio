@@ -9,6 +9,8 @@ import vocaba from '$lib/images/vocabulary.avif';
 import vocabs from '$lib/images/vocabulary.svg';
 import ragstacka from '$lib/images/ragstack.avif';
 import ragstackj from '$lib/images/ragstack.jpg';
+import localNanoa from '$lib/images/local_nano.avif';
+import localNanoj from '$lib/images/local_nano.jpg';
 
 export const projects: Project[] = [
 	{
@@ -84,5 +86,19 @@ export const projectsRow2: Project[] = [
 		link: 'https://dhrmkxyt1t9pb.cloudfront.net/login',
 		github: 'https://github.com/HatmanStack/RAGStack-Lambda',
 		buttonText: 'RAG'
+	},
+	{
+		id: 'local-nano',
+		title: 'Local Nano',
+		description:
+			"DOM-aware Chrome extension with a fully local AI assistant. Highlight text and an on-device model rewrites it in place, or ask about the page you're reading and it answers using the page itself as context. Pick from a curated catalog of small open models; the model is released from VRAM when you walk away. Runs on Transformers.js and WebGPU, so nothing leaves your machine.",
+		category: 'Web',
+		images: {
+			profession: localNanoa,
+			profile: localNanoj
+		},
+		link: 'https://chromewebstore.google.com/detail/local-nano/ilcmgldolaplehcdgmbgofkbenlmekpe',
+		github: 'https://github.com/HatmanStack/local-nano',
+		buttonText: 'Rewrite'
 	}
 ];

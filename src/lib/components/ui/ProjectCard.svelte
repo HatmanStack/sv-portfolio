@@ -70,11 +70,17 @@
 	<div class="wrapper">
 		<div class="profile_quote">
 			<p style="font-size:.8em" class="fade-in">{project.description}</p>
-			<a href={project.link}>
+			{#if project.link}
+				<a href={project.link}>
+					<GooeyButton onclick={handleClick}>
+						{project.buttonText}
+					</GooeyButton>
+				</a>
+			{:else}
 				<GooeyButton onclick={handleClick}>
 					{project.buttonText}
 				</GooeyButton>
-			</a>
+			{/if}
 		</div>
 	</div>
 </div>
