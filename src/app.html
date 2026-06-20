@@ -22,6 +22,33 @@
 			onload="this.media = 'all'"
 		/>
 
+		<!-- Body background lives here (not in app.css) so Vite's per-route CSS
+		     shuffling on client navigation can never drop it. Reads the same tokens
+		     and --bg-glow-* vars, with hard fallbacks so it holds regardless. -->
+		<style>
+			body {
+				margin: 0;
+				min-height: 100vh;
+				background-attachment: fixed;
+				background-color: var(--color-bg-layer-0, #483422);
+				background-size: 100vw 100vh;
+				background-image:
+					/* bright centre glow (lightens the middle) */
+					radial-gradient(
+						var(--bg-glow-rx, 65%) var(--bg-glow-ry, 65%) at var(--bg-glow-x, 50%)
+							var(--bg-glow-y, 50%),
+						rgba(255, 255, 255, 0.75) 0%,
+						rgba(255, 255, 255, 0) 100%
+					),
+					/* brown base */
+					linear-gradient(
+							180deg,
+							var(--color-bg-layer-0, #483422) 0%,
+							var(--color-bg-layer-2, #483422) 100%
+						);
+			}
+		</style>
+
 		%sveltekit.head%
 	</head>
 	<body data-sveltekit-preload-data="hover">

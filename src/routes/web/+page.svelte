@@ -3,13 +3,19 @@
 	import { webProjects, webContentMap } from '$lib/data/webProjects';
 	import Header from '../Header.svelte';
 	import SVGFilters from '$lib/components/ui/SVGFilters.svelte';
+	import ShimmerButton from '$lib/components/ui/ShimmerButton.svelte';
+	import BackgroundGlow from '$lib/components/ui/BackgroundGlow.svelte';
 
-	import { useSoundAction, createApplyClickSound } from '$lib/hooks/useSound.svelte';
+	import {
+		useSoundAction,
+		createApplyClickSound,
+		createSoundStore
+	} from '$lib/hooks/useSound.svelte';
 	import click from '$lib/sounds/click.wav';
 	import expand from '$lib/sounds/expand.wav';
 
 	const expand_sound = useSoundAction(expand);
-	const click_sound = useSoundAction(click);
+	const clickSound = createSoundStore(click);
 	const applyClickSound = createApplyClickSound(click);
 
 	let selectedImage = $state('Splash');
@@ -62,6 +68,8 @@
 	})}</script>`}
 </svelte:head>
 
+<BackgroundGlow />
+
 <section>
 	<Header />
 </section>
@@ -91,9 +99,15 @@
 				</p>
 			{/if}
 			{#if isWebProject(selectedEntry) && selectedEntry.link}
-				<a href={selectedEntry.link} target="_blank" rel="noopener noreferrer">
-					<button class="button" use:click_sound>More Stuff</button>
-				</a>
+				<ShimmerButton
+					href={selectedEntry.link}
+					target="_blank"
+					rel="noopener noreferrer"
+					background="rgba(90, 66, 44, 0.92)"
+					onclick={() => clickSound.play()}
+				>
+					More Stuff
+				</ShimmerButton>
 			{/if}
 		{/if}
 		<div class="wrapper">
@@ -178,43 +192,6 @@
 		-webkit-text-fill-color: transparent;
 		max-width: 60em;
 		text-align: center;
-	}
-
-	.button {
-		padding: 15px 30px;
-		color: var(--text-color);
-		font-size: 14px;
-		border-radius: var(--border-radius);
-		transition:
-			color var(--transition-speed),
-			background var(--transition-speed);
-		position: relative;
-		overflow: hidden;
-		text-transform: uppercase;
-		letter-spacing: 1px;
-		margin-top: 0.5rem;
-		background: transparent;
-		color: var(--accent-color);
-	}
-
-	.button::before {
-		content: '';
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		top: 0;
-		left: -100%;
-		background: var(--accent-color);
-		z-index: -1;
-		transition: all var(--transition-speed);
-	}
-
-	.button:hover::before {
-		left: 0;
-	}
-
-	.button:hover {
-		color: var(--text-color);
 	}
 
 	.items {

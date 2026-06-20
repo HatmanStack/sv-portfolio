@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { ImageGridItem } from '$lib/types/index.js';
+	import { onMount } from 'svelte';
 
 	interface Props {
 		images: ImageGridItem[];
@@ -7,9 +8,28 @@
 	}
 
 	let { images, className = '' }: Props = $props();
+
+	let containerEl: HTMLDivElement;
+	// Once the sticky grid has scrolled out of view, drop it from rendering so its
+	// ~50 animated AVIFs stop decoding — otherwise they keep the CPU pinned at the
+	// bottom of the page. One observer, one class toggle on enter/leave; nothing
+	// per-tile or per-frame, so it can't thrash.
+	let onscreen = $state(true);
+
+	onMount(() => {
+		if (typeof IntersectionObserver === 'undefined' || !containerEl) return;
+		const io = new IntersectionObserver(
+			(entries) => {
+				onscreen = entries[0].isIntersecting;
+			},
+			{ rootMargin: '300px 0px' }
+		);
+		io.observe(containerEl);
+		return () => io.disconnect();
+	});
 </script>
 
-<div class="scroll-container">
+<div class="scroll-container" class:paused={!onscreen} bind:this={containerEl}>
 	<div class="stuck-grid {className}">
 		{#each images as image (image.id)}
 			<div
@@ -19,7 +39,7 @@
 				{#if image.special}
 					<p><b>{image.content}</b></p>
 				{:else}
-					<img src={image.src} alt={image.alt} loading="lazy" />
+					<img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
 				{/if}
 			</div>
 		{/each}
@@ -31,6 +51,12 @@
 		height: 300vh;
 		position: relative;
 		padding: 0;
+	}
+
+	/* Grid scrolled out of view → drop it from rendering so its animated AVIFs stop
+	   decoding. The 300vh .scroll-container keeps its height, so nothing shifts. */
+	.scroll-container.paused .stuck-grid {
+		display: none;
 	}
 
 	.stuck-grid {
@@ -72,7 +98,10 @@
 			.grid-item {
 				animation: zoom-in linear both;
 				animation-timeline: scroll(root block);
-				will-change: transform, opacity, filter;
+				/* No `filter` here on purpose: keeping it in will-change pins a
+				   permanent offscreen blur buffer per tile (big memory cost). The
+				   blur still renders from the keyframes; it just isn't pre-promoted. */
+				will-change: transform, opacity;
 			}
 		}
 	}
@@ -84,156 +113,91 @@
 		margin-bottom: 32vh;
 	}
 
-	/* Animation ranges for each grid item */
+	/* Animation ranges. Most animated tiles (6, 7, 10, 19, 22, 23) are
+	   front-loaded into the first ~55% of the scroll, staggered, so they're seen
+	   while attention is high instead of being wasted near the bottom; tiles 18
+	   (twa, 57-71%) and 15 (vocab, 72-86%) are exceptions, animated in the back
+	   half by choice. The rest of the back half is carried by stills, and the
+	   late animated pair never overlaps its early still twin. Every window is ~14% wide and
+	   the starts step ~3-4% apart across all 26 tiles, so coverage stays
+	   continuous 0-100% with no dead spot. Item 11 (title) lingers early. */
 	.grid-item:nth-of-type(1) {
-		animation-range: 40% 50%;
+		animation-range: 0% 14%;
 	}
 	.grid-item:nth-of-type(2) {
-		animation-range: 20% 30%;
+		animation-range: 36% 50%;
 	}
 	.grid-item:nth-of-type(3) {
-		animation-range: 52% 62%;
+		animation-range: 18% 32%;
 	}
 	.grid-item:nth-of-type(4) {
-		animation-range: 50% 60%;
+		animation-range: 11% 25%;
 	}
 	.grid-item:nth-of-type(5) {
-		animation-range: 45% 55%;
+		animation-range: 43% 57%;
 	}
 	.grid-item:nth-of-type(6) {
-		animation-range: 10% 20%;
+		animation-range: 4% 18%;
 	}
 	.grid-item:nth-of-type(7) {
-		animation-range: 90% 100%;
+		animation-range: 25% 39%;
 	}
 	.grid-item:nth-of-type(8) {
-		animation-range: 30% 40%;
+		animation-range: 7% 21%;
 	}
 	.grid-item:nth-of-type(9) {
-		animation-range: 80% 90%;
+		animation-range: 22% 36%;
 	}
 	.grid-item:nth-of-type(10) {
-		animation-range: 70% 80%;
+		animation-range: 39% 53%;
 	}
 	.grid-item:nth-of-type(11) {
 		animation-range: -10% 50%;
 	}
 	.grid-item:nth-of-type(12) {
-		animation-range: 52% 62%;
+		animation-range: 54% 68%;
 	}
 	.grid-item:nth-of-type(13) {
-		animation-range: 15% 25%;
+		animation-range: 29% 43%;
 	}
 	.grid-item:nth-of-type(14) {
-		animation-range: 7% 17%;
+		animation-range: 50% 64%;
 	}
 	.grid-item:nth-of-type(15) {
-		animation-range: 75% 85%;
+		animation-range: 72% 86%;
 	}
 	.grid-item:nth-of-type(16) {
-		animation-range: 3% 13%;
+		animation-range: 86% 100%;
 	}
 	.grid-item:nth-of-type(17) {
-		animation-range: 87% 97%;
+		animation-range: 65% 79%;
 	}
 	.grid-item:nth-of-type(18) {
-		animation-range: 42% 52%;
+		animation-range: 57% 71%;
 	}
 	.grid-item:nth-of-type(19) {
-		animation-range: 57% 67%;
+		animation-range: 46% 60%;
 	}
 	.grid-item:nth-of-type(20) {
-		animation-range: 37% 47%;
+		animation-range: 61% 75%;
 	}
 	.grid-item:nth-of-type(21) {
-		animation-range: 12% 22%;
+		animation-range: 75% 89%;
 	}
 	.grid-item:nth-of-type(22) {
-		animation-range: 8% 18%;
+		animation-range: 14% 28%;
 	}
 	.grid-item:nth-of-type(23) {
-		animation-range: 84% 94%;
+		animation-range: 32% 46%;
 	}
 	.grid-item:nth-of-type(24) {
-		animation-range: 33% 43%;
+		animation-range: 79% 93%;
 	}
 	.grid-item:nth-of-type(25) {
-		animation-range: 48% 58%;
+		animation-range: 68% 82%;
 	}
 	.grid-item:nth-of-type(26) {
-		animation-range: 13% 23%;
-	}
-	.grid-item:nth-of-type(27) {
-		animation-range: 78% 88%;
-	}
-	.grid-item:nth-of-type(28) {
-		animation-range: 62% 72%;
-	}
-	.grid-item:nth-of-type(29) {
-		animation-range: 31% 41%;
-	}
-	.grid-item:nth-of-type(30) {
-		animation-range: 8% 18%;
-	}
-	.grid-item:nth-of-type(31) {
-		animation-range: 4% 14%;
-	}
-	.grid-item:nth-of-type(32) {
-		animation-range: 74% 84%;
-	}
-	.grid-item:nth-of-type(33) {
-		animation-range: 61% 71%;
-	}
-	.grid-item:nth-of-type(34) {
-		animation-range: 26% 36%;
-	}
-	.grid-item:nth-of-type(35) {
-		animation-range: 63% 73%;
-	}
-	.grid-item:nth-of-type(36) {
-		animation-range: 11% 21%;
-	}
-	.grid-item:nth-of-type(37) {
-		animation-range: 89% 99%;
-	}
-	.grid-item:nth-of-type(38) {
-		animation-range: 33% 43%;
-	}
-	.grid-item:nth-of-type(39) {
-		animation-range: 88% 98%;
-	}
-	.grid-item:nth-of-type(40) {
-		animation-range: 22% 32%;
-	}
-	.grid-item:nth-of-type(41) {
-		animation-range: 16% 26%;
-	}
-	.grid-item:nth-of-type(42) {
-		animation-range: 26% 36%;
-	}
-	.grid-item:nth-of-type(43) {
-		animation-range: 66% 76%;
-	}
-	.grid-item:nth-of-type(44) {
-		animation-range: 3% 13%;
-	}
-	.grid-item:nth-of-type(45) {
-		animation-range: 44% 54%;
-	}
-	.grid-item:nth-of-type(46) {
-		animation-range: 11% 21%;
-	}
-	.grid-item:nth-of-type(47) {
-		animation-range: 23% 33%;
-	}
-	.grid-item:nth-of-type(48) {
-		animation-range: 39% 49%;
-	}
-	.grid-item:nth-of-type(49) {
-		animation-range: 59% 69%;
-	}
-	.grid-item:nth-of-type(50) {
-		animation-range: 6% 16%;
+		animation-range: 82% 96%;
 	}
 
 	@supports (animation-timeline: scroll()) {

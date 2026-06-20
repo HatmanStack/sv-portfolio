@@ -3,6 +3,8 @@
 	import { androidApps, androidContentMap } from '$lib/data/androidApps';
 	import Header from '../Header.svelte';
 	import AndroidFilters from '$lib/components/ui/AndroidFilters.svelte';
+	import ShimmerButton from '$lib/components/ui/ShimmerButton.svelte';
+	import BackgroundGlow from '$lib/components/ui/BackgroundGlow.svelte';
 
 	let selectedImage = $state('Android Stuff');
 	let selectedEntry = $derived(androidContentMap[selectedImage]);
@@ -11,10 +13,10 @@
 		return entry != null && typeof entry === 'object' && 'id' in entry;
 	}
 
-	import { useSoundAction } from '$lib/hooks/useSound.svelte';
+	import { useSoundAction, createSoundStore } from '$lib/hooks/useSound.svelte';
 	import click from '$lib/sounds/click.wav';
 	import swoosh from '$lib/sounds/swoosh.mp3';
-	const click_sound = useSoundAction(click);
+	const clickSound = createSoundStore(click);
 	const swoosh_sound = useSoundAction(swoosh);
 </script>
 
@@ -60,6 +62,8 @@
 	})}</script>`}
 </svelte:head>
 
+<BackgroundGlow />
+
 <section style="margin-bottom:1rem;">
 	<Header />
 </section>
@@ -86,14 +90,25 @@
 					<p class="app-description">{selectedEntry.description}</p>
 				{/if}
 				{#if isAndroidApp(selectedEntry) && selectedEntry.webLink}
-					<a href={selectedEntry.webLink} target="_blank" rel="noopener noreferrer">
-						<button class="cta-button" use:click_sound>Cross-Platform</button>
-					</a>
+					<ShimmerButton
+						href={selectedEntry.webLink}
+						target="_blank"
+						rel="noopener noreferrer"
+						onclick={() => clickSound.play()}
+					>
+						Web Version
+					</ShimmerButton>
 				{/if}
 				{#if isAndroidApp(selectedEntry) && selectedEntry.link}
-					<a href={selectedEntry.link} target="_blank" rel="noopener noreferrer">
-						<button class="cta-button" use:click_sound>Play Store Stuff</button>
-					</a>
+					<ShimmerButton
+						animated={false}
+						href={selectedEntry.link}
+						target="_blank"
+						rel="noopener noreferrer"
+						onclick={() => clickSound.play()}
+					>
+						Play Store Stuff
+					</ShimmerButton>
 				{/if}
 			{/if}
 		</div>
@@ -283,43 +298,6 @@
 		margin: 1rem 0;
 	}
 
-	/* CTA Button */
-	.cta-button {
-		padding: 15px 30px;
-		background: transparent;
-		border: 2px solid var(--accent-color);
-		color: var(--accent-color);
-		border-radius: 50px;
-		font-size: 14px;
-		font-weight: 600;
-		cursor: pointer;
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
-		position: relative;
-		overflow: hidden;
-		transition: color var(--transition-speed);
-	}
-
-	.cta-button::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: -100%;
-		width: 100%;
-		height: 100%;
-		background: var(--accent-color);
-		z-index: -1;
-		transition: left var(--transition-speed);
-	}
-
-	.cta-button:hover::before {
-		left: 0;
-	}
-
-	.cta-button:hover {
-		color: var(--text-color);
-	}
-
 	/* Animations */
 	@keyframes titleScale {
 		0% {
@@ -363,10 +341,6 @@
 			grid-column: 1 / -1;
 			padding: 1.5rem 1rem;
 			min-height: 30vh;
-		}
-
-		.cta-button {
-			margin: 0.5rem 0;
 		}
 
 		.app-title {

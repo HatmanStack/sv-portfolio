@@ -4,6 +4,7 @@
 	import x from '$lib/images/x.svg';
 	import calendly from '$lib/images/calendly.svg';
 	import Header from '../Header.svelte';
+	import BackgroundGlow from '$lib/components/ui/BackgroundGlow.svelte';
 </script>
 
 <svelte:head>
@@ -48,6 +49,8 @@
 		jobTitle: 'Full-Stack Developer'
 	})}</script>`}
 </svelte:head>
+
+<BackgroundGlow />
 
 <section>
 	<Header />

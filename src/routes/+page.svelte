@@ -4,9 +4,13 @@
 	import Header from './Header.svelte';
 	import ImageGrid from '$lib/components/ui/ImageGrid.svelte';
 	import ProjectCard from '$lib/components/ui/ProjectCard.svelte';
+	import BackgroundGlow from '$lib/components/ui/BackgroundGlow.svelte';
 	import { gridImages } from '$lib/data/images.js';
 	import { projects, projectsRow2 } from '$lib/data/projects.js';
 	import sloth from '$lib/images/sloth_stuff.jpg';
+
+	// Temporarily disabled to isolate home-page CPU usage. Set back to true to re-enable.
+	const SHOW_GRID = true;
 
 	const REDIRECT_FLAG = 'noScrollAnimRedirected';
 
@@ -74,9 +78,13 @@
 	})}</script>`}
 </svelte:head>
 
-<section>
-	<ImageGrid images={gridImages} />
-</section>
+<BackgroundGlow />
+
+{#if SHOW_GRID}
+	<section>
+		<ImageGrid images={gridImages} />
+	</section>
+{/if}
 
 <section class="header-scroll">
 	<Header />

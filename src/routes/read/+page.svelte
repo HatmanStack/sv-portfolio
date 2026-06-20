@@ -2,6 +2,7 @@
 	import type { PageData } from './$types';
 	import Header from '../Header.svelte';
 	import SVGFilters from '$lib/components/ui/SVGFilters.svelte';
+	import BackgroundGlow from '$lib/components/ui/BackgroundGlow.svelte';
 
 	interface Props {
 		data: PageData;
@@ -56,6 +57,8 @@
 		}
 	})}</script>`}
 </svelte:head>
+
+<BackgroundGlow />
 
 <section>
 	<Header />

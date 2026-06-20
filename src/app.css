@@ -1,7 +1,5 @@
-@import '@fontsource/fira-mono';
-@import 'reset.css';
-@import './lib/styles/tokens.css';
-@import './lib/styles/glow.css';
+/* Global stylesheets are imported as JS modules in +layout.svelte (not via @import
+   here) — Vite's dev server drops @import-ed CSS on client-side navigation. */
 
 body {
 	width: 100%;
@@ -24,18 +22,5 @@ body {
 	font-size: var(--font-size-fluid);
 }
 
-body {
-	min-height: 100vh;
-	margin: 0;
-	background-attachment: fixed;
-	background-color: var(--color-bg-layer-1);
-	background-size: 100vw 100vh;
-	background-image:
-		radial-gradient(50% 50% at 50% 50%, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0) 100%),
-		linear-gradient(
-			180deg,
-			var(--color-bg-layer-0) 0%,
-			var(--color-bg-layer-1) 15%,
-			var(--color-bg-layer-2) 50%
-		);
-}
+/* The body background lives in app.html's static <head> so Vite's per-route CSS
+   shuffling can't drop it on client navigation. */

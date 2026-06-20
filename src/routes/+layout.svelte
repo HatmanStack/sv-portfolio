@@ -1,5 +1,12 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	// Import the global stylesheets as JS modules (not via @import inside app.css):
+	// Vite's dev server drops/reorders CSS pulled in through @import on client-side
+	// navigation, which was wiping tokens, fonts, and the nav bar on every route change.
+	import '@fontsource/fira-mono';
+	import '../reset.css';
+	import '$lib/styles/tokens.css';
+	import '$lib/styles/glow.css';
 	import '../app.css';
 	import { appStore } from '$lib/stores/app.svelte.js';
 	import { page } from '$app/stores';
