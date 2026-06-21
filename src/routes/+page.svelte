@@ -4,7 +4,6 @@
 	import Header from './Header.svelte';
 	import ImageGrid from '$lib/components/ui/ImageGrid.svelte';
 	import ProjectCard from '$lib/components/ui/ProjectCard.svelte';
-	import BackgroundGlow from '$lib/components/ui/BackgroundGlow.svelte';
 	import { gridImages } from '$lib/data/images.js';
 	import { projects, projectsRow2 } from '$lib/data/projects.js';
 	import sloth from '$lib/images/sloth_stuff.jpg';
@@ -77,8 +76,6 @@
 			'Full-stack developer portfolio showcasing Android apps, web projects, and technical blog posts.'
 	})}</script>`}
 </svelte:head>
-
-<BackgroundGlow />
 
 {#if SHOW_GRID}
 	<section>

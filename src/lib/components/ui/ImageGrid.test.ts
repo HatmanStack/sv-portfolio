@@ -1,5 +1,6 @@
 import { describe, test, expect } from 'vitest';
 import { render } from '@testing-library/svelte';
+import { tick } from 'svelte';
 import ImageGrid from './ImageGrid.svelte';
 import { createMockImageGridItem } from '$lib/test-utils/mock-factories';
 
@@ -160,5 +161,34 @@ describe('ImageGrid - Rendering', () => {
 		// Should have no grid items
 		const gridItems = container.querySelectorAll('.grid-item');
 		expect(gridItems).toHaveLength(0);
+	});
+});
+
+describe('ImageGrid - Release (swap to stills) on scroll-past', () => {
+	// jsdom has no layout, so the scroll check's threshold (offsetHeight − …) is
+	// negative and the grid "releases" on mount — which is enough to assert the swap.
+	test('swaps an animated tile to its still after release', async () => {
+		const images = [createMockImageGridItem({ id: '1', src: '/anim.avif', still: '/still.avif' })];
+		const { getByRole } = render(ImageGrid, { props: { images } });
+		await tick();
+
+		expect(getByRole('img')).toHaveAttribute('src', '/still.avif');
+	});
+
+	test('a tile without a still keeps its src after release', async () => {
+		const images = [createMockImageGridItem({ id: '1', src: '/static.avif' })];
+		const { getByRole } = render(ImageGrid, { props: { images } });
+		await tick();
+
+		expect(getByRole('img')).toHaveAttribute('src', '/static.avif');
+	});
+
+	test('the grid stays in the DOM (frozen, not unmounted)', async () => {
+		const images = [createMockImageGridItem({ id: '1', still: '/still.avif' })];
+		const { container } = render(ImageGrid, { props: { images } });
+		await tick();
+
+		expect(container.querySelector('.stuck-grid')).toBeInTheDocument();
+		expect(container.querySelectorAll('img')).toHaveLength(1);
 	});
 });

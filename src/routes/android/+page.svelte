@@ -62,7 +62,7 @@
 	})}</script>`}
 </svelte:head>
 
-<BackgroundGlow />
+<BackgroundGlow xFocus={30} />
 
 <section style="margin-bottom:1rem;">
 	<Header />

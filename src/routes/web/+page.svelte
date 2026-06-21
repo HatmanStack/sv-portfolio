@@ -68,7 +68,7 @@
 	})}</script>`}
 </svelte:head>
 
-<BackgroundGlow />
+<BackgroundGlow yFocus={70} />
 
 <section>
 	<Header />

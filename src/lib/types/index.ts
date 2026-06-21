@@ -175,6 +175,11 @@ export interface ImageGridItem {
 
 	/** Content for special items */
 	content?: string;
+
+	/** Static first-frame still. For animated tiles, this is swapped into `src`
+	 *  once the grid has scrolled past, freezing the tile to stop its animated
+	 *  decoder (memory/CPU) while keeping it visible. */
+	still?: string;
 }
 
 /**

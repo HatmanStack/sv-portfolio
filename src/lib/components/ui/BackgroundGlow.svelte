@@ -7,11 +7,22 @@
 	 * The page's background highlight (the white radial on <body>, defined in
 	 * app.html) tightens IN as the cursor nears the centre of the viewport — so the
 	 * dark grows inward from the edges — and eases back out to the resting baseline
-	 * as the cursor moves to the edges or leaves the page. Stays centred; only the
-	 * radius changes. Renders nothing of its own.
+	 * as the cursor moves to the edges or leaves the page. As it tightens the centre
+	 * can also drift — set `xFocus` (< 50 pulls the dark in from the right) and/or
+	 * `yFocus` (> 50 pulls it in from the top) per route; default 50/50 = no drift.
+	 * Renders nothing of its own.
 	 *
 	 * Disabled under prefers-reduced-motion (glow stays at the baseline).
 	 */
+
+	interface Props {
+		// Where the glow centre drifts to at full focus, in %. 50 = no drift.
+		// xFocus < 50 → dark grows from the right; yFocus > 50 → dark grows from the top.
+		xFocus?: number;
+		yFocus?: number;
+	}
+
+	let { xFocus = 50, yFocus = 50 }: Props = $props();
 
 	const ENABLED = true;
 
@@ -21,8 +32,8 @@
 	const RX_FOCUS = 54; // tightens horizontally
 	const RY_REST = 65;
 	const RY_FOCUS = 42; // tightens vertically
+	const X_REST = 50;
 	const Y_REST = 50;
-	const Y_FOCUS = 70; // centre drifts down as it tightens → dark grows more from the top
 
 	// >1 concentrates the effect near the centre; the periphery stays at rest.
 	const FALLOFF = 2.2;
@@ -43,7 +54,8 @@
 		function apply() {
 			body.style.setProperty('--bg-glow-rx', `${lerp(RX_REST, RX_FOCUS, current).toFixed(2)}%`);
 			body.style.setProperty('--bg-glow-ry', `${lerp(RY_REST, RY_FOCUS, current).toFixed(2)}%`);
-			body.style.setProperty('--bg-glow-y', `${lerp(Y_REST, Y_FOCUS, current).toFixed(2)}%`);
+			body.style.setProperty('--bg-glow-x', `${lerp(X_REST, xFocus, current).toFixed(2)}%`);
+			body.style.setProperty('--bg-glow-y', `${lerp(Y_REST, yFocus, current).toFixed(2)}%`);
 		}
 
 		function tick() {
@@ -79,6 +91,10 @@
 			start();
 		}
 
+		// Start from the resting baseline so this route never inherits a "stuck"
+		// focused glow left in the CSS vars by a previously visited route.
+		apply();
+
 		window.addEventListener('pointermove', onMove, { passive: true });
 		document.addEventListener('mouseleave', onLeave);
 
@@ -86,8 +102,14 @@
 			window.removeEventListener('pointermove', onMove);
 			document.removeEventListener('mouseleave', onLeave);
 			cancelAnimationFrame(raf);
-			// --bg-glow-* values are intentionally left in place (removing them on
-			// navigation triggered a stale repaint of the fixed <body> background).
+			// Reset to the resting baseline on unmount so the glow doesn't stay
+			// "stuck" focused on routes that have no BackgroundGlow (e.g. /read/post).
+			// We set the rest values rather than removeProperty — removing them
+			// triggered a stale repaint of the fixed <body> background.
+			body.style.setProperty('--bg-glow-rx', `${RX_REST}%`);
+			body.style.setProperty('--bg-glow-ry', `${RY_REST}%`);
+			body.style.setProperty('--bg-glow-x', `${X_REST}%`);
+			body.style.setProperty('--bg-glow-y', `${Y_REST}%`);
 		};
 	});
 </script>

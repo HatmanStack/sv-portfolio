@@ -24,11 +24,14 @@ describe('BackgroundGlow - Pointer tracking', () => {
 		removeSpy.mockRestore();
 	});
 
-	test('leaves its background custom properties in place on unmount', () => {
-		// Deliberate: removing them on navigation triggered a stale repaint of the
-		// fixed <body> background (it would vanish). Leaving them keeps it painted.
+	test('resets its background custom properties to the resting baseline on unmount', () => {
+		// On unmount we reset the vars to baseline (rest), not removeProperty, so the
+		// glow doesn't stay "stuck" focused on routes without a BackgroundGlow (e.g.
+		// /read/post). removeProperty is avoided: it triggered a stale repaint of the
+		// fixed <body> background (it would vanish).
 		const { unmount } = render(BackgroundGlow);
 		const removeSpy = vi.spyOn(document.body.style, 'removeProperty');
+		const setSpy = vi.spyOn(document.body.style, 'setProperty');
 
 		unmount();
 
@@ -36,6 +39,11 @@ describe('BackgroundGlow - Pointer tracking', () => {
 		expect(removeSpy).not.toHaveBeenCalledWith('--bg-glow-rx');
 		expect(removeSpy).not.toHaveBeenCalledWith('--bg-glow-ry');
 
+		expect(setSpy).toHaveBeenCalledWith('--bg-glow-rx', '65%');
+		expect(setSpy).toHaveBeenCalledWith('--bg-glow-ry', '65%');
+		expect(setSpy).toHaveBeenCalledWith('--bg-glow-y', '50%');
+
 		removeSpy.mockRestore();
+		setSpy.mockRestore();
 	});
 });

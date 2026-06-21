@@ -14,6 +14,16 @@ import instant from '$lib/images/instant.avif';
 import twa from '$lib/images/twa_short.avif';
 import vocab from '$lib/images/vocabulary-grid.avif';
 
+// First-frame stills for the animated tiles above — swapped into `src` once the
+// grid scrolls past, to stop the animated decoders while keeping the tile frozen
+// on screen (instead of unmounting it). twa/vocab reuse the stills imported below.
+import nbaStill from '$lib/images/nba-still.avif';
+import novaCanvasStill from '$lib/images/nova-canvas-still.avif';
+import pixelPromptStill from '$lib/images/pixel-prompt-grid-still.avif';
+import connectorStill from '$lib/images/connector-still.avif';
+import floatStill from '$lib/images/float-grid-still.avif';
+import instantStill from '$lib/images/instant-still.avif';
+
 // --- Static stills (first frame only; free to reuse across tiles) -----------
 import trachtenbergStill from '$lib/images/trachtenberg-grid-still.avif';
 import vocabStill from '$lib/images/vocabulary-grid-still.avif';
@@ -38,11 +48,11 @@ export const gridImages: ImageGridItem[] = [
 	{ id: 'credentials-1', src: credentialsStill, alt: 'Credentials project' }, // 1/3
 	{ id: 'twa-1', src: twaStill, alt: 'TWA project' }, // 1/4
 	{ id: 'savor-swipe-1', src: savorSwipeStill, alt: 'Savor Swipe project' }, // 2/1
-	{ id: 'nova-canvas-1', src: novaCanvas, alt: 'Nova Canvas project' }, // 2/2 [A]
-	{ id: 'float-1', src: float, alt: 'Float project' }, // 2/3 [A] centre
+	{ id: 'nova-canvas-1', src: novaCanvas, still: novaCanvasStill, alt: 'Nova Canvas project' }, // 2/2 [A]
+	{ id: 'float-1', src: float, still: floatStill, alt: 'Float project' }, // 2/3 [A] centre
 	{ id: 'plot-palette-1', src: plotPaletteStill, alt: 'Plot Palette project' }, // 2/4
 	{ id: 'trachtenberg-1', src: trachtenbergStill, alt: 'Trachtenberg project' }, // 3/1
-	{ id: 'connector-1', src: connector, alt: 'Connector project' }, // 3/2 [A]
+	{ id: 'connector-1', src: connector, still: connectorStill, alt: 'Connector project' }, // 3/2 [A]
 	{
 		id: 'special-text',
 		src: '',
@@ -53,16 +63,16 @@ export const gridImages: ImageGridItem[] = [
 	{ id: 'whoami-1', src: whoamiStill, alt: 'Who Am I project' }, // 3/4
 	{ id: 'stock-sent-1', src: stockSentStill, alt: 'Stock Sentiment project' }, // 4/1
 	{ id: 'studio-browser-1', src: studioBrowserStill, alt: 'Studio Browser project' }, // 4/2
-	{ id: 'vocab-2', src: vocab, alt: 'Vocabulary project' }, // 4/3 [A] animated late by choice
+	{ id: 'vocab-2', src: vocab, still: vocabStill, alt: 'Vocabulary project' }, // 4/3 [A] animated late by choice
 	{ id: 'stocks-2', src: stocksStill, alt: 'Stocks project' }, // 4/4
 	// second pass — overlapping wave through the centre rows (the cascade)
 	{ id: 'plot-palette-2', src: plotPaletteStill, alt: 'Plot Palette project' }, // 2/1
-	{ id: 'twa-2', src: twa, alt: 'TWA project' }, // 2/2 [A] animated late by choice
-	{ id: 'pixel-prompt-1', src: pixelPrompt, alt: 'Pixel Prompt project' }, // 2/3 [A] centre
+	{ id: 'twa-2', src: twa, still: twaStill, alt: 'TWA project' }, // 2/2 [A] animated late by choice
+	{ id: 'pixel-prompt-1', src: pixelPrompt, still: pixelPromptStill, alt: 'Pixel Prompt project' }, // 2/3 [A] centre
 	{ id: 'savor-swipe-2', src: savorSwipeStill, alt: 'Savor Swipe project' }, // 2/4
 	{ id: 'credentials-2', src: credentialsStill, alt: 'Credentials project' }, // 3/1
-	{ id: 'nba-1', src: nba, alt: 'NBA project' }, // 3/2 [A]
-	{ id: 'instant-1', src: instant, alt: 'Instant project' }, // 3/3 [A] centre
+	{ id: 'nba-1', src: nba, still: nbaStill, alt: 'NBA project' }, // 3/2 [A]
+	{ id: 'instant-1', src: instant, still: instantStill, alt: 'Instant project' }, // 3/3 [A] centre
 	{ id: 'trachtenberg-2', src: trachtenbergStill, alt: 'Trachtenberg project' }, // 3/4
 	{ id: 'stock-sent-2', src: stockSentStill, alt: 'Stock Sentiment project' }, // 1/1
 	{ id: 'studio-browser-2', src: studioBrowserStill, alt: 'Studio Browser project' } // 1/2

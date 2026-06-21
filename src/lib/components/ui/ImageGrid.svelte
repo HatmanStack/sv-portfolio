@@ -10,40 +10,55 @@
 	let { images, className = '' }: Props = $props();
 
 	let containerEl: HTMLDivElement;
-	// Once the sticky grid has scrolled out of view, drop it from rendering so its
-	// ~50 animated AVIFs stop decoding — otherwise they keep the CPU pinned at the
-	// bottom of the page. One observer, one class toggle on enter/leave; nothing
-	// per-tile or per-frame, so it can't thrash.
-	let onscreen = $state(true);
+	// Once the grid has scrolled past (you've reached the cards below), flip
+	// `released`. The {#key released} block then tears the grid down and rebuilds it
+	// with the static stills — destroying the animated <img> elements, which frees
+	// their AVIF decode buffers immediately. (A plain src-swap didn't: with
+	// loading="lazy" the still never loads while off-screen, so the animated decode
+	// lingered until you scrolled back up.) One-way: rebuilt once, never reverted.
+	let released = $state(false);
 
 	onMount(() => {
-		if (typeof IntersectionObserver === 'undefined' || !containerEl) return;
-		const io = new IntersectionObserver(
-			(entries) => {
-				onscreen = entries[0].isIntersecting;
-			},
-			{ rootMargin: '300px 0px' }
-		);
-		io.observe(containerEl);
-		return () => io.disconnect();
+		if (!containerEl) return;
+		// The grid's scroll region is ~3x the viewport, so it never fully leaves the
+		// screen and an IntersectionObserver "out of view" check never fires. Instead,
+		// release once we've scrolled past the grid's own height — read live from the
+		// element, so the check adapts to the actual grid/viewport size, not the reverse.
+		const threshold = () => containerEl.offsetHeight - window.innerHeight * 0.5;
+		function check() {
+			if (window.scrollY >= threshold()) {
+				released = true;
+				window.removeEventListener('scroll', check);
+			}
+		}
+		window.addEventListener('scroll', check, { passive: true });
+		check();
+		return () => window.removeEventListener('scroll', check);
 	});
 </script>
 
-<div class="scroll-container" class:paused={!onscreen} bind:this={containerEl}>
-	<div class="stuck-grid {className}">
-		{#each images as image (image.id)}
-			<div
-				class="grid-item {image.special ? 'special' : ''}"
-				style="--animation-range: {image.animationRange}"
-			>
-				{#if image.special}
-					<p><b>{image.content}</b></p>
-				{:else}
-					<img src={image.src} alt={image.alt} loading="lazy" decoding="async" />
-				{/if}
-			</div>
-		{/each}
-	</div>
+<div class="scroll-container" bind:this={containerEl}>
+	{#key released}
+		<div class="stuck-grid {className}">
+			{#each images as image (image.id)}
+				<div
+					class="grid-item {image.special ? 'special' : ''}"
+					style="--animation-range: {image.animationRange}"
+				>
+					{#if image.special}
+						<p><b>{image.content}</b></p>
+					{:else}
+						<img
+							src={released && image.still ? image.still : image.src}
+							alt={image.alt}
+							loading="lazy"
+							decoding="async"
+						/>
+					{/if}
+				</div>
+			{/each}
+		</div>
+	{/key}
 </div>
 
 <style>
@@ -51,12 +66,6 @@
 		height: 300vh;
 		position: relative;
 		padding: 0;
-	}
-
-	/* Grid scrolled out of view → drop it from rendering so its animated AVIFs stop
-	   decoding. The 300vh .scroll-container keeps its height, so nothing shifts. */
-	.scroll-container.paused .stuck-grid {
-		display: none;
 	}
 
 	.stuck-grid {
