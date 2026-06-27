@@ -5,19 +5,20 @@
 	 * BackgroundGlow
 	 *
 	 * The page's background highlight (the white radial on <body>, defined in
-	 * app.html) tightens IN as the cursor nears the centre of the viewport — so the
-	 * dark grows inward from the edges — and eases back out to the resting baseline
-	 * as the cursor moves to the edges or leaves the page. As it tightens the centre
-	 * can also drift — set `xFocus` (< 50 pulls the dark in from the right) and/or
-	 * `yFocus` (> 50 pulls it in from the top) per route; default 50/50 = no drift.
-	 * Renders nothing of its own.
+	 * app.html) tightens IN and the dark grows from one edge as the cursor moves
+	 * toward that edge, easing back to the resting baseline as it moves away or
+	 * leaves the page. The edge is set per route: `yFocus` > 50 darkens the top
+	 * (move the cursor up to trigger it); `xFocus` < 50 darkens the right (move it
+	 * right). With no directional focus (default 50/50, e.g. /about) it falls back to
+	 * centre proximity. Renders nothing of its own.
 	 *
 	 * Disabled under prefers-reduced-motion (glow stays at the baseline).
 	 */
 
 	interface Props {
-		// Where the glow centre drifts to at full focus, in %. 50 = no drift.
-		// xFocus < 50 → dark grows from the right; yFocus > 50 → dark grows from the top.
+		// Where the glow centre drifts to at full effect, in %. 50 = no drift. This also
+		// sets the trigger edge: xFocus < 50 → dark from the right (cursor right triggers
+		// it); yFocus > 50 → dark from the top (cursor up triggers it).
 		xFocus?: number;
 		yFocus?: number;
 	}
@@ -26,7 +27,7 @@
 
 	const ENABLED = true;
 
-	// Resting (cursor at edges / off-page) vs. focused (cursor at centre), in %.
+	// Resting (cursor away from the dark edge / off-page) vs. focused (at it), in %.
 	// Rest matches the app.html 65% baseline so there's no snap when the pointer enters.
 	const RX_REST = 65;
 	const RX_FOCUS = 54; // tightens horizontally
@@ -35,7 +36,7 @@
 	const X_REST = 50;
 	const Y_REST = 50;
 
-	// >1 concentrates the effect near the centre; the periphery stays at rest.
+	// >1 concentrates the effect near the dark edge; the rest of the travel stays low.
 	const FALLOFF = 2.2;
 
 	const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -47,7 +48,7 @@
 
 		const body = document.body;
 		let raf = 0;
-		let target = 0; // 0 at edges (rest) .. 1 at centre (focused)
+		let target = 0; // 0 = rest (cursor away from the dark edge) .. 1 = full effect
 		let current = 0;
 		let running = false;
 
@@ -75,13 +76,26 @@
 		}
 
 		function onMove(e: PointerEvent) {
-			const cx = window.innerWidth / 2;
-			const cy = window.innerHeight / 2;
-			if (cx === 0 || cy === 0) return;
-			const dx = (e.clientX - cx) / cx;
-			const dy = (e.clientY - cy) / cy;
-			const proximity = 1 - Math.min(1, Math.hypot(dx, dy));
-			target = Math.pow(proximity, FALLOFF);
+			const w = window.innerWidth;
+			const h = window.innerHeight;
+			if (w === 0 || h === 0) return;
+			// Drive the effect by how close the cursor is to the dark edge (the side the
+			// glow skews toward), not the centre: yFocus > 50 darkens the top, so moving
+			// up ramps it; xFocus < 50 darkens the right, so moving right ramps it. With
+			// no directional focus (xFocus = yFocus = 50, e.g. /about) use centre proximity.
+			let fraction: number;
+			if (yFocus !== 50) {
+				const ny = e.clientY / h; // 0 top .. 1 bottom
+				fraction = yFocus > 50 ? 1 - ny : ny;
+			} else if (xFocus !== 50) {
+				const nx = e.clientX / w; // 0 left .. 1 right
+				fraction = xFocus < 50 ? nx : 1 - nx;
+			} else {
+				const dx = (e.clientX - w / 2) / (w / 2);
+				const dy = (e.clientY - h / 2) / (h / 2);
+				fraction = 1 - Math.min(1, Math.hypot(dx, dy));
+			}
+			target = Math.pow(Math.max(0, Math.min(1, fraction)), FALLOFF);
 			start();
 		}
 
