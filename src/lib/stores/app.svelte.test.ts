@@ -139,46 +139,24 @@ describe('AppStore', () => {
 		test('setTheme triggers save and apply', () => {
 			store.setTheme('light');
 			expect(mockLocalStorage.setItem).toHaveBeenCalled();
-			expect(mockDocumentElement.setAttribute).toHaveBeenCalledWith('data-theme', 'light');
+			expect(mockDocumentElement.style.colorScheme).toBe('light');
 		});
 	});
 
 	describe('Side Effects - Theme', () => {
-		test('applyTheme sets light theme', () => {
-			mockMatchMedia.mockReturnValue({
-				matches: false,
-				addEventListener: vi.fn(),
-				removeEventListener: vi.fn(),
-				media: '',
-				onchange: null,
-				addListener: vi.fn(),
-				removeListener: vi.fn(),
-				dispatchEvent: vi.fn()
-			});
-
+		test('applyTheme sets light color-scheme', () => {
 			store.setTheme('light');
-			expect(mockDocumentElement.setAttribute).toHaveBeenCalledWith('data-theme', 'light');
+			expect(mockDocumentElement.style.colorScheme).toBe('light');
 		});
 
-		test('applyTheme sets dark theme', () => {
+		test('applyTheme sets dark color-scheme', () => {
 			store.setTheme('dark');
-			expect(mockDocumentElement.setAttribute).toHaveBeenCalledWith('data-theme', 'dark');
+			expect(mockDocumentElement.style.colorScheme).toBe('dark');
 		});
 
-		test('applyTheme respects system preference for auto', () => {
-			mockMatchMedia.mockReturnValue({
-				matches: true, // System prefers dark
-				addEventListener: vi.fn(),
-				removeEventListener: vi.fn(),
-				media: '',
-				onchange: null,
-				addListener: vi.fn(),
-				removeListener: vi.fn(),
-				dispatchEvent: vi.fn()
-			});
-
+		test('applyTheme uses both keywords for auto (browser follows system)', () => {
 			store.setTheme('auto');
-			expect(mockDocumentElement.setAttribute).toHaveBeenCalledWith('data-theme', 'dark');
+			expect(mockDocumentElement.style.colorScheme).toBe('light dark');
 		});
 	});
 

@@ -68,9 +68,13 @@
 		--radius: 100px;
 		--speed: 3s;
 		--cut: 0.05em;
-		--shimmer-color: #efb46c;
-		--bg: rgba(72, 52, 34, 0.9);
-		--border-color: rgba(255, 255, 255, 0.1);
+		/* Tracing shimmer: a deep amber in light mode (so it shows on the light fill),
+		   the bright amber in dark. */
+		--shimmer-color: light-dark(#a85a16, #efb46c);
+		/* Lighter warm fill + dark label in light mode; the brown fill + white label
+		   in dark. Per-use `background` props should also be light-dark() to match. */
+		--bg: light-dark(rgba(216, 195, 159, 0.96), rgba(72, 52, 34, 0.9));
+		--border-color: light-dark(rgba(60, 45, 30, 0.25), rgba(255, 255, 255, 0.1));
 
 		position: relative;
 		z-index: 0;
@@ -85,7 +89,7 @@
 		border-radius: var(--radius);
 		border: 1px solid var(--border-color);
 		background: var(--bg);
-		color: #fff;
+		color: light-dark(#2f2a22, #fff);
 		font-size: 14px;
 		font-weight: 500;
 		letter-spacing: 1px;
@@ -96,7 +100,7 @@
 	}
 
 	.shimmer-button.secondary {
-		--shimmer-color: #ffffff;
+		--shimmer-color: light-dark(#5a4a38, #ffffff);
 		--bg: transparent;
 		border: 0;
 	}

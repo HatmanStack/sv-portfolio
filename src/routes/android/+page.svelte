@@ -287,9 +287,13 @@
 	}
 
 	.app-description {
-		color: #86868b;
+		color: light-dark(#3a3328, #86868b);
 		font-weight: 600;
-		background: linear-gradient(0deg, #86868b 0%, #bdc2c9 100%);
+		background: linear-gradient(
+			0deg,
+			light-dark(#3a3328, #86868b) 0%,
+			light-dark(#5a5044, #bdc2c9) 100%
+		);
 		background-clip: text;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;

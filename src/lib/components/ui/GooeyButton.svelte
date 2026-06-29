@@ -104,17 +104,18 @@
 
 	.gooey-button {
 		--a: 0%;
-		--hue: 33deg; /* warm amber — matches the app's brown/amber palette */
+		--hue: 28deg; /* brown — matches the page background hue */
 		--x: 50;
 		--y: 50;
-		--button: hsl(var(--hue), 40%, 22%); /* dark brown, matching the /android buttons */
+		/* Lighter amber fill in light mode, dark brown in dark — both cycle --hue. */
+		--button: light-dark(hsl(var(--hue), 50%, 60%), hsl(var(--hue), 40%, 22%));
 		--edge: 20px;
 		--size: 2em;
 
 		background: transparent;
 		/* Fixed (not tied to the cycling --hue) so every button's lettering is the
 		   same colour, regardless of where each one is in its hue animation. */
-		color: hsla(33, 45%, 85%, 0.95); /* light cream-amber for contrast on the dark fill */
+		color: light-dark(hsla(28, 40%, 15%, 0.95), hsla(28, 45%, 85%, 0.95));
 		font-size: 1.8em;
 		position: relative;
 		padding: calc(var(--size)) calc(var(--size) * 1.5);
@@ -155,14 +156,14 @@
 		animation: color 3s ease-in-out infinite alternate;
 	}
 
-	/* Drift within a narrow warm band (amber ↔ honey) instead of the full hue wheel,
-	   so the buttons keep cycling but stay in the app's palette. */
+	/* Drift within a narrow brown band centred on the page-background hue (~28deg),
+	   so the buttons keep cycling but stay matched to the background. */
 	@keyframes color {
 		from {
 			--hue: 20deg;
 		}
 		to {
-			--hue: 46deg;
+			--hue: 36deg;
 		}
 	}
 </style>

@@ -103,7 +103,7 @@
 					href={selectedEntry.link}
 					target="_blank"
 					rel="noopener noreferrer"
-					background="rgba(90, 66, 44, 0.92)"
+					background="light-dark(rgba(216, 195, 159, 0.96), rgba(90, 66, 44, 0.92))"
 					onclick={() => clickSound.play()}
 				>
 					More Stuff
@@ -169,10 +169,10 @@
 	}
 
 	:global(p a) {
-		color: #bdc2c9;
-		-webkit-text-fill-color: #bdc2c9;
+		color: light-dark(#3a2f22, #bdc2c9);
+		-webkit-text-fill-color: light-dark(#3a2f22, #bdc2c9);
 		text-decoration: none;
-		background: rgba(75, 50, 35, 0.35);
+		background: light-dark(rgba(120, 90, 60, 0.16), rgba(75, 50, 35, 0.35));
 		padding: 0.15em 0.4em;
 		border-radius: 4px;
 		font-weight: 600;
@@ -180,13 +180,17 @@
 	}
 
 	:global(p a:hover) {
-		background: rgba(95, 65, 45, 0.5);
+		background: light-dark(rgba(120, 90, 60, 0.28), rgba(95, 65, 45, 0.5));
 	}
 
 	p {
-		color: #86868b;
+		color: light-dark(#3a3328, #86868b);
 		font-weight: 600;
-		background: linear-gradient(0deg, #86868b 0%, #bdc2c9 100%);
+		background: linear-gradient(
+			0deg,
+			light-dark(#3a3328, #86868b) 0%,
+			light-dark(#5a5044, #bdc2c9) 100%
+		);
 		background-clip: text;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
@@ -326,8 +330,8 @@
 			max-width: 90vw;
 			font-size: 0.9em;
 			background: none;
-			-webkit-text-fill-color: #86868b;
-			color: #86868b;
+			-webkit-text-fill-color: light-dark(#3a3328, #86868b);
+			color: light-dark(#3a3328, #86868b);
 		}
 
 		.items {

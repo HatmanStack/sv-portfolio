@@ -17,6 +17,11 @@
  */
 
 :root {
+	/* Default to the site's dark (brown) identity. The theme store overrides this on
+	   <html> for light/auto; the light-dark() tokens below resolve against it. So a
+	   fresh visit (no saved preference) stays on the current look. */
+	color-scheme: dark;
+
 	/* ===== Color Primitives ===== */
 	/* Base colors - use semantic colors in components */
 
@@ -65,10 +70,11 @@
 	--color-bg-inverse: var(--color-gray-900);
 	--color-bg-overlay: rgba(18, 18, 18, 0.6);
 
-	/* Page background gradient layers */
-	--color-bg-layer-0: var(--color-brown-dark);
-	--color-bg-layer-1: hsl(209, 36%, 86%);
-	--color-bg-layer-2: var(--color-brown-dark);
+	/* Page background gradient layers. light-dark(): light = a warm cream/tan, dark =
+	   the current brown identity (unchanged, so the live look holds). */
+	--color-bg-layer-0: light-dark(#f7f1e7, var(--color-brown-dark));
+	--color-bg-layer-1: light-dark(hsl(35, 48%, 85%), hsl(209, 36%, 86%));
+	--color-bg-layer-2: light-dark(#d4c3a0, #2c1e12);
 
 	--color-border-primary: var(--color-gray-200);
 	--color-border-secondary: var(--color-gray-300);
@@ -77,10 +83,10 @@
 	--color-accent-hover: var(--color-blue-500);
 
 	/* Component-specific semantic colors */
-	--color-nav-bg: #171c1b;
-	--color-nav-fg: var(--color-brown-light);
-	--color-nav-focus: var(--color-brown-accent);
-	--color-nav-focus-alt: var(--color-nav-bg);
+	--color-nav-bg: light-dark(#ece1cf, #171c1b);
+	--color-nav-fg: light-dark(#2a241c, var(--color-brown-light));
+	--color-nav-focus: light-dark(#6b4f2f, var(--color-brown-accent));
+	--color-nav-focus-alt: light-dark(#ece1cf, var(--color-nav-bg));
 
 	--color-card-dark: #121212;
 	--color-card-light: var(--color-white);
@@ -233,8 +239,8 @@
 
 	/* ===== Route-shared Tokens ===== */
 	/* Used across web, read, and android route pages */
-	--text-color: #aaaa9f;
-	--accent-color: #4c4b43;
+	--text-color: light-dark(#2f2a22, #aaaa9f);
+	--accent-color: light-dark(#4a3f2d, #4c4b43);
 	--index: calc(1vw + 1vh);
 
 	/* ===== Animation & Color Hue ===== */

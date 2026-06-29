@@ -82,14 +82,9 @@ function createAppStore() {
 		applyTheme() {
 			if (typeof document !== 'undefined') {
 				const { theme } = state.preferences;
-				const root = document.documentElement;
-
-				if (theme === 'auto') {
-					const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-					root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-				} else {
-					root.setAttribute('data-theme', theme);
-				}
+				// Drive light-dark() via color-scheme on <html>. 'auto' uses both keywords
+				// so it follows the OS; 'light'/'dark' force one. (Replaces data-theme.)
+				document.documentElement.style.colorScheme = theme === 'auto' ? 'light dark' : theme;
 			}
 		},
 
