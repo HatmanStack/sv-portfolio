@@ -96,7 +96,11 @@
 		text-transform: uppercase;
 		text-decoration: none;
 		transform: translateZ(0);
-		transition: transform 0.3s ease-in-out;
+		/* Elevation swap: drop-shadow on light, warm glow on dark. */
+		box-shadow: light-dark(0 4px 14px rgba(50, 38, 24, 0.2), 0 0 0.9em hsla(30, 30%, 72%, 0.12));
+		transition:
+			transform 0.3s ease-in-out,
+			box-shadow 0.3s ease-in-out;
 	}
 
 	.shimmer-button.secondary {

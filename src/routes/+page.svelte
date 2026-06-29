@@ -122,7 +122,8 @@
 	}
 
 	.portfolio-container {
-		overflow: hidden;
+		/* Visible so the cards' brand outline / elevation shadows aren't clipped. */
+		overflow: visible;
 		position: relative;
 		display: flex;
 		flex-direction: column;

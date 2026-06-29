@@ -48,6 +48,10 @@ export interface Project {
 
 	/** Text for the call-to-action button */
 	buttonText: string;
+
+	/** Brand accent colour (any CSS color). Drives the card's hover glow; falls back
+	 *  to a warm default when unset. */
+	brandColor?: string;
 }
 
 /**

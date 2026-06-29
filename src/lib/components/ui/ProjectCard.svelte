@@ -29,6 +29,7 @@
 	class:expanded
 	role="button"
 	tabindex="0"
+	style="--brand: {project.brandColor ?? '#483422'};"
 	onclick={toggleExpand}
 	onkeydown={(e) => {
 		if (e.target !== e.currentTarget) return;
@@ -100,12 +101,20 @@
 		width: calc((100% / 3) - var(--gap));
 		height: 100%;
 		border-radius: 1rem;
+		/* Elevation swap: drop-shadow on the light bg, a soft glow on the dark. */
+		box-shadow: light-dark(0 6px 18px rgba(40, 30, 20, 0.22), 0 0 0.8em hsla(30, 35%, 72%, 0.16));
 		transition: all 0.5s ease-in-out;
 	}
 
 	.content:hover {
 		--active: 1;
 		width: calc(90% - var(--gap));
+		/* Raise above siblings so the brand glow paints over them instead of being
+		   covered (that's what forced the solid outline), then a soft glow + lift. */
+		z-index: 20;
+		/* Soft halo in the brand colour at lowered opacity (a mid-tone amber reads on
+		   both the dark and light backgrounds). */
+		box-shadow: 0 0 25px 10px color-mix(in srgb, var(--brand) 80%, transparent);
 	}
 
 	.content::before {
