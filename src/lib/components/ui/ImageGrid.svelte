@@ -1,3 +1,12 @@
+<script module lang="ts">
+	// Survives client-side navigation (the module stays loaded) but resets on a full
+	// page reload. Lets a fresh load show the animated hero grid while any in-session
+	// return to `/` starts already-released (stills) — avoiding a re-decode of every
+	// animated AVIF on navigate-back, which could stall/time out. (An object, not a
+	// bare `let`, so the cross-instance write isn't flagged as a useless assignment.)
+	const gridState = { seen: false };
+</script>
+
 <script lang="ts">
 	import type { ImageGridItem } from '$lib/types/index.js';
 	import { onMount } from 'svelte';
@@ -16,10 +25,15 @@
 	// their AVIF decode buffers immediately. (A plain src-swap didn't: with
 	// loading="lazy" the still never loads while off-screen, so the animated decode
 	// lingered until you scrolled back up.) One-way: rebuilt once, never reverted.
-	let released = $state(false);
+	//
+	// On a return visit (gridState.seen already set) we start released, so the grid
+	// renders stills straight away instead of re-decoding the animated AVIFs.
+	let released = $state(gridState.seen);
+	gridState.seen = true;
 
 	onMount(() => {
-		if (!containerEl) return;
+		// Already released (return visit) → nothing to watch; the grid is stills.
+		if (!containerEl || released) return;
 		// The grid's scroll region is ~3x the viewport, so it never fully leaves the
 		// screen and an IntersectionObserver "out of view" check never fires. Instead,
 		// release once we've scrolled past the grid's own height — read live from the
