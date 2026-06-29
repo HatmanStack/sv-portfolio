@@ -5,6 +5,12 @@ export default defineConfig({
 	plugins: [sveltekit()],
 
 	build: {
+		// Don't let esbuild downlevel modern CSS. The theme toggle relies on light-dark()
+		// resolving against `color-scheme`; the default cssTarget (~chrome87) rewrites it
+		// to `prefers-color-scheme` media queries, which follow the OS instead of the
+		// toggle. Target browsers that support light-dark()/color-mix() so it stays intact.
+		cssTarget: ['chrome123', 'edge123', 'firefox120', 'safari17.5'],
+
 		// Minify using terser for better compression than esbuild
 		minify: 'terser',
 		terserOptions: {
