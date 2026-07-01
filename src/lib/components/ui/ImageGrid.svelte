@@ -1,12 +1,3 @@
-<script module lang="ts">
-	// Survives client-side navigation (the module stays loaded) but resets on a full
-	// page reload. Lets a fresh load show the animated hero grid while any in-session
-	// return to `/` starts already-released (stills) — avoiding a re-decode of every
-	// animated AVIF on navigate-back, which could stall/time out. (An object, not a
-	// bare `let`, so the cross-instance write isn't flagged as a useless assignment.)
-	const gridState = { seen: false };
-</script>
-
 <script lang="ts">
 	import type { ImageGridItem } from '$lib/types/index.js';
 	import { onMount } from 'svelte';
@@ -19,31 +10,56 @@
 	let { images, className = '' }: Props = $props();
 
 	let containerEl: HTMLDivElement;
-	// Once the grid has scrolled past (you've reached the cards below), flip
-	// `released`. The {#key released} block then tears the grid down and rebuilds it
-	// with the static stills — destroying the animated <img> elements, which frees
-	// their AVIF decode buffers immediately. (A plain src-swap didn't: with
-	// loading="lazy" the still never loads while off-screen, so the animated decode
-	// lingered until you scrolled back up.) One-way: rebuilt once, never reverted.
-	//
-	// On a return visit (gridState.seen already set) we start released, so the grid
-	// renders stills straight away instead of re-decoding the animated AVIFs.
-	let released = $state(gridState.seen);
-	gridState.seen = true;
+	// The grid always loads with its animated AVIFs playing. Once you've scrolled past
+	// it (reached the cards below), flip `released`: the {#key released} block tears the
+	// grid down and rebuilds it with the static stills — destroying the animated <img>
+	// elements, which frees their AVIF decode buffers immediately. (A plain src-swap
+	// didn't: with loading="lazy" the still never loads while off-screen, so the
+	// animated decode lingered until you scrolled back up.) One-way per load: rebuilt
+	// once as you leave the grid, never reverted.
+	let released = $state(false);
+
+	// Fast flicks freeze the page ~3/4 down even on stills, so the cost isn't AVIF
+	// decode — it's the animated filter:blur() in the zoom keyframe. The blur is kept
+	// out of will-change (to avoid pinning an offscreen buffer per tile), so every
+	// animating tile re-renders a fresh blur buffer each frame; a fast scroll thrashes
+	// that allocation across all 26 layered tiles and stalls the main thread. When a
+	// fast scroll is detected we flip this and the grid swaps to a blur-free keyframe;
+	// transform/opacity are identical, so nothing jumps — only the soft-focus drops.
+	// One-way: once you've flung the page, the cheap zoom carries the rest.
+	let flat = $state(false);
 
 	onMount(() => {
-		// Already released (return visit) → nothing to watch; the grid is stills.
-		if (!containerEl || released) return;
+		if (!containerEl) return;
 		// The grid's scroll region is ~3x the viewport, so it never fully leaves the
 		// screen and an IntersectionObserver "out of view" check never fires. Instead,
 		// release once we've scrolled past the grid's own height — read live from the
 		// element, so the check adapts to the actual grid/viewport size, not the reverse.
 		const threshold = () => containerEl.offsetHeight - window.innerHeight * 0.5;
+
+		// Gauge scroll velocity from the position/time delta between events. Past a
+		// clearly-fast threshold, drop the blur (the freeze cause). Cheap — a class
+		// toggle, no teardown — so it's safe to trip mid-flick.
+		const FAST_PX_PER_MS = 2; // ~120px/frame at 60fps — well above a deliberate scroll
+		let lastY = window.scrollY;
+		let lastT = performance.now();
+
 		function check() {
-			if (window.scrollY >= threshold()) {
-				released = true;
-				window.removeEventListener('scroll', check);
-			}
+			const y = window.scrollY;
+			const t = performance.now();
+			const dt = t - lastT;
+			const velocity = dt > 0 ? Math.abs(y - lastY) / dt : 0;
+			lastY = y;
+			lastT = t;
+
+			// Fast flick → drop the animated blur (the heavy per-frame cost).
+			if (velocity >= FAST_PX_PER_MS) flat = true;
+			// Scrolled past the grid → release the animated AVIFs to stills (frees their
+			// decode buffers). Guarded so it only fires once per load.
+			if (!released && y >= threshold()) released = true;
+
+			// Blur gone (freeze fixed) and AVIFs released — nothing left worth watching.
+			if (flat && released) window.removeEventListener('scroll', check);
 		}
 		window.addEventListener('scroll', check, { passive: true });
 		check();
@@ -53,7 +69,7 @@
 
 <div class="scroll-container" bind:this={containerEl}>
 	{#key released}
-		<div class="stuck-grid {className}">
+		<div class="stuck-grid {className}" class:flat>
 			{#each images as image (image.id)}
 				<div
 					class="grid-item {image.special ? 'special' : ''}"
@@ -125,6 +141,13 @@
 				   permanent offscreen blur buffer per tile (big memory cost). The
 				   blur still renders from the keyframes; it just isn't pre-promoted. */
 				will-change: transform, opacity;
+			}
+
+			/* Fast-flick fallback: same zoom, no animated blur. Dropping the per-frame
+			   blur buffer is what clears the freeze; transform/opacity match zoom-in so
+			   the swap is seamless mid-scroll. */
+			.flat .grid-item {
+				animation-name: zoom-in-flat;
 			}
 		}
 	}
@@ -397,6 +420,22 @@
 			transform: translateZ(1000px);
 			opacity: 0;
 			filter: blur(5px);
+		}
+	}
+
+	/* Blur-free twin of zoom-in (transform/opacity identical) for fast scrolls. */
+	@keyframes zoom-in-flat {
+		0% {
+			transform: translateZ(-1000px);
+			opacity: 0;
+		}
+		50% {
+			transform: translateZ(0px);
+			opacity: 1;
+		}
+		100% {
+			transform: translateZ(1000px);
+			opacity: 0;
 		}
 	}
 </style>
