@@ -57,5 +57,24 @@ describe('Android Apps Data', () => {
 				}
 			});
 		});
+
+		test('all web links are valid HTTPS URLs when present', () => {
+			androidApps.forEach((app) => {
+				if (app.webLink) {
+					const webLink = app.webLink;
+					expect(() => new URL(webLink)).not.toThrow();
+					expect(new URL(webLink).protocol).toBe('https:');
+				}
+			});
+		});
+	});
+
+	describe('Individual Apps', () => {
+		test('Stocks links to Material Brief as its web version', () => {
+			const stocks = androidApps.find((app) => app.id === 'stocks');
+			expect(stocks).toBeDefined();
+			// Renders the "Web Version" button on the /android panel.
+			expect(stocks?.webLink).toBe('https://materialbrief.com');
+		});
 	});
 });

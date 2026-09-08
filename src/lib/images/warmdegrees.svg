@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="WarmDegrees">
+  <title>WarmDegrees</title>
+  <defs>
+    <linearGradient id="warm" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#9333ea"/>
+    </linearGradient>
+  </defs>
+  <!-- Square, not the source icon.svg's full-bleed disc. The card paints its hero
+       with object-fit: cover across a wide, short box, which crops a circle to a
+       band and reads as a cut-off shape. The same square treatment the project
+       already ships as apple-touch-icon.png, kept in vector so it stays sharp at
+       card width rather than upscaling that 180px raster. Gradient and mark are
+       unchanged from frontend/public/icon.svg. -->
+  <rect width="512" height="512" fill="url(#warm)"/>
+  <g transform="translate(256 262) scale(1.12) translate(-256 -262)">
+    <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M147 160 207 318 256 220 305 318 365 160" stroke-width="24"/>
+      <path d="M223 340a40 40 0 0 1 66 0" stroke-width="14"/>
+      <path d="M237 353a22 22 0 0 1 38 0" stroke-width="14"/>
+    </g>
+    <circle cx="256" cy="371" r="13" fill="#fff"/>
+  </g>
+</svg>

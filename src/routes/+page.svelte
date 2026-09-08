@@ -5,7 +5,7 @@
 	import ImageGrid from '$lib/components/ui/ImageGrid.svelte';
 	import ProjectCard from '$lib/components/ui/ProjectCard.svelte';
 	import { gridImages } from '$lib/data/images.js';
-	import { projects, projectsRow2 } from '$lib/data/projects.js';
+	import { projects, projectsRow2, projectsRow3 } from '$lib/data/projects.js';
 	import sloth from '$lib/images/sloth_stuff.jpg';
 
 	// Temporarily disabled to isolate home-page CPU usage. Set back to true to re-enable.
@@ -98,6 +98,11 @@
 			<ProjectCard {project} lazy={true} />
 		{/each}
 	</div>
+	<div class="category-container row-3">
+		{#each projectsRow3 as project}
+			<ProjectCard {project} lazy={true} />
+		{/each}
+	</div>
 </section>
 
 <!-- SVG "goo" filter for page-level effects. Simplified variant (feComponentTransfer-based)
@@ -146,7 +151,8 @@
 		background: transparent;
 	}
 
-	.category-container.row-2 {
+	.category-container.row-2,
+	.category-container.row-3 {
 		justify-content: center;
 		height: 40%;
 	}
@@ -164,7 +170,8 @@
 			height: auto;
 		}
 
-		.category-container.row-2 {
+		.category-container.row-2,
+		.category-container.row-3 {
 			height: auto;
 		}
 	}

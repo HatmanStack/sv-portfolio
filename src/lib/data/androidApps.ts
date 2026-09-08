@@ -57,8 +57,9 @@ export const androidApps: AndroidApp[] = [
 		id: 'stocks',
 		title: 'Stocks',
 		link: 'https://play.google.com/store/apps/details?id=gemenielabs.sentiment',
+		webLink: 'https://materialbrief.com',
 		description:
-			'NLP sentiment analysis on news articles combined with price/volume data. Multivariate logistic regression forecasts via serverless backend. (update pending)',
+			'NLP sentiment analysis on news articles combined with price/volume data. Multivariate logistic regression forecasts via serverless backend.',
 		initialImg: stocks,
 		activeImg: stock
 	},
