@@ -11,6 +11,10 @@ import ragstacka from '$lib/images/ragstack.avif';
 import ragstackj from '$lib/images/ragstack.jpg';
 import localNanoa from '$lib/images/local_nano.avif';
 import localNanoj from '$lib/images/local_nano.jpg';
+import materialBriefa from '$lib/images/materialbrief.avif';
+import materialBriefs from '$lib/images/materialbrief.svg';
+import warmDegreesa from '$lib/images/warmdegrees.avif';
+import warmDegreess from '$lib/images/warmdegrees.svg';
 
 export const projects: Project[] = [
 	{
@@ -28,6 +32,35 @@ export const projects: Project[] = [
 		buttonText: 'Meditate'
 	},
 	{
+		id: 'material-brief',
+		title: 'Material Brief',
+		description:
+			"Most alerts tell you a stock moved — you already knew that. This reads the day's full coverage of the companies you hold, not just headlines, and tells you why: each event scored by a model fitted to that stock's own history.",
+		category: 'Web',
+		images: {
+			profession: materialBriefa,
+			profile: materialBriefs
+		},
+		link: 'https://materialbrief.com',
+		buttonText: 'Brief'
+	},
+	{
+		id: 'warmdegrees',
+		title: 'WarmDegrees',
+		description:
+			'Set a goal and an agent works the network you already have toward it — warmest path in, outreach drafted, follow-up scheduled. Each action queues as a proposal you approve or skip, and every send clears one gate: kill switch, quiet hours, daily cap.',
+		category: 'Web',
+		images: {
+			profession: warmDegreesa,
+			profile: warmDegreess
+		},
+		link: 'https://warmdegrees.com',
+		buttonText: 'Reach'
+	}
+];
+
+export const projectsRow2: Project[] = [
+	{
 		id: 'hold-that-thought',
 		title: 'Family Archive - Document AI',
 		description:
@@ -40,37 +73,6 @@ export const projects: Project[] = [
 		link: 'https://showcase-htt.hatstack.fun',
 		github: 'https://github.com/HatmanStack/family-archive-document-ai',
 		buttonText: 'Link'
-	},
-	{
-		id: 'savor-swipe',
-		title: 'Savor Swipe',
-		description:
-			'Recipe discovery app with swipe interface. Photograph ingredients or directions—OpenAI OCR extracts the info, Google Search finds matching food images.',
-		category: 'Cross-Platform',
-		images: {
-			profession: savorSwipea,
-			profile: savorSwipej
-		},
-		link: 'https://savorswipe.hatstack.fun',
-		github: 'https://github.com/HatmanStack/savorswipe',
-		buttonText: 'Eat'
-	}
-];
-
-export const projectsRow2: Project[] = [
-	{
-		id: 'vocabulary',
-		title: 'Vocabulary',
-		description:
-			'300+ word vocabulary builder. Multiple choice and fill-in-the-blank formats with per-list progress tracking and persistent high scores.',
-		category: 'Cross-Platform',
-		images: {
-			profession: vocaba,
-			profile: vocabs
-		},
-		link: 'https://vocabulary.hatstack.fun',
-		github: 'https://github.com/HatmanStack/react-vocabulary',
-		buttonText: 'Learn'
 	},
 	{
 		id: 'ragstack',
@@ -88,10 +90,41 @@ export const projectsRow2: Project[] = [
 		buttonText: 'RAG'
 	},
 	{
+		id: 'vocabulary',
+		title: 'Vocabulary',
+		description:
+			'300+ word vocabulary builder. Multiple choice and fill-in-the-blank formats with per-list progress tracking and persistent high scores.',
+		category: 'Cross-Platform',
+		images: {
+			profession: vocaba,
+			profile: vocabs
+		},
+		link: 'https://vocabulary.hatstack.fun',
+		github: 'https://github.com/HatmanStack/react-vocabulary',
+		buttonText: 'Learn'
+	}
+];
+
+export const projectsRow3: Project[] = [
+	{
+		id: 'savor-swipe',
+		title: 'Savor Swipe',
+		description:
+			'Recipe discovery app with swipe interface. Photograph ingredients or directions—OpenAI OCR extracts the info, Google Search finds matching food images.',
+		category: 'Cross-Platform',
+		images: {
+			profession: savorSwipea,
+			profile: savorSwipej
+		},
+		link: 'https://savorswipe.hatstack.fun',
+		github: 'https://github.com/HatmanStack/savorswipe',
+		buttonText: 'Eat'
+	},
+	{
 		id: 'local-nano',
 		title: 'Local Nano',
 		description:
-			"DOM-aware Chrome extension with a fully local AI assistant. Highlight text and an on-device model rewrites it in place, or ask about the page you're reading and it answers using the page itself as context. Pick from a curated catalog of small open models; the model is released from VRAM when you walk away. Runs on Transformers.js and WebGPU, so nothing leaves your machine.",
+			'DOM-aware Chrome extension with a fully local AI assistant. Highlight text and an on-device model rewrites it in place, or ask about the page and it answers from the page itself. Runs on Transformers.js and WebGPU, so nothing leaves your machine.',
 		category: 'Web',
 		images: {
 			profession: localNanoa,
