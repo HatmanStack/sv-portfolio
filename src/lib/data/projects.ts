@@ -48,7 +48,7 @@ export const projects: Project[] = [
 		id: 'warmdegrees',
 		title: 'WarmDegrees',
 		description:
-			'Set a goal and an agent works the network you already have toward it — warmest path in, outreach drafted, follow-up scheduled. Each action queues as a proposal you approve or skip, and every send clears one gate: kill switch, quiet hours, daily cap.',
+			'Say what you are trying to achieve and it works out what that takes — the people, the proof, the steps — then routes you through whoever can vouch for you, scoring progress against real evidence. Approval is the default; autonomy is per goal, inside quiet hours, caps and cooldowns.',
 		category: 'Web',
 		images: {
 			profession: warmDegreesa,
