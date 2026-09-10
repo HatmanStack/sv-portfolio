@@ -126,6 +126,40 @@
 		--gap: 0.5rem;
 	}
 
+	/* Desktop: a hovered card grows its row, and three rows leave no slack for that
+	   inside the viewport, so the grid spills below the fold. Pin the nav so reaching
+	   the rest of the grid can't scroll it off screen. Mobile keeps a normal header:
+	   its single-column list scrolls by design and hover expansion is off there. */
+	@media (min-width: 769px) {
+		.header-scroll {
+			position: sticky;
+			top: 0;
+			z-index: var(--z-sticky);
+			container-type: scroll-state;
+		}
+
+		/* Only a pinned header needs a ground. At rest it sits on the page background as
+		   before; pinned, it floats over the cards, which read straight through the logo,
+		   the icons and the gaps around the nav without one. */
+		@container scroll-state(stuck: top) {
+			.header-scroll > :global(header) {
+				background: color-mix(in srgb, var(--color-bg-layer-0) 70%, transparent);
+				backdrop-filter: blur(12px);
+			}
+		}
+	}
+
+	/* Without scroll-state queries a browser can't tell pinned from resting, so the
+	   ground stays on; at rest it is the page's own colour and barely shows. */
+	@supports not (container-type: scroll-state) {
+		@media (min-width: 769px) {
+			.header-scroll > :global(header) {
+				background: color-mix(in srgb, var(--color-bg-layer-0) 70%, transparent);
+				backdrop-filter: blur(12px);
+			}
+		}
+	}
+
 	.portfolio-container {
 		/* Visible so the cards' brand outline / elevation shadows aren't clipped. */
 		overflow: visible;
